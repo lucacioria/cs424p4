@@ -1,0 +1,32 @@
+{
+{
+	name: 'Michigan changes speed',
+	desc: 'Michigan State lowers the speed limit',
+	'year' : 2003,
+	number: 2
+}
+{
+	name: 'Illinois and alcohol',
+	desc: 'Illinois State increases the the penalties for alcohol involvement in the DUL laws',
+	'year' : 2001,
+	number: 1
+}
+{
+	name: 'Texas changes speed',
+	desc: 'Texas had the highest posted speed limit which is 80 mph in the US',
+	'year' : 2006,
+	number: 3
+}
+{
+	name: 'Illinois trucks speed',
+	desc: ' Illinois increased the truck speed limit to 65 mph',
+	'year' : 2009,
+	number: 4
+}
+{
+	name: 'Wisconsin and alcohol',
+	desc: 'Wisconsin State increases the the penalties for alcohol related offenses',
+	'year' : 2010,
+	number: 5
+}
+}

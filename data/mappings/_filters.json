@@ -1,0 +1,16 @@
+{
+	lines: [
+		{name: _state, label: state, select: single, default: Illinois},
+		{name: weather, label: weather, select: multiple, default: null},
+		{name: alcohol_involved, label: 'alcohol involved', select: multiple, default: null},
+		{name: drug_involved, label: 'drug involved', select: multiple, default: null},
+		{name: month, label: 'month', select: multiple, default: null},
+		{name: day_of_week, label: 'day of week', select: multiple, default: null},
+		{name: age_range, label: 'age', select: multiple, default: null},
+		{name: hour_range, label: 'hour', select: multiple, default: null},
+		{name: roadway_surface_condition, label: 'surface condition', select: multiple, default: null},
+		{name: _year, label: 'year', select: multiple, default: null},
+		{name: sex, label: 'sex', select: multiple, default: null}
+
+	]
+}

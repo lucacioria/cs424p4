@@ -1,0 +1,13 @@
+{
+'on_local_server' : false,
+'on_wall' : false,
+'multiply_by_2' : false,
+'translate_to_italian' : false,
+'enable_safe_line' : false,
+'enable_grid_lines' : false,
+'renderer' : 'java2d',
+'enable_tag_cloud' : false,
+enable_draw_mouse_position : false,
+initialize_visualization : true,
+draw_touch: false
+}

@@ -1,0 +1,6 @@
+{
+male : [1],
+female : [2],
+both : [3],
+unknown : [-1]
+}
