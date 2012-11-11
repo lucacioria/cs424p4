@@ -25,6 +25,7 @@ public class MapPanButtons extends VizPanel implements TouchEnabled {
     panUpButton = new VizButton(20, 0, 20, 20, this);
     panUpButton.name = "panUpButton";
     panUpButton.text = "\u2191";
+    panUpButton.repeatRate = 250;
     panUpButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 155f,
         155f, 12);
     panUpButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
@@ -34,6 +35,7 @@ public class MapPanButtons extends VizPanel implements TouchEnabled {
     panDownButton = new VizButton(20, 40, 20, 20, this);
     panDownButton.name = "panDownButton";
     panDownButton.text = "\u2193";
+    panDownButton.repeatRate = 250;
     panDownButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 155f,
       155f, 12);
     panDownButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
@@ -43,6 +45,7 @@ public class MapPanButtons extends VizPanel implements TouchEnabled {
     panRightButton = new VizButton(40, 20, 20, 20, this);
     panRightButton.name = "panRightButton";
     panRightButton.text = "\u2192";
+    panRightButton.repeatRate = 250;
     panRightButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 155f,
       155f, 12);
     panRightButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
@@ -52,6 +55,7 @@ public class MapPanButtons extends VizPanel implements TouchEnabled {
     panLeftButton = new VizButton(0, 20, 20, 20, this);
     panLeftButton.name = "panLeftButton";
     panLeftButton.text = "\u2190";
+    panLeftButton.repeatRate = 250;
     panLeftButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 155f,
       155f, 12);
     panLeftButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,

@@ -12,6 +12,7 @@ public class VizButton extends VizPanel implements TouchEnabled {
   public String text = "";
   private float xOffset = 0;
   private float yOffset = 0;
+  public int repeatRate = -1;
   // common styles
   public String name;
   private float round_a = 0;
@@ -54,6 +55,8 @@ public class VizButton extends VizPanel implements TouchEnabled {
 
   private MyColorEnum shapeFillingColor;
   private boolean pressed;
+  private int touchDownTime;
+  private int lastRepeatAction = 1;
 
   public boolean isSelected() {
     return state == StateEnum.SELECTED;
@@ -137,6 +140,12 @@ public class VizButton extends VizPanel implements TouchEnabled {
   public boolean draw() {
     if (pressed) {
       drawPressed();
+      if (repeatRate > 0) {
+        if ((millis() - touchDownTime) / repeatRate > lastRepeatAction) {
+          sendTouchedEvent();
+          lastRepeatAction ++;
+        }
+      }
       return false;
     }
     switch (state) {
@@ -247,7 +256,9 @@ public class VizButton extends VizPanel implements TouchEnabled {
     if (state == StateEnum.DISABLED) return false;
     if (down) {
       pressed = true;
+      touchDownTime = millis();
     } else {
+      lastRepeatAction = 1;
       pressed = false;
       sendTouchedEvent();
     }

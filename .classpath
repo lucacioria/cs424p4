@@ -8,6 +8,10 @@
 	<classpathentry kind="lib" path="libs/OmicronAPI.jar"/>
 	<classpathentry kind="lib" path="libs/resty-0.3.1.jar"/>
 	<classpathentry kind="lib" path="libs/SQLibrary.jar"/>
+	<classpathentry kind="lib" path="libs/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="libs/jogl-all.jar"/>
+	<classpathentry kind="lib" path="libs/gluegen-rt-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="libs/jogl-all-natives-macosx-universal.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
