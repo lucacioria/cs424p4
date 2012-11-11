@@ -58,6 +58,7 @@ public abstract class VizPanel {
   }
 
   private float x0Zoom, y0Zoom, widthZoom, heightZoom, parentX0Zoom, parentY0Zoom;
+  private int startTimer;
 
   public VizPanel(float x0, float y0, float width, float height) {
     this(x0, y0, width, height, 0f, 0f);
@@ -487,4 +488,13 @@ public abstract class VizPanel {
   public void vertex(float x, float y) {
     p.vertex(s(x) + x0Zoom, s(y) + y0Zoom);
   }
+
+  public void startTimer() {
+    startTimer = p.millis();
+  }
+
+  public void stopTimerAndPrint(String message) {
+    log((p.millis() - startTimer) + ": " + message);
+  }
+
 }
