@@ -2,7 +2,6 @@ package com.project4;
 
 import java.util.Stack;
 
-import processing.core.PApplet;
 import processing.core.PImage;
 
 import com.anotherbrick.inthewall.EventSubscriber;
@@ -14,8 +13,8 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
 
   static final double MAX_LAT = 42.30146f;
   static final double MIN_LAT = 42.16198f;
-  static final double MAX_LON = 93.56731f;
-  static final double MIN_LON = 93.19066f;
+  static final double MIN_LON = -93.56731f;
+  static final double MAX_LON = -93.19066f;
 
   private double maxLat;
   private double minLat;

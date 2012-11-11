@@ -34,6 +34,8 @@ public class MapScatter extends VizPanel implements TouchEnabled, EventSubscribe
   public boolean draw() {
     if (!isVisible()) return false;
     pushStyle();
+    fill(MyColorEnum.LIGHT_ORANGE, 100f);
+    noStroke();
     for (Tweet t : tweets) {
       drawTweet(t);
     }
@@ -42,16 +44,13 @@ public class MapScatter extends VizPanel implements TouchEnabled, EventSubscribe
   }
 
   private void drawTweet(Tweet t) {
-    pushStyle();
     float radius = 10;
     float x = PApplet.map((float) t.getLon(),(float) map.getMinLon(),(float) map.getMaxLon(), 0, getWidth());
     float y = PApplet.map((float) t.getLat(),(float) map.getMinLat(),(float) map.getMaxLat(), 0, getHeight());
-    fill(MyColorEnum.LIGHT_ORANGE);
-    noStroke();
     ellipse(x, y, radius, radius);
-    popStyle();
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.DATA_UPDATED) {

@@ -1,5 +1,7 @@
 package com.project4;
 
+import java.util.ArrayList;
+
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
@@ -40,8 +42,9 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void initializeVisualization() {
-    //ArrayList<Tweet> tweets = m.dataSourceSQL.getTweets("match(text) against('truck')");
-    //m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
+    ArrayList<Tweet> tweets = m.dataSourceSQL.getTweets("match(text) against('truck')");
+    println(tweets.get(0).getId() + ": " + tweets.get(0).getText());
+    m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
   }
 
   @Override

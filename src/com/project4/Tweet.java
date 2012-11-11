@@ -1,5 +1,7 @@
 package com.project4;
 
+import com.anotherbrick.inthewall.Model;
+
 public class Tweet {
   private double lat;
   private double lon;
@@ -19,11 +21,10 @@ public class Tweet {
   }
 
   public String getText() {
+    if (text == null) {
+        text = Model.getInstance().dataSourceSQL.getTweetText(id);
+    }
     return text;
-  }
-
-  public void setText(String text) {
-    this.text = text;
   }
 
   public double getLat() {

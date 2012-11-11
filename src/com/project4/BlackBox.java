@@ -1,9 +1,8 @@
 package com.project4;
 
-import com.anotherbrick.inthewall.Helper;
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.Config.MyColorEnum;
 
 public class BlackBox extends VizPanel implements TouchEnabled {
 
