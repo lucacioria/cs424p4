@@ -23,6 +23,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private PImage mapImage;
   private MapScatter mapScatter;
+  private MapHeatMap mapHeatMap;
   private MapZoomButtons mapZoomButtons;
   private Stack<Double> zoomStackLon = new Stack<Double>();
   private Stack<Double> zoomStackLat = new Stack<Double>();
@@ -53,6 +54,8 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     } else if (buttonName.equals("panLeftButton")) {
       panLeft();
     }
+    //TODO for other buttons don't raise this
+    m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
   }
 
 
@@ -72,8 +75,11 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     setupMapZoomButtons();
     setupMapPanButtons();
     setupMapScatter();
+    setupMapHeatMap();
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
   }
+
+
 
   private void setupMapZoomButtons() {
     mapZoomButtons = new MapZoomButtons(getWidth() - 60, getHeight() - 60, this);
@@ -92,11 +98,18 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     mapScatter.setup();
     addTouchSubscriber(mapScatter);
   }
+  
+  private void setupMapHeatMap() {
+    mapHeatMap = new MapHeatMap(0, 0, getWidth(), getHeight(), this);
+    mapHeatMap.setup();
+    addTouchSubscriber(mapHeatMap);
+  }
 
   @Override
   public boolean draw() {
     drawImage();
-    mapScatter.draw();
+    //mapScatter.draw();
+    mapHeatMap.draw();
     mapZoomButtons.draw();
     mapPanButtons.draw();
     return false;
@@ -203,6 +216,10 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
 
   public double getMinLon() {
     return minLon;
+  }
+
+  public boolean isVisible(Tweet t) {
+    return t.getLat()>minLat && t.getLat()<maxLat && t.getLon()>minLon && t.getLon()<maxLat;
   }
 
 
