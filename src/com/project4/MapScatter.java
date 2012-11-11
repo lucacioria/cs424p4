@@ -44,8 +44,8 @@ public class MapScatter extends VizPanel implements TouchEnabled, EventSubscribe
   private void drawTweet(Tweet t) {
     pushStyle();
     float radius = 10;
-    float x = PApplet.map((float) t.getLon(), map.getMinLon(), map.getMaxLon(), 0, getWidth());
-    float y = PApplet.map((float) t.getLat(), map.getMinLat(), map.getMaxLat(), 0, getHeight());
+    float x = PApplet.map((float) t.getLon(),(float) map.getMinLon(),(float) map.getMaxLon(), 0, getWidth());
+    float y = PApplet.map((float) t.getLat(),(float) map.getMinLat(),(float) map.getMaxLat(), 0, getHeight());
     fill(MyColorEnum.LIGHT_ORANGE);
     noStroke();
     ellipse(x, y, radius, radius);
