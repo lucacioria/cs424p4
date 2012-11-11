@@ -300,6 +300,10 @@ public abstract class VizPanel {
     this.y0Zoom = s(y0);
   }
 
+  public void move(float xOffset, float yOffset) {
+    modifyPosition((x0 - parent.x0) + xOffset, (y0 - parent.y0) + yOffset);
+  }
+
   public void modifyPositionAndSize(float newX0, float newY0, float newWidth, float newHeight) {
     modifyPosition(newX0, newY0);
     modifySize(newWidth, newHeight);
@@ -496,5 +500,14 @@ public abstract class VizPanel {
   public void stopTimerAndPrint(String message) {
     log((p.millis() - startTimer) + ": " + message);
   }
+
+  public int millis() {
+    return p.millis();
+  }
+
+  public float map(float value, float istart, float istop, float ostart, float ostop) {
+    return PApplet.map(value, istart, istop, ostart, ostop);
+  }
+
 
 }

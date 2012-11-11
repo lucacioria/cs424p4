@@ -15,10 +15,19 @@ public class DataSourceSQL {
   private boolean connected = false;
 
   public DataSourceSQL(PApplet context) {
-    String user = "organic";
-    String pass = "sharpcheddar";
-    String database = "crash";
-    String host = "inacarcrash.cnrtm99w3c2x.us-east-1.rds.amazonaws.com";
+    String user, pass, database, host;
+    if (com.anotherbrick.inthewall.Config.getInstance().onLocalServer) {
+      user = "root";
+      pass = "root";
+      database = "tweets";
+      host = "localhost";
+    } else {
+      user = "organic";
+      pass = "sharpcheddar";
+      database = "crash";
+      host = "inacarcrash.cnrtm99w3c2x.us-east-1.rds.amazonaws.com";
+    }
+
     sql = new MySQL(context, host, database, user, pass);
     try {
       Class.forName("com.mysql.jdbc.Driver").newInstance();

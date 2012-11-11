@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.Config.MyFontEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 
@@ -12,6 +13,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private Map map;
   private BlackBox blackBox1;
   private BlackBox blackBox2;
+  private Scroller scroller;
 
   public Application(float x0, float y0, float width, float height) {
     super(x0, y0, width, height);
@@ -24,10 +26,18 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   @Override
   public void setup() {
+    textFont(MyFontEnum.OPENSANS_REGULAR);
     setupMap();
     setupBlackBoxes();
+    setupScroller();
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
     if (c.initializeVisualization) initializeVisualization();
+  }
+
+  private void setupScroller() {
+    scroller = new Scroller(700, 0, 300, getHeight(), this);
+    scroller.setup();
+    addTouchSubscriber(scroller);
   }
 
   private void setupBlackBoxes() {
@@ -45,6 +55,11 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     ArrayList<Tweet> tweets = m.dataSourceSQL.getTweets("match(text) against('truck')");
     println(tweets.get(0).getId() + ": " + tweets.get(0).getText());
     m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
+    ArrayList<Tweet> scrollingTweets = new ArrayList<Tweet>();
+    for (int i = 0; i < 50; i++) {
+      scrollingTweets.add(tweets.get(i));
+    }
+    m.notificationCenter.notifyEvent(EventName.SCROLLING_TWEETS_UPDATED, scrollingTweets);
   }
 
   @Override
@@ -53,6 +68,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     map.draw();
     blackBox1.draw();
     blackBox2.draw();
+    scroller.draw();
     popStyle();
     return false;
   }

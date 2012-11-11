@@ -34,9 +34,10 @@ public class Config {
   public static final int ITALIAN = 2;
   public boolean initializeVisualization = false;
   public boolean drawTouch = true;
+  private PFont openSansRegular;
 
   public enum MyFontEnum {
-    HELVETICA, MYRIAD
+    HELVETICA, MYRIAD, OPENSANS_REGULAR, OPENSANS_BOLD
   }
 
   public enum MyColorEnum {
@@ -111,8 +112,9 @@ public class Config {
     }
 
     // load fonts
-    helvetica = p.loadFont(path + "fonts/Helvetica-120.vlw");
-    myriad = p.loadFont(path + "fonts/MyriadPro-200.vlw");
+    //helvetica = p.loadFont(path + "fonts/Helvetica-120.vlw");
+    //myriad = p.loadFont(path + "fonts/MyriadPro-200.vlw");
+    openSansRegular = p.loadFont(path + "fonts/OpenSans-200.vlw");
   }
 
   public static Config getInstance() {
@@ -188,6 +190,8 @@ public class Config {
       return helvetica;
     case MYRIAD:
       return myriad;
+    case OPENSANS_REGULAR:
+      return openSansRegular;
     default:
       return myriad;
     }
