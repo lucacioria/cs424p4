@@ -2,15 +2,17 @@ package com.anotherbrick.inthewall.datasource;
 
 import java.util.ArrayList;
 
-import com.anotherbrick.inthewall.Model;
-import com.anotherbrick.inthewall.BarChart.BarData;
-
 import processing.core.PApplet;
+
+import com.anotherbrick.inthewall.Model;
+import com.project4.Tweet;
+
 import de.bezier.data.sql.MySQL;
 
 public class DataSourceSQL {
 
   private MySQL sql;
+  private boolean connected = false;
 
   public DataSourceSQL(PApplet context) {
     String user = "organic";
@@ -25,109 +27,64 @@ public class DataSourceSQL {
     }
   }
 
-  public void getCrashes(DSFilter f) {
-    ArrayList<DSCrash> crashes = new ArrayList<DSCrash>();
+  public ArrayList<Tweet> getTweets(String where) {
+    ArrayList<Tweet> tweets = new ArrayList<Tweet>();
     String query;
-    if (sql.connect()) {
-      query = "SELECT _year,_state,_case,number_of_vehicles,number_of_persons,weather,city,county,day,"
-          + "hour,month,crash_related_factor_1,crash_related_factor_2,crash_related_factor_3,time,"
-          + "day_of_week,first_harmful_event,holiday_related,latitude,longitude,light_condition,"
-          + "number_of_fatalities,number_of_travel_lanes,roadway_function_class,roadway_surface_condition,"
-          + "roadway_surface_type,route_signing,speed_limit,trafficway_flow,age, age_range, air_bag_availability,"
-          + "alcohol_test_result,injury_severity,person_related_factors_1,person_related_factors_2,"
-          + "person_related_factors_3,person_type,alcohol_involved,drug_involved,"
-          + "race,seating_position,sex,body_type,most_harmful_event,number_of_occupants,"
-          + "travel_speed,vehicle_configuration,vehicle_related_factors_1,vehicle_related_factors_2,"
-          + "driver_related_factors_1,driver_related_factors_2,driver_related_factors_3,driver_related_factors_4 "
-          + " FROM krashes3 WHERE " + f.getWhereClause(true);
-      sql.query(query);
-      createArrayFromQuery(crashes);
-      Model.getInstance().crashes = crashes;
-      Model.getInstance().currentStateCode = crashes.get(0)._state;
-    }
-  }
-
-  public void getCrashesCountBy(DSFilter f, String groupField, String state, int barChartNumber) {
-    ArrayList<BarData> crashesCountForBarchart = new ArrayList<BarData>();
-    String query;
-    if (sql.connect()) {
-      ArrayList<String> states = new ArrayList<String>();
-      states.add(barChartNumber == 1 ? DSFilter.getValueByCode("_state",
-          Model.getInstance().currentStateCode) : state);
-      String where = f.getWhereClause(false);
-      query = "SELECT " + groupField + " as label, count(*) as count" + " FROM krashes3 WHERE "
-          + where + (where.length() > 0 ? " AND " : " ") + "_state IN ("
-          + DSFilter.getCodesByName("_state", states) + ") GROUP BY " + groupField;
-      System.out.println(query);
-      sql.query(query);
+    if (connect()) {
+      query = "SELECT id, user_id, lat, lon, creation_date_posix FROM tweets WHERE " + where;
+      query(query);
       while (sql.next()) {
-        BarData barData = new BarData();
-        barData.value = sql.getInt("count");
-        barData.label = sql.getString("label");
-        crashesCountForBarchart.add(barData);
+        Tweet tweet =
+            new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
+                sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
+        tweets.add(tweet);
       }
-      if (barChartNumber == 1) {
-        Model.getInstance().crashesCountForBarchart1 = DSFilter.adaptCountByToLabels(
-            crashesCountForBarchart, groupField);
-        Model.getInstance().currentGroupField1 = groupField;
-      } else {
-        Model.getInstance().crashesCountForBarchart2 = DSFilter.adaptCountByToLabels(
-            crashesCountForBarchart, groupField);
-        Model.getInstance().currentGroupField2 = groupField;
-      }
+      return tweets;
     }
+    return null;
   }
 
-  public int getStatePopulation(int currentStateCode) {
+  public ArrayList<Tweet> getCountByDay(String where) {
+    ArrayList<Tweet> tweets = new ArrayList<Tweet>();
     String query;
-    if (sql.connect()) {
-      query = "SELECT population FROM states WHERE id = " + currentStateCode;
-      System.out.println(query);
-      sql.query(query);
+    if (connect()) {
+      query = "SELECT count(id, user_id, lat, lon, creation_date_posix FROM tweets WHERE " + where;
+      query(query);
       while (sql.next()) {
-        return sql.getInt("population");
+        Tweet tweet =
+            new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
+                sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
+        tweets.add(tweet);
       }
+      return tweets;
     }
-    return -1;
+    return null;
   }
 
-  public int getStatePopulation(String currentStateCode) {
+  private boolean connect() {
+    if (connected)
+      return true;
+    else {
+      return sql.connect();
+    }
+  }
+
+  public String getTweetText(int id) {
     String query;
-    if (sql.connect()) {
-      query = "SELECT population FROM states WHERE name like '" + currentStateCode + "'";
-      System.out.println(query);
-      sql.query(query);
+    if (connect()) {
+      query = "SELECT text FROM tweets WHERE id = " + id;
+      query(query);
       while (sql.next()) {
-        return sql.getInt("population");
+        return sql.getString("text");
       }
     }
-    return -1;
+    return null;
   }
 
-  private void createArrayFromQuery(ArrayList<DSCrash> array) {
-    while (sql.next()) {
-      DSCrash event = new DSCrash();
-      event._year = sql.getInt("_year");
-      event._state = sql.getInt("_state");
-      event._case = sql.getInt("_case");
-      event.latitude = sql.getFloat("latitude");
-      event.longitude = sql.getFloat("longitude");
-      // value
-      event.weather = DSFilter.getValueByCode("weather", sql.getInt("weather"));
-      event.alcohol_involved = DSFilter.getValueByCode("alcohol_involved",
-          sql.getInt("alcohol_involved"));
-      event.drug_involved = DSFilter.getValueByCode("drug_involved", sql.getInt("drug_involved"));
-      event.day_of_week = DSFilter.getValueByCode("day_of_week", sql.getInt("day_of_week"));
-      event.month = DSFilter.getValueByCode("month", sql.getInt("month"));
-      event.age_range = DSFilter.getValueByCode("age_range", sql.getInt("age_range"));
-      event.sex = DSFilter.getValueByCode("sex", ((int) sql.getFloat("sex")));
-      // numeric
-      event.number_of_fatalities = DSFilter.getIntValue("number_of_fatalities",
-          sql.getInt("number_of_fatalities"));
-      event.age = DSFilter.getIntValue("age", sql.getInt("age"));
-      event.travel_speed = DSFilter.getIntValue("travel_speed", sql.getInt("travel_speed"));
-      //
-      array.add(event);
-    }
+  private void query(String query) {
+    int start = Model.getInstance().p.millis();
+    sql.query(query);
+    int end = Model.getInstance().p.millis();
+    System.out.println("[MYSQL] (" + (end - start) + "ms) " + query);
   }
 }
