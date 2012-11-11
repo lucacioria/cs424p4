@@ -1,28 +1,39 @@
 package com.anotherbrick.inthewall.FilterPlayGround;
 
+import static com.anotherbrick.inthewall.FilterPlayGround.BoxConnectorType.INGOING;
+import static com.anotherbrick.inthewall.FilterPlayGround.BoxConnectorType.OUTGOING;
+
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
-import static com.anotherbrick.inthewall.FilterPlayGround.BoxConnectorType.*;
 
 public class FilterLine extends VizPanel implements TouchEnabled {
+    private MyColorEnum color;
+
     public FilterLine(float x0, float y0, float width, float height,
-	    VizPanel parent) {
+	    VizPanel parent, MyColorEnum color) {
 	super(x0, y0, width, height, parent);
+	this.color = color;
+
     }
 
     private ArrayList<AbstractFilterBox> boxes = new ArrayList<AbstractFilterBox>();
 
     public void addBox(AbstractFilterBox afb) {
 	boxes.add(afb);
+	addTouchSubscriber(afb);
     }
 
     public void removeBox(AbstractFilterBox afb) {
 	boxes.remove(afb);
+	removeTouchSubscriber(afb);
     }
 
     private void addConection(AbstractFilterBox from, AbstractFilterBox to) {
+	System.out.println("connecting..." + from.isTerminal()
+		+ to.isTerminal());
 	if (!from.isTerminal())
 	    from.addOutgoingConnection(to);
     }
@@ -36,35 +47,40 @@ public class FilterLine extends VizPanel implements TouchEnabled {
 	    for (AbstractFilterBox afb : boxes) {
 		BoxConnectorIngoing bci = (BoxConnectorIngoing) afb
 			.getInputConnector();
-		if (bci.containsPoint(x, y)) {
-		    if (currentBox != null
-			    && currentConnector.getType() == OUTGOING) {
-			addConection(currentBox, afb);
-			currentConnector.toggleActive();
-			bci.toggleActive();
-		    } else {
-			currentBox = afb;
-			currentConnector = bci;
-			currentConnector.toggleActive();
-		    }
+		if (bci.containsPoint(x, y) && currentBox != null
+			&& currentConnector.getType() == OUTGOING) {
+
+		    addConection(currentBox, afb);
+		    bci.deactivate();
+		    currentConnector.deactivate();
+		    currentConnector = null;
+		    currentBox = null;
+		} else if (bci.containsPoint(x, y)) {
+		    currentBox = afb;
+		    currentConnector = bci;
+		    bci.toggleActive();
 		}
-		BoxConnectorOutgoing bco = (BoxConnectorOutgoing) afb
-			.getInputConnector();
-		if (bco.containsPoint(x, y)) {
-		    if (currentBox != null
+		if (!afb.isTerminal()) {
+		    BoxConnectorOutgoing bco = (BoxConnectorOutgoing) afb
+			    .getOutputConnector();
+		    if (bco.containsPoint(x, y) && currentBox != null
 			    && currentConnector.getType() == INGOING) {
 			addConection(afb, currentBox);
-			currentConnector.toggleActive();
-			bci.toggleActive();
-		    } else {
+			bco.deactivate();
+			currentConnector.deactivate();
+			currentConnector = null;
+			currentBox = null;
+
+		    } else if (bco.containsPoint(x, y)) {
 			currentBox = afb;
 			currentConnector = bco;
-			currentConnector.toggleActive();
+			bco.toggleActive();
 		    }
 		}
 	    }
 	}
 	propagateTouch(x, y, down, touchType);
+	log("arriva il touch!! si salvi chi puo..");
 	return false;
     }
 
@@ -75,18 +91,24 @@ public class FilterLine extends VizPanel implements TouchEnabled {
 
     @Override
     public boolean draw() {
+	pushStyle();
+	stroke(color);
+	strokeWeight(2);
 	for (AbstractFilterBox abc : boxes) {
 	    abc.draw();
-	    AbstractFilterBox prev = null;
+	    AbstractFilterBox prev = abc;
 	    for (AbstractFilterBox next : abc.getOutgoingConnections()) {
-		if (prev != null)
-		    line(prev.getOutputConnector().getX0(), prev
-			    .getOutputConnector().getY0(), next
-			    .getInputConnector().getX0(), next
-			    .getInputConnector().getY0());
+		float sourceX = prev.getOutputConnector().getX0()
+			+ prev.getX0();
+		float sourceY = prev.getOutputConnector().getY0()
+			+ prev.getY0();
+		float destX = next.getInputConnector().getX0() + next.getX0();
+		float destY = next.getInputConnector().getY0() + next.getY0();
+		line(sourceX, sourceY, destX, destY);
+		prev = next;
 	    }
 	}
-
+	popStyle();
 	return false;
     }
 }

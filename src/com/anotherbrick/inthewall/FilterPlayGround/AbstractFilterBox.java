@@ -11,8 +11,8 @@ public abstract class AbstractFilterBox extends VizPanel implements
 	Serializable, TouchEnabled {
 
     private static final long serialVersionUID = 5807010684381393247L;
-    private AbstractBoxConnector inputConnector;
-    private AbstractBoxConnector outputConnector;
+    protected BoxConnectorIngoing inputConnector;
+    protected BoxConnectorOutgoing outputConnector;
 
     public AbstractBoxConnector getInputConnector() {
 	return inputConnector;
@@ -22,15 +22,13 @@ public abstract class AbstractFilterBox extends VizPanel implements
 	return outputConnector;
     }
 
-    public float CONNECTOR_SIZE = 30;
-    public MyColorEnum BOX_COLOR = MyColorEnum.DARK_WHITE;
+    public float CONNECTOR_SIZE = 20;
+    public MyColorEnum BOX_COLOR = MyColorEnum.RED;
 
     public AbstractFilterBox(float x0, float y0, float width, float height,
 	    VizPanel parent) {
 	super(x0, y0, width, height, parent);
-	float connectorX0 = CONNECTOR_SIZE / 2;
-	float connectorY0 = (getHeight() - CONNECTOR_SIZE) / 2;
-	inputConnector = new BoxConnectorIngoing(connectorX0, connectorY0,
+	inputConnector = new BoxConnectorIngoing(0, getHeight() / 2,
 		CONNECTOR_SIZE, CONNECTOR_SIZE, this);
     }
 
@@ -46,13 +44,14 @@ public abstract class AbstractFilterBox extends VizPanel implements
 
     public boolean draw() {
 	pushStyle();
-	fill(BOX_COLOR);
-	rect(getX0(), getY0(), getWidth(), getHeight());
+	background(MyColorEnum.RED);
 	inputConnector.draw();
 	if (!isTerminal()) {
 	    outputConnector.draw();
 	}
 	popStyle();
+	if (dragging)
+	    modifyPositionWithAbsoluteValue(m.touchX, m.touchY);
 	return false;
     }
 
@@ -60,7 +59,17 @@ public abstract class AbstractFilterBox extends VizPanel implements
 	return outgoingConnections;
     }
 
+    private boolean dragging = false;
+
     public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
+
+	if (down) {
+	    dragging = true;
+	    setModal(true);
+	} else {
+	    dragging = false;
+	    setModal(false);
+	}
 	return false;
     }
 

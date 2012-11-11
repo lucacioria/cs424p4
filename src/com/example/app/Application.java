@@ -4,36 +4,50 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
+import com.anotherbrick.inthewall.FilterPlayGround.FilterPlayGround;
 
-public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
+public class Application extends VizPanel implements TouchEnabled,
+	EventSubscriber {
 
-  public Application(float x0, float y0, float width, float height) {
-    super(x0, y0, width, height);
-  }
+    public Application(float x0, float y0, float width, float height) {
+	super(x0, y0, width, height);
+    }
 
-  @Override
-  public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    return propagateTouch(x, y, down, touchType);
-  }
+    FilterPlayGround fpg;
 
-  @Override
-  public void setup() {
-    m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
-    if (c.initializeVisualization) initializeVisualization();
-  }
+    @Override
+    public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
+	return propagateTouch(x, y, down, touchType);
+    }
 
-  private void initializeVisualization() {
-  }
+    @Override
+    public void setup() {
+	m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
+	if (c.initializeVisualization)
+	    initializeVisualization();
+	setupFilterPlayGround();
+    }
 
-  @Override
-  public boolean draw() {
-    pushStyle();
-    popStyle();
-    return false;
-  }
+    private void setupFilterPlayGround() {
+	fpg = new FilterPlayGround(0, 0, getWidth(), getHeight(), this);
+	fpg.setup();
+	addTouchSubscriber(fpg);
+	fpg.addTerminalBox();
+    }
 
-  @Override
-  public void eventReceived(EventName eventName, Object data) {
-  }
+    private void initializeVisualization() {
+    }
+
+    @Override
+    public boolean draw() {
+	pushStyle();
+	fpg.draw();
+	popStyle();
+	return false;
+    }
+
+    @Override
+    public void eventReceived(EventName eventName, Object data) {
+    }
 
 }

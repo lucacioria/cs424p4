@@ -5,7 +5,8 @@ import java.io.Serializable;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizPanel;
 
-public abstract class AbstractBoxConnector extends VizPanel implements Serializable {
+public abstract class AbstractBoxConnector extends VizPanel implements
+	Serializable {
 
     private static final long serialVersionUID = 8197227398393603393L;
     private boolean active = false;
@@ -42,7 +43,7 @@ public abstract class AbstractBoxConnector extends VizPanel implements Serializa
     public boolean draw() {
 	pushStyle();
 	fill(active ? ACTIVE_COLOR : UNACTIVE_COLOR);
-	ellipse(getX0(), getY0(), getWidth(), getHeight());
+	ellipse(0, 0, getWidth(), getHeight());
 	popStyle();
 	return false;
     }
