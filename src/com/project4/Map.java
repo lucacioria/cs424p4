@@ -165,20 +165,28 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     maxLon += lon;
     minLat -= lat;
     maxLat += lat;
+    repositionMap();
+  }
+
+  private void repositionMap() {
     // fix errors
     if (minLon < MIN_LON) {
-      minLon += MIN_LON - minLon;
-      maxLon += MIN_LON - minLon;
+      double val = MIN_LON - minLon;
+      minLon += val;
+      maxLon += val;
     } else if (maxLon > MAX_LON) {
-      minLon -= MAX_LON - maxLon;
-      maxLon -= MAX_LON - maxLon;
+      double val = MAX_LON - maxLon;
+      minLon -= val;
+      maxLon -= val;
     }
     if (minLat < MIN_LAT) {
-      minLat += MIN_LAT - minLat;
-      maxLat += MIN_LAT - minLat;
+      double val = MIN_LAT - minLat;
+      minLat += val;
+      maxLat += val;
     } else if (maxLat > MAX_LAT) {
-      minLat -= maxLat - MAX_LAT;
-      maxLat -= maxLat - MAX_LAT;
+      double val = maxLat - MAX_LAT;
+      minLat -= val;
+      maxLat -= val;
     }
   }
 
