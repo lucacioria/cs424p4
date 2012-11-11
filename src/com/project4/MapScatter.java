@@ -12,7 +12,7 @@ import com.anotherbrick.inthewall.VizPanel;
 
 public class MapScatter extends VizPanel implements TouchEnabled, EventSubscriber {
 
-  private ArrayList<Tweet> tweets;
+  private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
   private Map map;
 
   public MapScatter(float x0, float y0, float width, float height, Map parent) {

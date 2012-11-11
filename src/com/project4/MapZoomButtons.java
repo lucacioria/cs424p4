@@ -23,19 +23,19 @@ public class MapZoomButtons extends VizPanel implements TouchEnabled {
     zoomInButton = new VizButton(0, 0, 20, 20, this);
     zoomInButton.name = "zoomInButton";
     zoomInButton.text = "+";
-    zoomInButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
+    zoomInButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 155f,
+        155f, 10);
     zoomInButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
-        255f, 10);
+        155f, 10);
     addTouchSubscriber(zoomInButton);
 
     zoomOutButton = new VizButton(0, 20, 20, 20, this);
     zoomOutButton.name = "zoomOutButton";
     zoomOutButton.text = "-";
-    zoomOutButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
+    zoomOutButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 155f,
+        155f, 10);
     zoomOutButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
-        MyColorEnum.DARK_GRAY, 255f, 10);
+        MyColorEnum.DARK_GRAY, 155f, 10);
     addTouchSubscriber(zoomOutButton);
   }
 

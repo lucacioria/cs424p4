@@ -1,5 +1,8 @@
 package com.project4;
 
+import java.util.Stack;
+
+import processing.core.PApplet;
 import processing.core.PImage;
 
 import com.anotherbrick.inthewall.EventSubscriber;
@@ -22,6 +25,9 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   private PImage mapImage;
   private MapScatter mapScatter;
   private MapZoomButtons mapZoomButtons;
+  private Stack<Double> zoomStackLon = new Stack<Double>();
+  private Stack<Double> zoomStackLat = new Stack<Double>();
+  private MapPanButtons mapPanButtons;
 
   public Map(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -29,21 +35,28 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
 
   @Override
   public void eventReceived(EventName eventName, Object data) {
-    if(eventName==EventName.BUTTON_TOUCHED){
+    if (eventName == EventName.BUTTON_TOUCHED) {
       manageButtons(data.toString());
     }
   }
-  
-  private void manageButtons(String buttonName){
-    if(buttonName.equals("zoomInButton")){
+
+  private void manageButtons(String buttonName) {
+    if (buttonName.equals("zoomInButton")) {
       zoomIn();
-    }
-    if(buttonName.equals("zoomOutButton")){
+    } else if (buttonName.equals("zoomOutButton")) {
       zoomOut();
+    } else if (buttonName.equals("panUpButton")) {
+      panUp();
+    } else if (buttonName.equals("panDownButton")) {
+      panDown();
+    } else if (buttonName.equals("panRightButton")) {
+      panRight();
+    } else if (buttonName.equals("panLeftButton")) {
+      panLeft();
     }
   }
 
- 
+
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -58,14 +71,21 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     minLon = MIN_LON;
     mapImage = c.getImage("map", "png");
     setupMapZoomButtons();
+    setupMapPanButtons();
     setupMapScatter();
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
   }
 
   private void setupMapZoomButtons() {
-    mapZoomButtons = new MapZoomButtons(getWidth() - 40, getHeight() - 60, this);
+    mapZoomButtons = new MapZoomButtons(getWidth() - 60, getHeight() - 60, this);
     addTouchSubscriber(mapZoomButtons);
     mapZoomButtons.setup();
+  }
+
+  private void setupMapPanButtons() {
+    mapPanButtons = new MapPanButtons(getWidth() - 80, getHeight() - 140, this);
+    addTouchSubscriber(mapPanButtons);
+    mapPanButtons.setup();
   }
 
   private void setupMapScatter() {
@@ -79,6 +99,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     drawImage();
     mapScatter.draw();
     mapZoomButtons.draw();
+    mapPanButtons.draw();
     return false;
   }
 
@@ -86,22 +107,79 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     double zoom = (MAX_LON - MIN_LON) / (maxLon - minLon);
     double width = zoom * getWidth();
     double height = zoom * getHeight();
-    double offsetLon = ((minLon - MIN_LON) / (MAX_LON - MIN_LON) ) * width;
-    double offsetLat = ((minLat - MIN_LAT) / (MAX_LAT - MIN_LAT) ) * height;
-    image(mapImage,(float) -offsetLon,(float) -offsetLat,(float) width,(float) height);
+    double offsetLon = ((minLon - MIN_LON) / (MAX_LON - MIN_LON)) * width;
+    double offsetLat = ((minLat - MIN_LAT) / (MAX_LAT - MIN_LAT)) * height;
+    image(mapImage, (float) -offsetLon, (float) -offsetLat, (float) width, (float) height);
   }
- 
+
   private void zoomIn() {
-    minLon += (maxLon - minLon)/3;
-    maxLon -= (maxLon - minLon)/3;
-    minLat += (maxLat - minLat)/3;
-    maxLat -= (maxLat - minLat)/3;
+    double lon = (maxLon - minLon) / 7;
+    double lat = (maxLat - minLat) / 7;
+    zoomStackLon.add(lon);
+    zoomStackLat.add(lat);
+    minLon += lon;
+    maxLon -= lon;
+    minLat += lat;
+    maxLat -= lat;
   }
+
+  private double getPanOffset() {
+    return (maxLat - minLat) / 10;
+  }
+
+  private void panUp() {
+    double offset = Math.min(minLat - MIN_LAT, getPanOffset());
+    minLat -= offset;
+    maxLat -= offset;
+  }
+
+  private void panDown() {
+    double offset = Math.min(MAX_LAT - maxLat, getPanOffset());
+    minLat += offset;
+    maxLat += offset;
+  }
+
+  private void panLeft() {
+    double offset = Math.min(Math.abs(MIN_LON - minLon), getPanOffset());
+    minLon -= offset;
+    maxLon -= offset;
+  }
+
+  private void panRight() {
+    double offset = Math.min(Math.abs(maxLon - MAX_LON), getPanOffset());
+    minLon += offset;
+    maxLon += offset;
+  }
+
   private void zoomOut() {
-    minLon -= (maxLon - minLon);
-    maxLon += (maxLon - minLon);
-    minLat -= (maxLat - minLat);
-    maxLat += (maxLat - minLat);
+    if (zoomStackLat.size() == 0) {
+      minLon = MIN_LON;
+      minLat = MIN_LAT;
+      maxLon = MAX_LON;
+      maxLat = MAX_LAT;
+      return;
+    }
+    double lat = zoomStackLat.pop();
+    double lon = zoomStackLon.pop();
+    minLon -= lon;
+    maxLon += lon;
+    minLat -= lat;
+    maxLat += lat;
+    // fix errors
+    if (minLon < MIN_LON) {
+      minLon += MIN_LON - minLon;
+      maxLon += MIN_LON - minLon;
+    } else if (maxLon > MAX_LON) {
+      minLon -= MAX_LON - maxLon;
+      maxLon -= MAX_LON - maxLon;
+    }
+    if (minLat < MIN_LAT) {
+      minLat += MIN_LAT - minLat;
+      maxLat += MIN_LAT - minLat;
+    } else if (maxLat > MAX_LAT) {
+      minLat -= maxLat - MAX_LAT;
+      maxLat -= maxLat - MAX_LAT;
+    }
   }
 
   public double getMaxLat() {
