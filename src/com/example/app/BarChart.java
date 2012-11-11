@@ -1,13 +1,12 @@
 package com.example.app;
 
-import com.anotherbrick.inthewall.BarChart.BarData;
-import com.anotherbrick.inthewall.BarChart.VizBarChart;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
-import com.anotherbrick.inthewall.datasource.DSFilter;
 import com.anotherbrick.inthewall.VizPanel;
+import com.anotherbrick.inthewall.BarChart.VizBarChart;
+import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -57,7 +56,7 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
     if (eventName == EventName.CRASHES_COUNT_BY_VALUE_UPDATED) {
       if (barChartNumber == 1 && data.toString().equals("barChart1")) {
         barChart.data = m.crashesCountForBarchart1;
-        //
+        /*
         if (m.population) {
           int pop = m.dataSourceSQL.getStatePopulation(m.currentStateCode);
           for (BarData x : m.crashesCountForBarchart1) {
@@ -78,7 +77,7 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
             x.value /= pop;
           }
         }
-        //
+        */
         barChart.title = DSFilter.getLabelByName(m.currentGroupField2) + " ("
             + m.selectorPanelsState.get("selectorBarChart2State").get(0).toString() + ")";
         barChart.setup();

@@ -34,8 +34,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void initializeVisualization() {
-    ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-    tweets.add(new Tweet(42.22717, 93.33772, 1305725160, 1, 3));
+    ArrayList<Tweet> tweets = m.dataSourceSQL.getTweets("text like '%truck%'");
     m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
   }
 
