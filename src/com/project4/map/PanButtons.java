@@ -1,18 +1,18 @@
-package com.project4;
+package com.project4.map;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizButton;
 import com.anotherbrick.inthewall.VizPanel;
 
-public class MapPanButtons extends VizPanel implements TouchEnabled {
+public class PanButtons extends VizPanel implements TouchEnabled {
 
   private VizButton panUpButton;
   private VizButton panDownButton;
   private VizButton panLeftButton;
   private VizButton panRightButton;
 
-  public MapPanButtons(float x0, float y0, VizPanel parent) {
+  public PanButtons(float x0, float y0, VizPanel parent) {
     super(x0, y0, 60, 60, parent);
   }
 

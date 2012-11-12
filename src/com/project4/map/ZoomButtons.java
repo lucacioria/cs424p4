@@ -1,16 +1,16 @@
-package com.project4;
+package com.project4.map;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizButton;
 import com.anotherbrick.inthewall.VizPanel;
 
-public class MapZoomButtons extends VizPanel implements TouchEnabled {
+public class ZoomButtons extends VizPanel implements TouchEnabled {
 
   private VizButton zoomInButton;
   private VizButton zoomOutButton;
 
-  public MapZoomButtons(float x0, float y0, VizPanel parent) {
+  public ZoomButtons(float x0, float y0, VizPanel parent) {
     super(x0, y0, 20, 40, parent);
   }
 

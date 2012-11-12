@@ -1,4 +1,4 @@
-package com.project4;
+package com.project4.map;
 
 import java.util.Stack;
 
@@ -7,6 +7,7 @@ import processing.core.PImage;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
+import com.anotherbrick.inthewall.datasource.Tweet;
 import com.anotherbrick.inthewall.VizPanel;
 
 public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
@@ -22,12 +23,12 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   private double minLon;
 
   private PImage mapImage;
-  private MapScatter mapScatter;
-  private MapHeatMap mapHeatMap;
-  private MapZoomButtons mapZoomButtons;
+  private Scatter mapScatter;
+  private HeatMap mapHeatMap;
+  private ZoomButtons mapZoomButtons;
   private Stack<Double> zoomStackLon = new Stack<Double>();
   private Stack<Double> zoomStackLat = new Stack<Double>();
-  private MapPanButtons mapPanButtons;
+  private PanButtons mapPanButtons;
 
   public Map(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -82,25 +83,25 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
 
 
   private void setupMapZoomButtons() {
-    mapZoomButtons = new MapZoomButtons(getWidth() - 60, getHeight() - 60, this);
+    mapZoomButtons = new ZoomButtons(getWidth() - 60, getHeight() - 60, this);
     addTouchSubscriber(mapZoomButtons);
     mapZoomButtons.setup();
   }
 
   private void setupMapPanButtons() {
-    mapPanButtons = new MapPanButtons(getWidth() - 80, getHeight() - 140, this);
+    mapPanButtons = new PanButtons(getWidth() - 80, getHeight() - 140, this);
     addTouchSubscriber(mapPanButtons);
     mapPanButtons.setup();
   }
 
   private void setupMapScatter() {
-    mapScatter = new MapScatter(0, 0, getWidth(), getHeight(), this);
+    mapScatter = new Scatter(0, 0, getWidth(), getHeight(), this);
     mapScatter.setup();
     addTouchSubscriber(mapScatter);
   }
   
   private void setupMapHeatMap() {
-    mapHeatMap = new MapHeatMap(0, 0, getWidth(), getHeight(), this);
+    mapHeatMap = new HeatMap(0, 0, getWidth(), getHeight(), this);
     mapHeatMap.setup();
     addTouchSubscriber(mapHeatMap);
   }

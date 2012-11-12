@@ -1,4 +1,4 @@
-package com.project4;
+package com.project4.map;
 
 import java.util.ArrayList;
 
@@ -8,14 +8,15 @@ import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
+import com.anotherbrick.inthewall.datasource.Tweet;
 import com.anotherbrick.inthewall.VizPanel;
 
-public class MapScatter extends VizPanel implements TouchEnabled, EventSubscriber {
+public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
   private Map map;
 
-  public MapScatter(float x0, float y0, float width, float height, Map parent) {
+  public Scatter(float x0, float y0, float width, float height, Map parent) {
     super(x0, y0, width, height, parent);
     this.map = parent;
   }

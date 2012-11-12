@@ -6,7 +6,10 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.Config.MyFontEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
+import com.anotherbrick.inthewall.datasource.Tweet;
+import com.anotherbrick.inthewall.datasource.User;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.map.Map;
 
 public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -59,7 +62,8 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     for (int i = 0; i < 50; i++) {
       scrollingTweets.add(tweets.get(i));
     }
-    m.notificationCenter.notifyEvent(EventName.SCROLLING_TWEETS_UPDATED, scrollingTweets);
+    ArrayList<User> users = m.dataSourceSQL.getUsers("match(text) against('truck')", 2);
+    m.notificationCenter.notifyEvent(EventName.USERS_UPDATED, users);
   }
 
   @Override

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.datasource.Tweet;
 import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;

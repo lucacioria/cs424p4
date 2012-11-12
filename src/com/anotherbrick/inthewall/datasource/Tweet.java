@@ -1,4 +1,4 @@
-package com.project4;
+package com.anotherbrick.inthewall.datasource;
 
 import com.anotherbrick.inthewall.Model;
 

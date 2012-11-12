@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Model;
-import com.project4.Tweet;
 
 import de.bezier.data.sql.MySQL;
 
@@ -34,6 +33,39 @@ public class DataSourceSQL {
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  public ArrayList<User> getUsers(String where, int minTweets) {
+    ArrayList<User> users = new ArrayList<User>();
+    String query;
+    if (connect()) {
+      query =
+          "select t.user_id, group_concat(t.lat) as lat, group_concat(t.lon) as lon, "
+              + "group_concat(t.creation_date_posix) as creation_date_posix, group_concat(t.id) as id"
+              + " from (select * from tweets as t1 where " + where
+              + " order by t1.creation_date_posix) t group by t.user_id having count(*) >= " + minTweets;
+      query(query);
+      while (sql.next()) {
+        ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+        // get group attributes
+        String[] lat = sql.getString("lat").split(",");
+        String[] lon = sql.getString("lon").split(",");
+        String[] id = sql.getString("id").split(",");
+        String[] creation_date_posix = sql.getString("creation_date_posix").split(",");
+        // for loop..
+        int userId = sql.getInt("user_id");
+        for (int i = 0; i < lat.length; i++) {
+          Tweet tweet =
+              new Tweet(Double.valueOf(lat[i]).doubleValue(),
+                  -Double.valueOf(lon[i]).doubleValue(), Integer.valueOf(creation_date_posix[i])
+                      .intValue(), Integer.valueOf(id[i]).intValue(), userId);
+          tweets.add(tweet);
+        }
+        users.add(new User(userId, tweets));
+      }
+      return users;
+    }
+    return null;
   }
 
   public ArrayList<Tweet> getTweets(String where) {
