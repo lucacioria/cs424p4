@@ -32,6 +32,7 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
   public void setup() {
     m.notificationCenter.registerToEvent(EventName.USERS_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.MAP_ZOOMED_OR_PANNED, this);
+    m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
   }
 
   @Override
@@ -61,6 +62,9 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
     }
     if (eventName == EventName.MAP_ZOOMED_OR_PANNED) {
       udpateLinks();
+    }
+    if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals("linesButton")) {
+      toggleVisible();
     }
   }
 

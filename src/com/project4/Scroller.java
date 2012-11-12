@@ -22,6 +22,8 @@ public class Scroller extends VizPanel implements TouchEnabled, EventSubscriber 
   private float scrollHeight;
   private boolean scrolling;
   private float scrolledAmount;
+  public Tweet selectedTweet;
+  private boolean paused;
 
   @SuppressWarnings("unchecked")
   @Override
@@ -29,7 +31,22 @@ public class Scroller extends VizPanel implements TouchEnabled, EventSubscriber 
     if (eventName == EventName.SCROLLING_TWEETS_UPDATED) {
       tweets = (ArrayList<Tweet>) data;
       startScrolling();
+    } else if (eventName == EventName.TWEET_SELECTED) {
+      selectedTweet = (Tweet) data;
+      pauseScrolling();
+
+    } else if (eventName == EventName.TWEET_DESELECTED) {
+      selectedTweet = null;
+      resumeScrolling();
     }
+  }
+
+  private void pauseScrolling() {
+    paused = true;
+  }
+
+  private void resumeScrolling() {
+    paused = false;
   }
 
   private void startScrolling() {
@@ -46,6 +63,7 @@ public class Scroller extends VizPanel implements TouchEnabled, EventSubscriber 
           new ScrollerTweet(0, i * scrollHeight, getWidth(), scrollHeight, this);
       scrollerTweet.tweet = tweets.get(i);
       scrollerTweets.add(scrollerTweet);
+      addTouchSubscriber(scrollerTweet);
     }
   }
 
@@ -57,6 +75,8 @@ public class Scroller extends VizPanel implements TouchEnabled, EventSubscriber 
   @Override
   public void setup() {
     m.notificationCenter.registerToEvent(EventName.SCROLLING_TWEETS_UPDATED, this);
+    m.notificationCenter.registerToEvent(EventName.TWEET_SELECTED, this);
+    m.notificationCenter.registerToEvent(EventName.TWEET_DESELECTED, this);
   }
 
   @Override
@@ -72,7 +92,7 @@ public class Scroller extends VizPanel implements TouchEnabled, EventSubscriber 
   private void advanceScrolling() {
     if (scrolling) scroll();
     float timePassed = (millis() - lastMillis);
-    if (timePassed < 3500) return;
+    if (timePassed < 3500 || paused) return;
     lastMillis = millis();
     scrolling = true;
   }

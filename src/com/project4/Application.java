@@ -38,7 +38,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void setupScroller() {
-    scroller = new Scroller(700, 0, 300, getHeight(), this);
+    scroller = new Scroller(map.getX1(), 0, 300, getHeight(), this);
     scroller.setup();
     addTouchSubscriber(scroller);
   }
@@ -56,13 +56,12 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   private void initializeVisualization() {
     ArrayList<Tweet> tweets = m.dataSourceSQL.getTweets("match(text) against('truck')");
-    println(tweets.get(0).getId() + ": " + tweets.get(0).getText());
     m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
-    ArrayList<Tweet> scrollingTweets = new ArrayList<Tweet>();
-    for (int i = 0; i < 50; i++) {
-      scrollingTweets.add(tweets.get(i));
-    }    
-    m.notificationCenter.notifyEvent(EventName.SCROLLING_TWEETS_UPDATED, scrollingTweets);
+//    ArrayList<Tweet> scrollingTweets = new ArrayList<Tweet>();
+//    for (int i = 0; i < 50; i++) {
+//      scrollingTweets.add(tweets.get(i));
+//    }    
+//    m.notificationCenter.notifyEvent(EventName.SCROLLING_TWEETS_UPDATED, scrollingTweets);
     ArrayList<User> users = m.dataSourceSQL.getUsers("id < 1000", 15);
     m.notificationCenter.notifyEvent(EventName.USERS_UPDATED, users);
   }
