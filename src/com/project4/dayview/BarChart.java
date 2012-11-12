@@ -1,16 +1,11 @@
 package com.project4.dayview;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.SortedSet;
 
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
 import com.anotherbrick.inthewall.BarChart.BarData;
 import com.anotherbrick.inthewall.BarChart.VizBarChart;
-import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.project4.datasource.Filter;
 
 public class BarChart extends VizPanel implements TouchEnabled {

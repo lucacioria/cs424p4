@@ -37,15 +37,14 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     textFont(MyFontEnum.OPENSANS_REGULAR);
     setupMap();
     setupBlackBoxes();
-    // setupScroller();
+    setupScroller();
     setupDayView();
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
     if (c.initializeVisualization) initializeVisualization();
   }
 
   private void setupDayView() {
-    // dayView = new DayView(0, map.getY1(), map.getWidth(), getHeight() - map.getHeight(), this);
-    dayView = new DayView(700, 40, 500, 300, this);
+    dayView = new DayView(0, map.getY1(), map.getWidth(), getHeight() - map.getHeight(), this);
     dayView.setup();
     addTouchSubscriber(dayView);
   }
@@ -93,7 +92,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     map.draw();
     blackBox1.draw();
     blackBox2.draw();
-    // scroller.draw();
+    scroller.draw();
     dayView.draw();
     popStyle();
     return false;

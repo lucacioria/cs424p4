@@ -79,7 +79,7 @@ public class DataSourceSQL {
   }
 
   public ArrayList<Day> getDays(ArrayList<Filter> filters) {
-    Day[] days = new Day[22];
+    Day[] days = new Day[21];
     Arrays.fill(days, null);
     for (int i = 0; i < filters.size(); i++) {
       String query;

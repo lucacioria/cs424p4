@@ -51,7 +51,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
     textSize(8);
     fill(MyColorEnum.WHITE);
     float max = getMaxValue();
-    int numberOfTicks = 10;
+    int numberOfTicks = 3;
     float tickValue = max / numberOfTicks;
     for (int i = 0; i < numberOfTicks; i++) {
       float y = chartYBottom - PApplet.map(i, 0, numberOfTicks - 1, 0, chartHeight);
@@ -60,8 +60,10 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
         numberLabel = Helper.floatToString((tickValue * i), 0, true);
       } else if ((tickValue * i) > 1) {
         numberLabel = Helper.floatToString((tickValue * i), 1, true);
-      } else {
+      } else if ((tickValue * i) != 0){
         numberLabel = Helper.floatToString((tickValue * i), 3, true);
+      } else {
+        numberLabel = Helper.floatToString((tickValue * i), 0, true);        
       }
       text(numberLabel, chartXLeft - 5, y);
     }
@@ -91,9 +93,9 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   }
 
   private void setupChartLocation() {
-    chartXLeft = 50;
-    chartXRight = getWidth() - 20;
-    chartYTop = 10;
+    chartXLeft = 40;
+    chartXRight = getWidth() - 10;
+    chartYTop = 5;
     chartYBottom = getHeight() - 30;
     chartWidth = chartXRight - chartXLeft;
     chartHeight = chartYBottom - chartYTop;
