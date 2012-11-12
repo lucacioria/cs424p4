@@ -1,10 +1,15 @@
 package com.project4.datasource;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.TreeMap;
 
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Model;
+import com.project4.datasource.Day.WeatherEnum;
 
 import de.bezier.data.sql.MySQL;
 
@@ -43,7 +48,8 @@ public class DataSourceSQL {
           "select t.user_id, group_concat(t.lat) as lat, group_concat(t.lon) as lon, "
               + "group_concat(t.creation_date_posix) as creation_date_posix, group_concat(t.id) as id"
               + " from (select * from tweets as t1 where " + where
-              + " order by t1.creation_date_posix) t group by t.user_id having count(*) >= " + minTweets;
+              + " order by t1.creation_date_posix) t group by t.user_id having count(*) >= "
+              + minTweets;
       query(query);
       while (sql.next()) {
         ArrayList<Tweet> tweets = new ArrayList<Tweet>();
@@ -56,11 +62,11 @@ public class DataSourceSQL {
         int userId = sql.getInt("user_id");
         for (int i = 0; i < lat.length; i++) {
           try {
-          Tweet tweet =
-              new Tweet(Double.valueOf(lat[i]).doubleValue(),
-                  -Double.valueOf(lon[i]).doubleValue(), Integer.valueOf(creation_date_posix[i])
-                      .intValue(), Integer.valueOf(id[i]).intValue(), userId);
-          tweets.add(tweet);
+            Tweet tweet =
+                new Tweet(Double.valueOf(lat[i]).doubleValue(), -Double.valueOf(lon[i])
+                    .doubleValue(), Integer.valueOf(creation_date_posix[i]).intValue(), Integer
+                    .valueOf(id[i]).intValue(), userId);
+            tweets.add(tweet);
           } catch (ArrayIndexOutOfBoundsException e) {
             System.out.println("error in parsing tweet");
           }
@@ -70,6 +76,45 @@ public class DataSourceSQL {
       return users;
     }
     return null;
+  }
+
+  public ArrayList<Day> getDays(ArrayList<Filter> filters) {
+    Day[] days = new Day[22];
+    Arrays.fill(days, null);
+    for (int i = 0; i < filters.size(); i++) {
+      String query;
+      if (connect()) {
+        query =
+            "SELECT day, count(*) as count FROM tweets WHERE " + filters.get(i).getWhere()
+                + "GROUP BY day";
+        query(query);
+        while (sql.next()) {
+          // add day if doesn't exist
+          if (days[sql.getInt("day")] == null) {
+            Day day = emptyDay(sql.getInt("day"), filters);
+            days[sql.getInt("day")] = day;
+          }
+          // update count
+          days[sql.getInt("day")].setCount(filters.get(i), sql.getInt("count"));
+        }
+      }
+    }
+    // insert missing days
+    for (int i = 0; i < days.length; i++) {
+      if (days[i] == null) {
+        days[i] = emptyDay(i, filters);
+      }
+    }
+    //
+    return new ArrayList<Day>(Arrays.asList(days));
+  }
+
+  private Day emptyDay(int dayNumber, ArrayList<Filter> filters) {
+    Day day = new Day(dayNumber, WeatherEnum.CLEAR, 5, 0);
+    for (Filter f : filters) {
+      day.setCount(f, 0);
+    }
+    return day;
   }
 
   public ArrayList<Tweet> getTweets(String where) {

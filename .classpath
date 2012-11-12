@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/example/app/" kind="src" path="src"/>
+	<classpathentry excluding="com/example/app/|com/example/" kind="src" path="src"/>
 	<classpathentry kind="lib" path="libs/core.jar"/>
 	<classpathentry kind="lib" path="libs/modestmaps.jar"/>
 	<classpathentry kind="lib" path="libs/mysql-connector-java-3.1.14-bin.jar"/>

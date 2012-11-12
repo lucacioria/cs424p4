@@ -1,4 +1,4 @@
-package com.anotherbrick.inthewall;
+package com.example;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,15 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PVector;
 
+import com.anotherbrick.inthewall.Cluster;
+import com.anotherbrick.inthewall.Config;
+import com.anotherbrick.inthewall.EventSubscriber;
+import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizMapLegend;
+import com.anotherbrick.inthewall.VizNotificationCenter;
+import com.anotherbrick.inthewall.VizPanel;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
@@ -14,7 +22,7 @@ import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
 import com.project4.datasource.DSCrash;
 
-public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber {
+public class ModMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private InteractiveMap map;
   private PVector mapOffset;
   private PVector mapSize;
@@ -29,7 +37,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private String colorFilter = "alcohol_involved";
   private int clusterLevel;
 
-  public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
+  public ModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
     this.parent = parent;
   }

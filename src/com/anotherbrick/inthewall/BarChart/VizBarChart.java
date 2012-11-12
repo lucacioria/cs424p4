@@ -12,9 +12,9 @@ import com.anotherbrick.inthewall.VizPanel;
 public class VizBarChart extends VizPanel implements TouchEnabled {
 
   public String title;
-  public ArrayList<BarData> data;
+  private ArrayList<BarData> data;
   public MyColorEnum backgroundColor = MyColorEnum.DARK_GRAY;
-  public MyColorEnum barColor = MyColorEnum.LIGHT_BLUE;
+  public MyColorEnum[] barColors = {MyColorEnum.LIGHT_BLUE, MyColorEnum.LIGHT_ORANGE, MyColorEnum.LIGHT_GREEN, MyColorEnum.LIGHT_GREEN, MyColorEnum.LIGHT_GREEN};
   public MyColorEnum textColor = MyColorEnum.WHITE;
 
   private float chartXLeft, chartXRight, chartYBottom, chartYTop, chartWidth, chartHeight;
@@ -38,6 +38,11 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
     drawYAxis();
     popStyle();
     return false;
+  }
+  
+  public void setData(ArrayList<BarData> data) {
+    this.data = data;
+    updateBars();
   }
 
   private void drawYAxis() {
@@ -64,6 +69,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   }
 
   private void drawTitle() {
+    if (title == null) return;
     pushStyle();
     textSize(15);
     fill(MyColorEnum.WHITE);
@@ -87,7 +93,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   private void setupChartLocation() {
     chartXLeft = 50;
     chartXRight = getWidth() - 20;
-    chartYTop = 40;
+    chartYTop = 10;
     chartYBottom = getHeight() - 30;
     chartWidth = chartXRight - chartXLeft;
     chartHeight = chartYBottom - chartYTop;
@@ -95,6 +101,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
 
   private void updateBars() {
     bars.clear();
+    if (data == null) return;
     int n = data.size();
     float barWidth = chartWidth / n;
     float maxValue = getMaxValue();
@@ -103,7 +110,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
       float x0 = chartXLeft + barWidth * i;
       VizBar bar = new VizBar(x0, chartYTop, barWidth, chartHeight, this);
       bar.barData = barData;
-      bar.barColor = barColor;
+      bar.barColors = barColors;
       bar.maxValue = maxValue;
       bar.setup();
       addTouchSubscriber(bar);
@@ -114,8 +121,10 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   private float getMaxValue() {
     float max = Float.MIN_VALUE;
     for (BarData barData : data) {
-      if (barData.value > max) {
-        max = barData.value;
+      for (int i = 0; i < barData.values.length; i++) {        
+        if (barData.values[i] > max) {
+          max = barData.values[i];
+        }
       }
     }
     return max;

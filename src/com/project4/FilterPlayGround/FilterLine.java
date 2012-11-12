@@ -1,7 +1,7 @@
-package com.anotherbrick.inthewall.FilterPlayGround;
+package com.project4.FilterPlayGround;
 
-import static com.anotherbrick.inthewall.FilterPlayGround.BoxConnectorType.INGOING;
-import static com.anotherbrick.inthewall.FilterPlayGround.BoxConnectorType.OUTGOING;
+import static com.project4.FilterPlayGround.BoxConnectorType.INGOING;
+import static com.project4.FilterPlayGround.BoxConnectorType.OUTGOING;
 
 import java.util.ArrayList;
 

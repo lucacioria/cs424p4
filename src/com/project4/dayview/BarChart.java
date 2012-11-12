@@ -1,12 +1,19 @@
 package com.project4.dayview;
 
-import com.anotherbrick.inthewall.EventSubscriber;
-import com.anotherbrick.inthewall.TouchEnabled;
-import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
-import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.BarChart.VizBarChart;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
 
-public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber {
+import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizPanel;
+import com.anotherbrick.inthewall.BarChart.BarData;
+import com.anotherbrick.inthewall.BarChart.VizBarChart;
+import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.project4.datasource.Filter;
+
+public class BarChart extends VizPanel implements TouchEnabled {
 
   private VizBarChart barChart;
 
@@ -18,9 +25,18 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
   public void setup() {
     setupBarChart();
   }
+  
+  public void setData(ArrayList<Filter> f, ArrayList<BarData> data) {
+    for (int i = 0; i < f.size(); i++) {
+      barChart.barColors[i] = f.get(i).getColor();
+    }
+    barChart.setData(data);
+  }
 
   private void setupBarChart() {
     barChart = new VizBarChart(0, 0, getWidth(), getHeight(), this);
+    barChart.setup();
+    addTouchSubscriber(barChart);
   }
 
   @Override
@@ -29,9 +45,6 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
     return false;
   }
 
-  @Override
-  public void eventReceived(EventName eventName, Object data) {
-  }
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     return propagateTouch(x, y, down, touchType);

@@ -1,4 +1,4 @@
-package com.anotherbrick.inthewall.FilterPlayGround;
+package com.project4.FilterPlayGround;
 
 import com.anotherbrick.inthewall.VizPanel;
 

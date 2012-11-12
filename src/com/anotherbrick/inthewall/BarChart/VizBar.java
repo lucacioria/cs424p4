@@ -2,12 +2,9 @@ package com.anotherbrick.inthewall.BarChart;
 
 import processing.core.PApplet;
 
-import com.anotherbrick.inthewall.Config;
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
-import com.project4.datasource.DSFilter;
 
 public class VizBar extends VizPanel implements TouchEnabled {
 
@@ -17,14 +14,10 @@ public class VizBar extends VizPanel implements TouchEnabled {
 
   public BarData barData;
   public float maxValue;
-  public MyColorEnum barColor = MyColorEnum.LIGHT_ORANGE;
+  public MyColorEnum[] barColors;
   public MyColorEnum textColor = MyColorEnum.WHITE;
 
   private float paddingPercentage = 0.1f;
-  private float xLeft;
-  private float xRight;
-  private float yBottom;
-  private float yTop;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -36,26 +29,37 @@ public class VizBar extends VizPanel implements TouchEnabled {
   public boolean draw() {
     pushStyle();
     // set styles
-    fill(barColor);
     noStroke();
     // rect
-    rect(xLeft, yTop, xRight - xLeft, yBottom - yTop);
+    int n = barData.values.length;
+    float xLeft = getWidth() * paddingPercentage;
+    float xRight = getWidth() - getWidth() * paddingPercentage;
+    float yBottom = getHeight();
+    for (int i = 0; i < n; i++) {
+      fill(barColors[i]);
+      float xLeftBar = xLeft + (xRight - xLeft) / n * i;
+      float xRightBar = xLeftBar + (xRight - xLeft) / n;
+      float yTop = yBottom - (barData.values[i] / maxValue) * getHeight();      
+      rect(xLeftBar, yTop, xRightBar - xLeftBar, yBottom - yTop);
+    }
     // label
-    fill(textColor);
-    textSize(8);
-    textAlign(PApplet.CENTER, PApplet.TOP);
-    text(DSFilter.getClearLabel(barData.label), xLeft + (xRight - xLeft) / 2, yBottom + 3);
-    //
+    drawLabel();
     popStyle();
     return false;
   }
 
+  private void drawLabel() {
+    fill(textColor);
+    float xLeft = getWidth() * paddingPercentage;
+    float xRight = getWidth() - getWidth() * paddingPercentage;
+    float yBottom = getHeight();
+    textSize(8);
+    textAlign(PApplet.CENTER, PApplet.TOP);
+    text(barData.label, xLeft + (xRight - xLeft) / 2, yBottom + 3);
+  }
+
   @Override
   public void setup() {
-    xLeft = getWidth() * paddingPercentage;
-    xRight = getWidth() - getWidth() * paddingPercentage;
-    yBottom = getHeight();
-    yTop = yBottom - (barData.value / maxValue) * getHeight();
   }
 
 }
