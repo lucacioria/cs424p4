@@ -3,12 +3,13 @@ package com.project4.map;
 import java.util.Stack;
 
 import processing.core.PImage;
+import processing.core.PVector;
 
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
-import com.anotherbrick.inthewall.datasource.Tweet;
 import com.anotherbrick.inthewall.VizPanel;
+import com.anotherbrick.inthewall.datasource.Tweet;
 
 public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -23,12 +24,13 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   private double minLon;
 
   private PImage mapImage;
-  private Scatter mapScatter;
-  private HeatMap mapHeatMap;
-  private ZoomButtons mapZoomButtons;
+  private Scatter scatter;
+  private HeatMap heatMap;
+  private ZoomButtons zoomButtons;
   private Stack<Double> zoomStackLon = new Stack<Double>();
   private Stack<Double> zoomStackLat = new Stack<Double>();
-  private PanButtons mapPanButtons;
+  private PanButtons panButtons;
+  private LinkMap linkMap;
 
   public Map(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -73,46 +75,54 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     maxLon = MAX_LON;
     minLon = MIN_LON;
     mapImage = c.getImage("map", "png");
-    setupMapZoomButtons();
-    setupMapPanButtons();
-    setupMapScatter();
-    setupMapHeatMap();
+    setupZoomButtons();
+    setupPanButtons();
+    setupScatter();
+    setupHeatMap();
+    setupLinkMap();
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
   }
 
 
 
-  private void setupMapZoomButtons() {
-    mapZoomButtons = new ZoomButtons(getWidth() - 60, getHeight() - 60, this);
-    addTouchSubscriber(mapZoomButtons);
-    mapZoomButtons.setup();
+  private void setupZoomButtons() {
+    zoomButtons = new ZoomButtons(getWidth() - 60, getHeight() - 60, this);
+    addTouchSubscriber(zoomButtons);
+    zoomButtons.setup();
   }
 
-  private void setupMapPanButtons() {
-    mapPanButtons = new PanButtons(getWidth() - 80, getHeight() - 140, this);
-    addTouchSubscriber(mapPanButtons);
-    mapPanButtons.setup();
+  private void setupPanButtons() {
+    panButtons = new PanButtons(getWidth() - 80, getHeight() - 140, this);
+    addTouchSubscriber(panButtons);
+    panButtons.setup();
   }
 
-  private void setupMapScatter() {
-    mapScatter = new Scatter(0, 0, getWidth(), getHeight(), this);
-    mapScatter.setup();
-    addTouchSubscriber(mapScatter);
+  private void setupScatter() {
+    scatter = new Scatter(0, 0, getWidth(), getHeight(), this);
+    scatter.setup();
+    addTouchSubscriber(scatter);
   }
   
-  private void setupMapHeatMap() {
-    mapHeatMap = new HeatMap(0, 0, getWidth(), getHeight(), this);
-    mapHeatMap.setup();
-    addTouchSubscriber(mapHeatMap);
+  private void setupHeatMap() {
+    heatMap = new HeatMap(0, 0, getWidth(), getHeight(), this);
+    heatMap.setup();
+    addTouchSubscriber(heatMap);
+  }
+
+  private void setupLinkMap() {
+    linkMap = new LinkMap(0, 0, getWidth(), getHeight(), this);
+    linkMap.setup();
+    addTouchSubscriber(linkMap);
   }
 
   @Override
   public boolean draw() {
     drawImage();
-    //mapScatter.draw();
-    mapHeatMap.draw();
-    mapZoomButtons.draw();
-    mapPanButtons.draw();
+    scatter.draw();
+//    mapHeatMap.draw();
+    linkMap.draw();
+    zoomButtons.draw();
+    panButtons.draw();
     return false;
   }
 
@@ -222,6 +232,11 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   public boolean isVisible(Tweet t) {
     return t.getLat()>minLat && t.getLat()<maxLat && t.getLon()>minLon && t.getLon()<maxLat;
   }
-
+  public PVector getPositionByLatLon(double lat, double lon) {
+    float x = map((float) lon,(float) getMinLon(),(float) getMaxLon(), 0, getWidth());
+    float y = map((float) lat,(float) getMinLat(),(float) getMaxLat(), 0, getHeight());
+    return new PVector(x, y);
+  }
+  
 
 }

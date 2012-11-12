@@ -3,6 +3,7 @@ package com.project4.map;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
@@ -46,9 +47,8 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private void drawTweet(Tweet t) {
     float radius = 10;
-    float x = PApplet.map((float) t.getLon(),(float) map.getMinLon(),(float) map.getMaxLon(), 0, getWidth());
-    float y = PApplet.map((float) t.getLat(),(float) map.getMinLat(),(float) map.getMaxLat(), 0, getHeight());
-    ellipse(x, y, radius, radius);
+    PVector position = map.getPositionByLatLon(t.getLat(), t.getLon());
+    ellipse(position.x, position.y, radius, radius);
   }
 
   @SuppressWarnings("unchecked")

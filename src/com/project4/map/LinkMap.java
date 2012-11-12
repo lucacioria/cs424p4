@@ -1,7 +1,6 @@
 package com.project4.map;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import processing.core.PVector;
 
@@ -9,9 +8,9 @@ import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
+import com.anotherbrick.inthewall.VizPanel;
 import com.anotherbrick.inthewall.datasource.Tweet;
 import com.anotherbrick.inthewall.datasource.User;
-import com.anotherbrick.inthewall.VizPanel;
 
 public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -31,7 +30,7 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
 
   @Override
   public void setup() {
-    m.notificationCenter.registerToEvent(EventName.DATA_UPDATED, this);
+    m.notificationCenter.registerToEvent(EventName.USERS_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.MAP_ZOOMED_OR_PANNED, this);
   }
 
@@ -39,14 +38,24 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
   public boolean draw() {
     if (!isVisible()) return false;
     pushStyle();
+    stroke(MyColorEnum.RED, 200f);
+    drawLines();
     popStyle();
     return false;
+  }
+
+  private void drawLines() {
+    for (ArrayList<PVector> line : lines) {
+      for (int i = 1; i < line.size(); i++) {
+        line(line.get(i - 1).x, line.get(i - 1).y, line.get(i).x, line.get(i).y);
+      }
+    }
   }
 
   @SuppressWarnings("unchecked")
   @Override
   public void eventReceived(EventName eventName, Object data) {
-    if (eventName == EventName.DATA_UPDATED) {
+    if (eventName == EventName.USERS_UPDATED) {
       this.users = (ArrayList<User>) data;
       udpateLinks();
     }
@@ -57,12 +66,26 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private void udpateLinks() {
     lines = new ArrayList<ArrayList<PVector>>();
-    for (User u:users) {
-      for (Tweet t: u.getTweets()) {
-        
+    for (User u : users) {
+      ArrayList<PVector> line = new ArrayList<PVector>();
+      float avgDist = 0;
+      Tweet lastTweet = null;
+      for (Tweet t : u.getTweets()) {
+        PVector pos = map.getPositionByLatLon(t.getLat(), t.getLon());
+        line.add(new PVector(pos.x, pos.y));
+        if (lastTweet != null) {
+          avgDist +=
+              dist((float) t.getLat(), (float) t.getLon(), (float) lastTweet.getLat(),
+                  (float) lastTweet.getLon());
+        }
+        lastTweet = t;
       }
+      if (u.getTweets().size() > 1) {
+        avgDist /= (u.getTweets().size() - 1);
+        if (avgDist < 0.13 || avgDist > 0.17) continue; 
+      }
+      lines.add(line);
     }
-    
   }
 
 }

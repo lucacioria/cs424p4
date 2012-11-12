@@ -55,11 +55,15 @@ public class DataSourceSQL {
         // for loop..
         int userId = sql.getInt("user_id");
         for (int i = 0; i < lat.length; i++) {
+          try {
           Tweet tweet =
               new Tweet(Double.valueOf(lat[i]).doubleValue(),
                   -Double.valueOf(lon[i]).doubleValue(), Integer.valueOf(creation_date_posix[i])
                       .intValue(), Integer.valueOf(id[i]).intValue(), userId);
           tweets.add(tweet);
+          } catch (ArrayIndexOutOfBoundsException e) {
+            System.out.println("error in parsing tweet");
+          }
         }
         users.add(new User(userId, tweets));
       }
