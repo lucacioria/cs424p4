@@ -25,7 +25,7 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
       ArrayList<BarData> barChartData = new ArrayList<BarData>();
       for (Day d : days) {
         BarData b = new BarData();
-        b.label = d.toString();
+        b.label = d.toStringForBarchart();
         b.values = d.getSortedCounts();
         barChartData.add(b);
       }

@@ -51,6 +51,13 @@ public class Day {
   }
   
   public String toString() {
+    if (day==0) return "30 Apr";
+    return day + " May";
+  }
+
+  public String toStringForBarchart() {
+    if (day==0) return "30\nApr";
+    if (day==1) return "1\nMay";
     return day + "";
   }
 
