@@ -6,7 +6,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.datasource.DSFilter;
+import com.project4.datasource.DSFilter;
 
 public class VizRow extends VizPanel {
 

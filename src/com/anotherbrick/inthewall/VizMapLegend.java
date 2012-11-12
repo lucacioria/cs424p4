@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import processing.core.PConstants;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.datasource.DSFilter;
+import com.project4.datasource.DSFilter;
 
 public class VizMapLegend extends VizPanel implements TouchEnabled {
   private String colorFilter = "";

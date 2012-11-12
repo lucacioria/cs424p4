@@ -9,7 +9,7 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.datasource.Tweet;
+import com.project4.datasource.Tweet;
 
 public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
 

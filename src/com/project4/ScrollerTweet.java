@@ -6,10 +6,10 @@ import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
-import com.anotherbrick.inthewall.datasource.Tweet;
 import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.datasource.Tweet;
 
 public class ScrollerTweet extends VizPanel implements TouchEnabled {
 

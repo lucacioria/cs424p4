@@ -8,8 +8,8 @@ import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
-import com.anotherbrick.inthewall.datasource.DataSourceSQL;
 import com.project4.Application;
+import com.project4.datasource.DataSourceSQL;
 
 public class Main extends PApplet {
 

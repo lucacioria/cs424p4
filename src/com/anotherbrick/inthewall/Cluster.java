@@ -3,8 +3,8 @@ package com.anotherbrick.inthewall;
 import java.util.ArrayList;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.datasource.DSCrash;
 import com.modestmaps.core.Point2f;
+import com.project4.datasource.DSCrash;
 
 public class Cluster {
   private int count = 0;

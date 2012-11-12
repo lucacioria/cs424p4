@@ -8,8 +8,8 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
-import com.anotherbrick.inthewall.datasource.Tweet;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.datasource.Tweet;
 
 public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -51,7 +51,7 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
     if (!isVisible()) return false;
     pushStyle();
     noStroke();
-    drawGrid2();
+    drawGrid();
     popStyle();
     return false;
   }
@@ -80,7 +80,8 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
     for (int j = 0; j < grid.length; j++) {
       for (int i = 0; i < grid[j].length; i++) {
         if (grid[j][i] < 5) continue;
-        fill(m.p.lerpColor(Helper.hex2Rgb("#ff0000", m.p), Helper.hex2Rgb("#00ff00", m.p), map(grid[j][i], 0, maxCount, 0, 1)));
+        fill(m.p.lerpColor(Helper.hex2Rgb("#ff0000", m.p), Helper.hex2Rgb("#00ff00", m.p),
+            map(grid[j][i], 0, maxCount, 0, 1)));
         rect(i * gridW, j * gridH, gridW, gridH);
       }
     }

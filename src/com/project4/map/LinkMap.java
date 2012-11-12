@@ -9,8 +9,8 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.datasource.Tweet;
-import com.anotherbrick.inthewall.datasource.User;
+import com.project4.datasource.Tweet;
+import com.project4.datasource.User;
 
 public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
 

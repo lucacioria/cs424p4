@@ -6,9 +6,9 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.Config.MyFontEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
-import com.anotherbrick.inthewall.datasource.Tweet;
-import com.anotherbrick.inthewall.datasource.User;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.datasource.Tweet;
+import com.project4.datasource.User;
 import com.project4.map.Map;
 
 public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
@@ -57,11 +57,11 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private void initializeVisualization() {
     ArrayList<Tweet> tweets = m.dataSourceSQL.getTweets("match(text) against('truck')");
     m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
-//    ArrayList<Tweet> scrollingTweets = new ArrayList<Tweet>();
-//    for (int i = 0; i < 50; i++) {
-//      scrollingTweets.add(tweets.get(i));
-//    }    
-//    m.notificationCenter.notifyEvent(EventName.SCROLLING_TWEETS_UPDATED, scrollingTweets);
+    ArrayList<Tweet> scrollingTweets = new ArrayList<Tweet>();
+    for (int i = 0; i < 50; i++) {
+      scrollingTweets.add(tweets.get(i));
+    }    
+    m.notificationCenter.notifyEvent(EventName.SCROLLING_TWEETS_UPDATED, scrollingTweets);
     ArrayList<User> users = m.dataSourceSQL.getUsers("id < 1000", 15);
     m.notificationCenter.notifyEvent(EventName.USERS_UPDATED, users);
   }

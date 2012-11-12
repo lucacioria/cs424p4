@@ -8,11 +8,11 @@ import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
-import com.anotherbrick.inthewall.datasource.DSCrash;
 import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
+import com.project4.datasource.DSCrash;
 
 public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private InteractiveMap map;
