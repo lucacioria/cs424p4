@@ -8,6 +8,7 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.FilterPlayGround.FilterPlayGround;
 import com.project4.datasource.Day;
 import com.project4.datasource.Filter;
 import com.project4.datasource.Tweet;
@@ -22,6 +23,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private BlackBox blackBox2;
   private Scroller scroller;
   private DayView dayView;
+  private FilterPlayGround playGround;
 
   public Application(float x0, float y0, float width, float height) {
     super(x0, y0, width, height);
@@ -39,8 +41,15 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     setupBlackBoxes();
     setupScroller();
     setupDayView();
+    setupFilterPlayGround();
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
     if (c.initializeVisualization) initializeVisualization();
+  }
+
+  private void setupFilterPlayGround() {
+    playGround = new FilterPlayGround(scroller.getX1(), 0, getWidth() - 929, getHeight(), this);
+    playGround.setup();
+    addTouchSubscriber(playGround);
   }
 
   private void setupDayView() {
@@ -94,6 +103,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     blackBox2.draw();
     scroller.draw();
     dayView.draw();
+    playGround.draw();
     popStyle();
     return false;
   }
