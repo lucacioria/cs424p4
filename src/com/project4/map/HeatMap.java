@@ -41,8 +41,8 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void gridSetup() {
-    gridSizeY = 100;
-    gridSizeX = 200;
+    gridSizeY = 200;
+    gridSizeX = 400;
     gridW = getWidth() / gridSizeX;
     gridH = getHeight() / gridSizeY;
     grid = new int[gridSizeY][gridSizeX];

@@ -52,7 +52,7 @@ public class TimeSlider extends VizPanel implements TouchEnabled, EventSubscribe
   public boolean draw() {
     pushStyle();
     background(MyColorEnum.WHITE, 50f);
-    updatePosition();
+   updatePosition();
     left.draw();
     center.draw();
     right.draw();
