@@ -35,8 +35,7 @@ public abstract class VizPanel {
   PGraphics pg;
   boolean redraw = true, firstDraw = true;
   ArrayList<TouchEnabled> touchChildren = new ArrayList<TouchEnabled>();
-  // ArrayList<VizPanelInterface> drawChildren = new
-  // ArrayList<VizPanelInterface>();
+  ArrayList<VizPanel> children = new ArrayList<VizPanel>(); 
   private boolean visible = true;
 
   private float x0, y0, width, height;
@@ -92,6 +91,10 @@ public abstract class VizPanel {
 
   public void addTouchSubscriber(TouchEnabled child) {
     touchChildren.add(child);
+  }
+
+  public void addChild(VizPanel child) {
+    children.add(child);
   }
 
   public void removeTouchSubscriber(TouchEnabled child) {
@@ -302,6 +305,13 @@ public abstract class VizPanel {
 
   public void move(float xOffset, float yOffset) {
     modifyPosition((x0 - parent.x0) + xOffset, (y0 - parent.y0) + yOffset);
+    propagateMove(xOffset, yOffset);
+  }
+
+  private void propagateMove(float xOffset, float yOffset) {
+    for (VizPanel child: children) {
+      child.move(xOffset, yOffset);
+    }
   }
 
   public void modifyPositionAndSize(float newX0, float newY0, float newWidth, float newHeight) {

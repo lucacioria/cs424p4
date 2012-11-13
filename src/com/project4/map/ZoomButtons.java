@@ -10,8 +10,11 @@ public class ZoomButtons extends VizPanel implements TouchEnabled {
   private VizButton zoomInButton;
   private VizButton zoomOutButton;
 
+  public static final float height = 40;
+  public static final float width = 20;
+  
   public ZoomButtons(float x0, float y0, VizPanel parent) {
-    super(x0, y0, 20, 40, parent);
+    super(x0, y0, width, height, parent);
   }
 
   @Override
@@ -28,6 +31,7 @@ public class ZoomButtons extends VizPanel implements TouchEnabled {
     zoomInButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
         155f, 10);
     addTouchSubscriber(zoomInButton);
+    addChild(zoomInButton);
 
     zoomOutButton = new VizButton(0, 20, 20, 20, this);
     zoomOutButton.name = "zoomOutButton";
@@ -37,6 +41,7 @@ public class ZoomButtons extends VizPanel implements TouchEnabled {
     zoomOutButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
         MyColorEnum.DARK_GRAY, 155f, 10);
     addTouchSubscriber(zoomOutButton);
+    addChild(zoomOutButton);
   }
 
   @Override

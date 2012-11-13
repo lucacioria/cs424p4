@@ -11,8 +11,11 @@ public class LayerButtons extends VizPanel implements TouchEnabled {
 
   private ArrayList<VizButton> buttons = new ArrayList<VizButton>();
 
+  public static final float height = 80;
+  public static final float width = 60;
+  
   public LayerButtons(float x0, float y0, VizPanel parent) {
-    super(x0, y0, 60, 80, parent);
+    super(x0, y0, width, height, parent);
   }
 
   @Override
@@ -31,6 +34,7 @@ public class LayerButtons extends VizPanel implements TouchEnabled {
       button.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
           155f, 10);
       addTouchSubscriber(button);
+      addChild(button);
       buttons.add(button);
     }
   }

@@ -87,12 +87,6 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     eventManager.initInterface();
     // m.dataSourceSQL.doStuff();
 
-    // ArrayList<Filter> filters = new ArrayList<Filter>();
-    // filters.add(new Filter(0, MyColorEnum.RED, "match(text) against('truck')"));
-    // filters.add(new Filter(1, MyColorEnum.LIGHT_GREEN, "match(text) against('sick')"));
-    // ArrayList<Day> days = m.dataSourceSQL.getDays(filters);
-    // m.notificationCenter.notifyEvent(EventName.DAYS_UPDATED, days);
-
     // ArrayList<Tweet> scrollingTweets = new ArrayList<Tweet>();
     // for (int i = 0; i < 50; i++) {
     // scrollingTweets.add(tweets.get(i));

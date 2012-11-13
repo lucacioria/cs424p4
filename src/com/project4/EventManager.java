@@ -8,6 +8,7 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.Model;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.datasource.Day;
 import com.project4.datasource.Filter;
 import com.project4.datasource.Tweet;
 
@@ -25,7 +26,7 @@ public class EventManager extends VizPanel implements EventSubscriber {
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.TIME_SLIDER_UPDATED) {
       minMax = (int[]) data;
-      log("from: " + minMax[0]+ " to: " + minMax[1]);
+      log("from: " + minMax[0] + " to: " + minMax[1]);
       updateData();
     }
     if (eventName == EventName.FILTERS_UPDATED) {
@@ -37,6 +38,8 @@ public class EventManager extends VizPanel implements EventSubscriber {
   private void updateData() {
     TreeMap<Filter, ArrayList<Tweet>> tweets = m.dataSourceSQL.getTweets(filters, minMax);
     m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
+    ArrayList<Day> days = m.dataSourceSQL.getDays(filters);
+    m.notificationCenter.notifyEvent(EventName.DAYS_UPDATED, days);
   }
 
   public void initInterface() {
