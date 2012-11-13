@@ -67,6 +67,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void initializeVisualization() {
+    // m.dataSourceSQL.doStuff();
     ArrayList<Tweet> tweets = m.dataSourceSQL.getTweets("match(text) against('truck')");
     m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
 
