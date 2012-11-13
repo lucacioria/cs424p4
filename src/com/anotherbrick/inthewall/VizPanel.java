@@ -15,7 +15,7 @@ import com.anotherbrick.inthewall.Config.MyFontEnum;
 import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 
 public abstract class VizPanel {
-
+  
   // public static VizPanel createFromXY0andXY1(float x0, float y0, float x1,
   // float y1) {
   // return new VizPanel(x0, y0, x1 - x0, y1 - y0);

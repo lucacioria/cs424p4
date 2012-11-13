@@ -12,6 +12,7 @@ import com.project4.datasource.Day;
 public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private BarChart barChart;
+  private TimeSlider timeSlider;
 
   public DayView(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -41,11 +42,18 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
   @Override
   public void setup() {
     setupBarChart();
+    setupTimeSlider();
     m.notificationCenter.registerToEvent(EventName.DAYS_UPDATED, this);
   }
 
+  private void setupTimeSlider() {
+    timeSlider = new TimeSlider(0, barChart.getY1(), getWidth(), 20, this);
+    timeSlider.setup();
+    addTouchSubscriber(timeSlider);
+  }
+
   private void setupBarChart() {
-    barChart = new BarChart(0, 0, getWidth(), getHeight(), this);
+    barChart = new BarChart(0, 0, getWidth(), getHeight() - 20, this);
     barChart.setup();
     addTouchSubscriber(barChart);
   }
@@ -53,6 +61,7 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
   @Override
   public boolean draw() {
     barChart.draw();
+    timeSlider.draw();
     return false;
   }
 

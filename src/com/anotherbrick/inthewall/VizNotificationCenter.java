@@ -8,7 +8,7 @@ public class VizNotificationCenter {
   private static VizNotificationCenter instance = new VizNotificationCenter();
 
   public enum EventName {
-    SCROLLING_TWEETS_UPDATED, BUTTON_TOUCHED, DATA_UPDATED, MAP_ZOOMED_OR_PANNED, USERS_UPDATED, TWEET_SELECTED, TWEET_DESELECTED, DAYS_UPDATED
+    SCROLLING_TWEETS_UPDATED, BUTTON_TOUCHED, DATA_UPDATED, MAP_ZOOMED_OR_PANNED, USERS_UPDATED, TWEET_SELECTED, TWEET_DESELECTED, DAYS_UPDATED, BUTTON_PRESSED, TIME_SLIDER_UPDATED
   }
 
   private HashMap<EventName, ArrayList<EventSubscriber>> subscribers;
