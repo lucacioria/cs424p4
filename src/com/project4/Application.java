@@ -37,7 +37,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   @Override
   public void setup() {
-    textFont(MyFontEnum.OPENSANS_REGULAR);
+//    textFont(MyFontEnum.OPENSANS_REGULAR);
     setupMap();
     setupBlackBoxes();
     setupScroller();
