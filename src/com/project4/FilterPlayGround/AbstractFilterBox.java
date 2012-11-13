@@ -13,6 +13,8 @@ public abstract class AbstractFilterBox extends VizPanel implements Serializable
   protected BoxConnectorIngoing inputConnector;
   protected BoxConnectorOutgoing outputConnector;
 
+  protected MyColorEnum COLOR = MyColorEnum.RED;
+
   public AbstractBoxConnector getInputConnector() {
     return inputConnector;
   }
@@ -40,16 +42,19 @@ public abstract class AbstractFilterBox extends VizPanel implements Serializable
     outgoingConnections.remove(afb);
   }
 
+  float spanX;
+  float spanY;
+
   public boolean draw() {
     pushStyle();
-    background(MyColorEnum.RED);
+    background(COLOR);
     inputConnector.draw();
     if (!isTerminal()) {
       outputConnector.draw();
     }
     popStyle();
     if (dragging) {
-      modifyPositionWithAbsoluteValue(m.touchX, m.touchY);
+      modifyPositionWithAbsoluteValue(m.touchX - spanX, m.touchY - spanY);
       inputConnector.modifyPosition(0, getHeight() / 2);
       if (!isTerminal()) outputConnector.modifyPosition(getWidth(), getHeight() / 2);
     }
@@ -67,6 +72,8 @@ public abstract class AbstractFilterBox extends VizPanel implements Serializable
     if (down) {
       dragging = true;
       setModal(true);
+      spanX = m.touchX - getX0Absolute();
+      spanY = m.touchY - getY0Absolute();
     } else {
       dragging = false;
       setModal(false);

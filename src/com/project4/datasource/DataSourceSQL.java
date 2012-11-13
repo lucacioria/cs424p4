@@ -86,7 +86,7 @@ public class DataSourceSQL {
       if (connect()) {
         query =
             "SELECT day, count(*) as count FROM tweets WHERE " + filters.get(i).getWhere()
-                + "GROUP BY day";
+                + " GROUP BY day";
         query(query);
         while (sql.next()) {
           // add day if doesn't exist
