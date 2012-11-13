@@ -78,7 +78,7 @@ public class Main extends PApplet {
       omicronManager.setTouchListener(touchListener);
     }
     smooth();
-    frameRate(60);
+    frameRate(30);
   }
 
   @Override

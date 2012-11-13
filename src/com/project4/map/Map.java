@@ -47,19 +47,23 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   private void manageButtons(String buttonName) {
     if (buttonName.equals("zoomInButton")) {
       zoomIn();
+      m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
     } else if (buttonName.equals("zoomOutButton")) {
       zoomOut();
+      m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
     } else if (buttonName.equals("panUpButton")) {
       panUp();
+      m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
     } else if (buttonName.equals("panDownButton")) {
       panDown();
+      m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
     } else if (buttonName.equals("panRightButton")) {
       panRight();
+      m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
     } else if (buttonName.equals("panLeftButton")) {
       panLeft();
+      m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
     }
-    //TODO for other buttons don't raise this
-    m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
   }
 
 
@@ -110,7 +114,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     scatter.setup();
     addTouchSubscriber(scatter);
   }
-  
+
   private void setupHeatMap() {
     heatMap = new HeatMap(0, 0, getWidth(), getHeight(), this);
     heatMap.setup();
@@ -239,13 +243,14 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   public boolean isVisible(Tweet t) {
-    return t.getLat()>minLat && t.getLat()<maxLat && t.getLon()>minLon && t.getLon()<maxLat;
+    return t.getLat() > minLat && t.getLat() < maxLat && t.getLon() > minLon && t.getLon() < maxLat;
   }
+
   public PVector getPositionByLatLon(double lat, double lon) {
-    float x = map((float) lon,(float) getMinLon(),(float) getMaxLon(), 0, getWidth());
-    float y = map((float) lat,(float) getMinLat(),(float) getMaxLat(), 0, getHeight());
+    float x = map((float) lon, (float) getMinLon(), (float) getMaxLon(), 0, getWidth());
+    float y = map((float) lat, (float) getMinLat(), (float) getMaxLat(), 0, getHeight());
     return new PVector(x, y);
   }
-  
+
 
 }

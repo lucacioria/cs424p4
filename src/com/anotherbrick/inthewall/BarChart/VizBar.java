@@ -54,8 +54,9 @@ public class VizBar extends VizPanel implements TouchEnabled {
     float xRight = getWidth() - getWidth() * paddingPercentage;
     float yBottom = getHeight();
     textSize(8);
+    textLeading(7);
     textAlign(PApplet.CENTER, PApplet.TOP);
-    text(barData.label, xLeft + (xRight - xLeft) / 2, yBottom + 3);
+    text(barData.label, xLeft + (xRight - xLeft) / 2, yBottom + 6);
   }
 
   @Override

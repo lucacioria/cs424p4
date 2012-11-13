@@ -269,8 +269,6 @@ public class VizList extends VizPanel implements TouchEnabled {
 
     @Override
     public void setup() {
-      // TODO Auto-generated method stub
-
     }
 
   }
@@ -330,8 +328,6 @@ public class VizList extends VizPanel implements TouchEnabled {
 
     @Override
     public void setup() {
-      // TODO Auto-generated method stub
-
     }
 
   }
@@ -347,8 +343,6 @@ public class VizList extends VizPanel implements TouchEnabled {
 
   @Override
   public void setup() {
-    // TODO Auto-generated method stub
-
   }
 
   public void selectElementByString(String elementName) {

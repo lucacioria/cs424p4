@@ -2,6 +2,7 @@ package com.project4.dayview;
 
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.BarChart.BarData;
@@ -47,21 +48,25 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void setupTimeSlider() {
-    timeSlider = new TimeSlider(0, barChart.getY1(), getWidth(), 20, this);
+    timeSlider = new TimeSlider(20, getHeight() - 27, getWidth() - 21, 20, this);
     timeSlider.setup();
     addTouchSubscriber(timeSlider);
   }
 
   private void setupBarChart() {
-    barChart = new BarChart(0, 0, getWidth(), getHeight() - 20, this);
+    barChart = new BarChart(0, 0, getWidth() - 10, getHeight(), this);
     barChart.setup();
     addTouchSubscriber(barChart);
   }
 
   @Override
   public boolean draw() {
+    pushStyle();
+    noStroke();
+    background(MyColorEnum.DARK_GRAY);
     barChart.draw();
     timeSlider.draw();
+    popStyle();
     return false;
   }
 

@@ -41,42 +41,46 @@ public class DataSourceSQL {
     }
   }
 
-  public ArrayList<User> getUsers(String where, int minTweets) {
-    ArrayList<User> users = new ArrayList<User>();
-    String query;
-    if (connect()) {
-      query =
-          "select t.user_id, group_concat(t.lat) as lat, group_concat(t.lon) as lon, "
-              + "group_concat(t.creation_date_posix) as creation_date_posix, group_concat(t.id) as id"
-              + " from (select * from tweets as t1 where " + where
-              + " order by t1.creation_date_posix) t group by t.user_id having count(*) >= "
-              + minTweets;
-      query(query);
-      while (sql.next()) {
-        ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-        // get group attributes
-        String[] lat = sql.getString("lat").split(",");
-        String[] lon = sql.getString("lon").split(",");
-        String[] id = sql.getString("id").split(",");
-        String[] creation_date_posix = sql.getString("creation_date_posix").split(",");
-        // for loop..
-        int userId = sql.getInt("user_id");
-        for (int i = 0; i < lat.length; i++) {
-          try {
-            Tweet tweet =
-                new Tweet(Double.valueOf(lat[i]).doubleValue(), -Double.valueOf(lon[i])
-                    .doubleValue(), Integer.valueOf(creation_date_posix[i]).intValue(), Integer
-                    .valueOf(id[i]).intValue(), userId);
-            tweets.add(tweet);
-          } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("error in parsing tweet");
+  public TreeMap<Filter, ArrayList<User>> getUsers(ArrayList<Filter> filters, int[] minMax,
+      int minTweets) {
+    TreeMap<Filter, ArrayList<User>> out = new TreeMap<Filter, ArrayList<User>>();
+    for (Filter f : filters) {
+      ArrayList<User> users = new ArrayList<User>();
+      String query;
+      if (connect()) {
+        query =
+            "select t.user_id, group_concat(t.lat) as lat, group_concat(t.lon) as lon, "
+                + "group_concat(t.creation_date_posix) as creation_date_posix, group_concat(t.id) as id"
+                + " from (select * from tweets as t1 where " + getCompleteWhere(minMax, f)
+                + " order by t1.creation_date_posix) t group by t.user_id having count(*) >= "
+                + minTweets;
+        query(query);
+        while (sql.next()) {
+          ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+          // get group attributes
+          String[] lat = sql.getString("lat").split(",");
+          String[] lon = sql.getString("lon").split(",");
+          String[] id = sql.getString("id").split(",");
+          String[] creation_date_posix = sql.getString("creation_date_posix").split(",");
+          // for loop..
+          int userId = sql.getInt("user_id");
+          for (int i = 0; i < lat.length; i++) {
+            try {
+              Tweet tweet =
+                  new Tweet(Double.valueOf(lat[i]).doubleValue(), -Double.valueOf(lon[i])
+                      .doubleValue(), Integer.valueOf(creation_date_posix[i]).intValue(), Integer
+                      .valueOf(id[i]).intValue(), userId);
+              tweets.add(tweet);
+            } catch (ArrayIndexOutOfBoundsException e) {
+              System.out.println("error in parsing tweet");
+            }
           }
+          users.add(new User(userId, tweets));
         }
-        users.add(new User(userId, tweets));
+        out.put(f, users);
       }
-      return users;
     }
-    return null;
+    return out;
   }
 
   public ArrayList<Day> getDays(ArrayList<Filter> filters) {
@@ -118,38 +122,33 @@ public class DataSourceSQL {
     return day;
   }
 
-  public ArrayList<Tweet> getTweets(String where) {
-    ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-    String query;
-    if (connect()) {
-      query = "SELECT id, user_id, lat, lon, creation_date_posix FROM tweets WHERE " + where;
-      query(query);
-      while (sql.next()) {
-        Tweet tweet =
-            new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
-                sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
-        tweets.add(tweet);
+  public TreeMap<Filter, ArrayList<Tweet>> getTweets(ArrayList<Filter> filters, int[] minMax) {
+    TreeMap<Filter, ArrayList<Tweet>> out = new TreeMap<Filter, ArrayList<Tweet>>();
+    for (Filter f : filters) {
+      ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+      String query;
+      if (connect()) {
+        query =
+            "SELECT id, user_id, lat, lon, creation_date_posix FROM tweets WHERE "
+                + getCompleteWhere(minMax, f);
+        query(query);
+        while (sql.next()) {
+          Tweet tweet =
+              new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
+                  sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
+          tweets.add(tweet);
+        }
+        out.put(f, tweets);
       }
-      return tweets;
     }
-    return null;
+    return out;
   }
 
-  public ArrayList<Tweet> getCountByDay(String where) {
-    ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-    String query;
-    if (connect()) {
-      query = "SELECT count(id, user_id, lat, lon, creation_date_posix FROM tweets WHERE " + where;
-      query(query);
-      while (sql.next()) {
-        Tweet tweet =
-            new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
-                sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
-        tweets.add(tweet);
-      }
-      return tweets;
-    }
-    return null;
+  private String getCompleteWhere(int[] minMax, Filter f) {
+    String where =
+        "creation_date_posix > " + minMax[0] + " AND creation_date_posix < " + minMax[1]
+            + (f.getWhere().length() > 0 ? " AND " + f.getWhere() : "");
+    return where;
   }
 
   public void doStuff() {

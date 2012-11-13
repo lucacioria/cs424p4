@@ -7,6 +7,7 @@ import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
+import com.anotherbrick.inthewall.Model;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizButton;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
@@ -19,8 +20,6 @@ public class TimeSlider extends VizPanel implements TouchEnabled, EventSubscribe
   private PVector touchPoint;
   private float leftX, rightX;
   private float minCenterWidth = 10;
-  private float maxValue = 1305935940;
-  private float minValue = 1304121600;
 
   public TimeSlider(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -123,8 +122,10 @@ public class TimeSlider extends VizPanel implements TouchEnabled, EventSubscribe
 
   private void raiseMovedEvent() {
     int[] minMax = new int[2];
-    minMax[0] = (int) map(left.getX0(), 0, getWidth(), minValue, maxValue);
-    minMax[1] = (int) map(right.getX1(), 0, getWidth(), minValue, maxValue);
+    float from = left.getWidth();
+    float to = getWidth() - right.getWidth();
+    minMax[0] = (int) map(left.getX1(), from, to, Model.MIN_TIME, Model.MAX_TIME);
+    minMax[1] = (int) map(right.getX0(), from, to, Model.MIN_TIME, Model.MAX_TIME);
     m.notificationCenter.notifyEvent(EventName.TIME_SLIDER_UPDATED, minMax);
   }
 

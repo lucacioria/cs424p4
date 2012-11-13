@@ -21,8 +21,6 @@ public class TerminalFilterBox extends AbstractFilterBox {
 
   @Override
   public void setup() {
-    // TODO Auto-generated method stub
-
   }
 
 }

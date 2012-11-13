@@ -2,18 +2,20 @@ package com.project4.map;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.TreeMap;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
-import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.datasource.Filter;
 import com.project4.datasource.Tweet;
 
 public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
 
-  private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+  private TreeMap<Filter, ArrayList<Tweet>> tweets = new TreeMap<Filter, ArrayList<Tweet>>();
   private Map map;
   private int[][] grid;
   private int gridSizeX, gridSizeY;
@@ -39,8 +41,8 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void gridSetup() {
-    gridSizeY = 400;
-    gridSizeX = 800;
+    gridSizeY = 100;
+    gridSizeX = 200;
     gridW = getWidth() / gridSizeX;
     gridH = getHeight() / gridSizeY;
     grid = new int[gridSizeY][gridSizeX];
@@ -75,23 +77,11 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
     }
   }
 
-  private void drawGrid2() {
-    float alpha = 150;
-    for (int j = 0; j < grid.length; j++) {
-      for (int i = 0; i < grid[j].length; i++) {
-        if (grid[j][i] < 5) continue;
-        fill(m.p.lerpColor(Helper.hex2Rgb("#ff0000", m.p), Helper.hex2Rgb("#00ff00", m.p),
-            map(grid[j][i], 0, maxCount, 0, 1)));
-        rect(i * gridW, j * gridH, gridW, gridH);
-      }
-    }
-  }
-
   @SuppressWarnings("unchecked")
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.DATA_UPDATED) {
-      this.tweets = (ArrayList<Tweet>) data;
+      this.tweets = (TreeMap<Filter, ArrayList<Tweet>>) data;
       gridUpdate();
     }
     if (eventName == EventName.MAP_ZOOMED_OR_PANNED) {
@@ -105,14 +95,20 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private void gridUpdate() {
     gridInit();
     int x, y;
-    for (Tweet t : tweets) {
-      if (map.isVisible(t)) {
-        x =
-            (int) ((t.getLon() - map.getMinLon()) / (map.getMaxLon() - map.getMinLon()) * gridSizeX);
-        y =
-            (int) ((t.getLat() - map.getMinLat()) / (map.getMaxLat() - map.getMinLat()) * gridSizeY);
-        increaseValue(x, y);
+    Iterator<Filter> i = tweets.keySet().iterator();
+    while (i.hasNext()) {
+      Filter key = i.next();
+      for (Tweet t : tweets.get(key)) {
+        if (map.isVisible(t)) {
+          x =
+              (int) ((t.getLon() - map.getMinLon()) / (map.getMaxLon() - map.getMinLon()) * gridSizeX);
+          y =
+              (int) ((t.getLat() - map.getMinLat()) / (map.getMaxLat() - map.getMinLat()) * gridSizeY);
+          increaseValue(x, y);
+        }
       }
+      // TODO disegna solo la prima heatmap a caso..
+      break;
     }
     updateMax();
   }

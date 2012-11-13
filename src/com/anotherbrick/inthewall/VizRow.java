@@ -70,7 +70,5 @@ public class VizRow extends VizPanel {
 
   @Override
   public void setup() {
-    // TODO Auto-generated method stub
-
   }
 }
