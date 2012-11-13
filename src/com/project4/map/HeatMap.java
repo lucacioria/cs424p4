@@ -3,6 +3,7 @@ package com.project4.map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Random;
 import java.util.TreeMap;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
@@ -41,8 +42,8 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void gridSetup() {
-    gridSizeY = 100;
-    gridSizeX = 200;
+    gridSizeY = 400;
+    gridSizeX = 800;
     gridW = getWidth() / gridSizeX;
     gridH = getHeight() / gridSizeY;
     grid = new int[gridSizeY][gridSizeX];
@@ -58,18 +59,37 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
     return false;
   }
 
-  private void drawGrid() {
-    float alpha = 150;
+  private void drawGrid2() {
+    float alpha = 180;
     for (int j = 0; j < grid.length; j++) {
       for (int i = 0; i < grid[j].length; i++) {
-        if (grid[j][i] > maxCount / 2)
+        if (grid[j][i] > maxCount / 1.5)
           fill(MyColorEnum.DARK_BLUE, alpha);
-        else if (grid[j][i] > maxCount / 10)
+        else if (grid[j][i] > maxCount / 2)
           fill(MyColorEnum.RED, alpha);
-        else if (grid[j][i] > maxCount / 20)
+        else if (grid[j][i] > maxCount / 5)
           fill(MyColorEnum.LIGHT_ORANGE, alpha);
-        else if (grid[j][i] > maxCount / 30)
+        else if (grid[j][i] > maxCount / 10)
           fill(MyColorEnum.YELLOW, alpha);
+        else
+          noFill();
+        rect(i * gridW, j * gridH, gridW, gridH);
+      }
+    }
+  }
+  
+  private void drawGrid() {
+    float alpha = 255;
+    for (int j = 0; j < grid.length; j++) {
+      for (int i = 0; i < grid[j].length; i++) {
+        if (grid[j][i] > maxCount / 1.5)
+          fill(MyColorEnum.HEAT_MAP_4, alpha*0.9f);
+        else if (grid[j][i] > maxCount / 2)
+          fill(MyColorEnum.HEAT_MAP_3, alpha*0.8f);
+        else if (grid[j][i] > maxCount / 5)
+          fill(MyColorEnum.HEAT_MAP_2, alpha*0.7f);
+        else if (grid[j][i] > maxCount / 10)
+          fill(MyColorEnum.HEAT_MAP_1, alpha*0.6f);
         else
           noFill();
         rect(i * gridW, j * gridH, gridW, gridH);
@@ -123,7 +143,7 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void increaseValue(int x, int y) {
-    int square = 31;
+    int square = 41;
     int incr;
     int finX, finY;
     for (int j = 0; j < square; j++) {
@@ -131,7 +151,8 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
         finX = (int) (x - Math.floor(square / 2) + i);
         finY = (int) (y - Math.floor(square / 2) + j);
         if (finX > 0 && finX < gridSizeX && finY > 0 && finY < gridSizeY) {
-          incr = Math.max(Math.abs(x - finX), Math.abs(y - finY));
+          //incr = Math.max(Math.abs(x - finX), Math.abs(y - finY));
+          incr = (int) Math.floor(Math.sqrt((Math.pow((x - finX), 2.0) + (int) (Math.pow((y - finY), 2.0)))));
           grid[finY][finX] += (Math.floor(square / 2) - incr + 1);
         }
       }
