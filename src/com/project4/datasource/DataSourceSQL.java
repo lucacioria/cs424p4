@@ -1,8 +1,8 @@
 package com.project4.datasource;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -17,6 +17,7 @@ public class DataSourceSQL {
 
   private MySQL sql;
   private boolean connected = false;
+  private HashMap<String, Double> idf;
 
   public DataSourceSQL(PApplet context) {
     String user, pass, database, host;
@@ -149,6 +150,72 @@ public class DataSourceSQL {
       return tweets;
     }
     return null;
+  }
+
+  public void doStuff() {
+    idf = new HashMap<String, Double>();
+    if (connect()) {
+      // prendi le stringhe dal db
+      String query = "SELECT id, LOWER(text) as text FROM tweets WHERE id < 10000";
+      query(query);
+      ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+      while (sql.next()) {
+        Tweet t = new Tweet(0, 0, 0, sql.getInt("id"), 0);
+        t.setText(sql.getString("text"));
+        tweets.add(t);
+      }
+      // conta roba
+      for (Tweet t : tweets) {
+        String x = t.getText();
+        String[] parole = x.split(" ");
+        for (String parola : parole) {
+          if (!idf.containsKey(parola)) {
+            idf.put(parola, 0.0);
+          }
+          idf.put(parola, idf.get(parola) + 1);
+        }
+      }
+      // fai idf figo
+      Iterator<String> i = idf.keySet().iterator();
+      while (i.hasNext()) {
+        String key = i.next();
+        idf.put(key, (100000 / idf.get(key)));
+      }
+      // conto il tf
+      for (Tweet t : tweets) {
+        String x = t.getText();
+        t.tf = new TreeMap<String, Double>();
+        String[] parole = x.split(" ");
+        for (String parola : parole) {
+          if (!t.tf.containsKey(parola)) {
+            t.tf.put(parola, 0.0);
+          }
+          t.tf.put(parola, t.tf.get(parola) + 1);
+        }
+      }
+      // moltiplico la roba
+      for (Tweet t : tweets) {
+        i = t.tf.keySet().iterator();
+        while (i.hasNext()) {
+          String key = i.next();
+          t.tf.put(key, t.tf.get(key) * idf.get(key));
+        }
+      }
+      // tengo il maggiore
+      for (Tweet t : tweets) {
+        i = t.tf.keySet().iterator();
+        String max = null;
+        Double maxn = Double.MAX_VALUE;
+        while (i.hasNext()) {
+          String key = i.next();
+          if (t.tf.get(key) > 5000 && t.tf.get(key) < maxn) {
+            maxn = t.tf.get(key);
+            max = key;
+          }
+        }
+        System.out.println(max + " (" + maxn + ") " + t.getText());
+      }
+    }
   }
 
   private boolean connect() {
