@@ -24,7 +24,8 @@ public class DayDetails extends VizPanel implements TouchEnabled, EventSubscribe
   public float endX;
   private Day day;
   private ArrayList<Day> days;
-  private HashMap<String, PImage> weatherShapes;
+  private HashMap<String, PImage> weatherImages;
+  private PImage windImage;
 
   public DayDetails(float x0, float y0, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -35,10 +36,11 @@ public class DayDetails extends VizPanel implements TouchEnabled, EventSubscribe
     m.notificationCenter.registerToEvent(EventName.DAY_DESELECTED, this);
     m.notificationCenter.registerToEvent(EventName.DAY_SELECTED, this);
     m.notificationCenter.registerToEvent(EventName.DAYS_UPDATED, this);
-    weatherShapes = new HashMap<String, PImage>();
+    weatherImages = new HashMap<String, PImage>();
     for (String name : new String[] {"clear", "cloudy", "rain", "showers"}) {
-      weatherShapes.put(name, c.getImage("weather/" + name, "png"));
+      weatherImages.put(name, c.getImage("weather/" + name, "png"));
     }
+    windImage = c.getImage("weather/wind", "png");
     setVisible(false);
   }
 
@@ -52,7 +54,17 @@ public class DayDetails extends VizPanel implements TouchEnabled, EventSubscribe
   }
 
   private void drawWeather() {
-    image(weatherShapes.get(day.getWeather().toString().toLowerCase()), 10, 10);
+    pushStyle();
+    image(weatherImages.get(day.getWeather().toString().toLowerCase()), 10, 10);
+    pushMatrix();
+    imageMode(PApplet.CENTER);
+    translate(getX0Absolute() + 80 + windImage.width / 2.0f, getY0Absolute() + 7 + windImage.height
+        / 2.0f);
+    rotate(radians(45 - day.getWindDirection()));
+    m.p.image(windImage, 0, 0);
+    popMatrix();
+    text(day.getWindSpeed() + "mph", 40, 10);
+    popStyle();
   }
 
   private void drawBackground() {

@@ -307,6 +307,14 @@ public abstract class VizPanel {
     modifyPosition((x0 - parent.x0) + xOffset, (y0 - parent.y0) + yOffset);
     propagateMove(xOffset, yOffset);
   }
+  
+  public void translate(float tx, float ty) {
+    p.translate(s(tx), s(ty));
+  }
+
+  public void rotate(float angle) {
+    p.rotate(angle);
+  }
 
   private void propagateMove(float xOffset, float yOffset) {
     for (VizPanel child: children) {
