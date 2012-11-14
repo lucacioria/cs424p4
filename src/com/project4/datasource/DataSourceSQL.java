@@ -18,6 +18,7 @@ public class DataSourceSQL {
   private MySQL sql;
   private boolean connected = false;
   private HashMap<String, Double> idf;
+  private Day[] weather;
 
   public DataSourceSQL(PApplet context) {
     String user, pass, database, host;
@@ -83,6 +84,28 @@ public class DataSourceSQL {
     return out;
   }
 
+  private void addWeatherToDay(Day day) {
+    String query;
+    if (weather == null) {
+      weather = new Day[21];
+      if (connect()) {
+        query = "SELECT day, weather, wind_speed, wind_direction FROM p4weather";
+        query(query);
+        while (sql.next()) {
+          Day d = new Day(sql.getInt("day"));
+          d.setWindDirection(sql.getInt("wind_direction"));
+          d.setWindSpeed(sql.getInt("wind_speed"));
+          d.setWeather(WeatherEnum.fromString(sql.getString("weather")));
+          weather[d.getDay()] = d;
+        }
+      }
+    }
+    Day weatherDay = weather[day.getDay()];
+    day.setWindDirection(weatherDay.getWindDirection());
+    day.setWindSpeed(weatherDay.getWindSpeed());
+    day.setWeather(weatherDay.getWeather());
+  }
+
   public ArrayList<Day> getDays(ArrayList<Filter> filters) {
     Day[] days = new Day[21];
     Arrays.fill(days, null);
@@ -111,11 +134,14 @@ public class DataSourceSQL {
       }
     }
     //
+    for (Day day : days) {
+      addWeatherToDay(day);
+    }
     return new ArrayList<Day>(Arrays.asList(days));
   }
 
   private Day emptyDay(int dayNumber, ArrayList<Filter> filters) {
-    Day day = new Day(dayNumber, WeatherEnum.CLEAR, 5, 0);
+    Day day = new Day(dayNumber);
     for (Filter f : filters) {
       day.setCount(f, 0);
     }

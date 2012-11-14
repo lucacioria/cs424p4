@@ -1,18 +1,10 @@
 package com.project4;
 
-import java.util.ArrayList;
-
-import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.Config.MyFontEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.FilterPlayGround;
-import com.project4.datasource.Day;
-import com.project4.datasource.Filter;
-import com.project4.datasource.Tweet;
-import com.project4.datasource.User;
 import com.project4.dayview.DayView;
 import com.project4.map.Map;
 

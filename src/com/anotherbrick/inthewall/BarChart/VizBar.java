@@ -4,6 +4,7 @@ import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 
 public class VizBar extends VizPanel implements TouchEnabled {
@@ -21,7 +22,13 @@ public class VizBar extends VizPanel implements TouchEnabled {
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    log("bar touched: " + barData.label);
+    if (down) {
+      m.notificationCenter.notifyEvent(EventName.DAY_SELECTED, Integer.valueOf(barData.name));
+      setModal(true);
+    } else {      
+      m.notificationCenter.notifyEvent(EventName.DAY_DESELECTED);
+      setModal(false);
+    }
     return true;
   }
 
@@ -39,7 +46,7 @@ public class VizBar extends VizPanel implements TouchEnabled {
       fill(barColors[i]);
       float xLeftBar = xLeft + (xRight - xLeft) / n * i;
       float xRightBar = xLeftBar + (xRight - xLeft) / n;
-      float yTop = yBottom - (barData.values[i] / maxValue) * getHeight();      
+      float yTop = yBottom - (barData.values[i] / maxValue) * getHeight();
       rect(xLeftBar, yTop, xRightBar - xLeftBar, yBottom - yTop);
     }
     // label
@@ -60,7 +67,6 @@ public class VizBar extends VizPanel implements TouchEnabled {
   }
 
   @Override
-  public void setup() {
-  }
+  public void setup() {}
 
 }

@@ -14,6 +14,7 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private BarChart barChart;
   private TimeSlider timeSlider;
+  private DayDetails dayDetails;
 
   public DayView(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -28,6 +29,7 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
       for (Day d : days) {
         BarData b = new BarData();
         b.label = d.toStringForBarchart();
+        b.name = d.getDay() + "";
         b.values = d.getSortedCounts();
         barChartData.add(b);
       }
@@ -44,7 +46,16 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
   public void setup() {
     setupBarChart();
     setupTimeSlider();
+    setupDayDetails();
     m.notificationCenter.registerToEvent(EventName.DAYS_UPDATED, this);
+  }
+
+  private void setupDayDetails() {
+    dayDetails = new DayDetails(0, - DayDetails.height, this);
+    dayDetails.startX = barChart.getX0() - dayDetails.getWidth() / 2 + 50;
+    dayDetails.endX = barChart.getX1() - dayDetails.getWidth() / 2 - 20;
+    dayDetails.setup();
+    addTouchSubscriber(dayDetails);
   }
 
   private void setupTimeSlider() {
@@ -66,6 +77,7 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
     background(MyColorEnum.DARK_GRAY);
     barChart.draw();
     timeSlider.draw();
+    dayDetails.draw();
     popStyle();
     return false;
   }

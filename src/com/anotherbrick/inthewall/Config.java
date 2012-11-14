@@ -169,14 +169,6 @@ public class Config {
       return hex("#E14C41");
     case BACKGROUND_COLOR:
       return hex("#1f1f1f");
-    case GRAPH_COLOR_1:
-      return hex("#8da940");
-    case GRAPH_COLOR_2:
-      return hex("#adb0b0");
-    case GRAPH_COLOR_3:
-      return hex("#f16451");
-    case GRAPH_COLOR_4:
-      return hex("#4fc1bb");
     case YELLOW:
       return hex("#FFFF00");
     case HEAT_MAP_4:

@@ -85,7 +85,7 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
 
   @Override
   public void eventReceived(EventName eventName, Object data) {
-    if (eventName == EventName.TOGGLE_CONTROL_PANEL || eventName == EventName.BUTTON_TOUCHED) {
+    if (eventName == EventName.TOGGLE_CONTROL_PANEL) {
       if (animating) return;
       if (hidden) {
         startShowAnimation();
