@@ -23,4 +23,9 @@ public class FilterBox extends AbstractFilterBox {
 
   }
 
+  @Override
+  public String getFilter() {
+    return null;
+  }
+
 }
