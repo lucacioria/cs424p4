@@ -51,7 +51,7 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void setupDayDetails() {
-    dayDetails = new DayDetails(0, - DayDetails.height, this);
+    dayDetails = new DayDetails(0, - DayDetails.height + 10, this);
     dayDetails.startX = barChart.getX0() - dayDetails.getWidth() / 2 + 50;
     dayDetails.endX = barChart.getX1() - dayDetails.getWidth() / 2 - 20;
     dayDetails.setup();

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
@@ -14,11 +15,15 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   public String title;
   private ArrayList<BarData> data;
   public MyColorEnum backgroundColor = MyColorEnum.DARK_GRAY;
-  public MyColorEnum[] barColors = {MyColorEnum.LIGHT_BLUE, MyColorEnum.LIGHT_ORANGE, MyColorEnum.LIGHT_GREEN, MyColorEnum.LIGHT_GREEN, MyColorEnum.LIGHT_GREEN};
+  public MyColorEnum[] barColors = {MyColorEnum.LIGHT_BLUE, MyColorEnum.LIGHT_ORANGE,
+      MyColorEnum.LIGHT_GREEN, MyColorEnum.LIGHT_GREEN, MyColorEnum.LIGHT_GREEN};
   public MyColorEnum textColor = MyColorEnum.WHITE;
 
   private float chartXLeft, chartXRight, chartYBottom, chartYTop, chartWidth, chartHeight;
   private ArrayList<VizBar> bars = new ArrayList<VizBar>();
+  private boolean dragging = false;
+  private Object lastBar = null;
+  private boolean wasDragging = false;
 
   public VizBarChart(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -26,11 +31,25 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    return propagateTouch(x, y, down, touchType);
+    if (down) {
+      for (VizBar bar: bars) {
+        if (bar.containsPoint(x, y)) {
+          dragging = true;
+          setModal(true);
+          return true;
+        }
+      }
+    } else {
+      dragging = false;
+      setModal(false);
+      return true;
+    }
+    return false;
   }
 
   @Override
   public boolean draw() {
+    manageTouch();
     pushStyle();
     background(backgroundColor);
     if (data == null) return false;
@@ -40,7 +59,28 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
     popStyle();
     return false;
   }
-  
+
+  private void manageTouch() {
+    if (dragging) {
+      wasDragging = true;
+      for (VizBar bar : bars) {
+        if (bar.containsPoint(m.touchX, m.touchY)) {
+          if (lastBar == null || lastBar != bar) {
+            m.notificationCenter.notifyEvent(EventName.DAY_DESELECTED);
+            m.notificationCenter.notifyEvent(EventName.DAY_SELECTED,
+                Integer.valueOf(bar.barData.name));
+            lastBar = bar;
+          }
+        }
+      }
+    } else {
+      if (wasDragging) {
+        wasDragging = false;
+        m.notificationCenter.notifyEvent(EventName.DAY_DESELECTED);
+      }
+    }
+  }
+
   public void setData(ArrayList<BarData> data) {
     this.data = data;
     updateBars();
@@ -61,11 +101,11 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
         numberLabel = Helper.floatToString((tickValue * i), 0, true);
       } else if ((tickValue * i) > 1) {
         numberLabel = Helper.floatToString((tickValue * i), 1, true);
-      } else if ((tickValue * i) != 0){
+      } else if ((tickValue * i) != 0) {
         numberLabel = Helper.floatToString((tickValue * i), 3, true);
       } else {
         textAlign(PApplet.RIGHT, PApplet.BOTTOM);
-        numberLabel = Helper.floatToString((tickValue * i), 0, true);        
+        numberLabel = Helper.floatToString((tickValue * i), 0, true);
       }
       text(numberLabel, chartXLeft - 5, y);
     }
@@ -125,7 +165,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   private float getMaxValue() {
     float max = Float.MIN_VALUE;
     for (BarData barData : data) {
-      for (int i = 0; i < barData.values.length; i++) {        
+      for (int i = 0; i < barData.values.length; i++) {
         if (barData.values[i] > max) {
           max = barData.values[i];
         }

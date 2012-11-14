@@ -1,6 +1,11 @@
 package com.project4.dayview;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import processing.core.PApplet;
+import processing.core.PImage;
+import processing.core.PShape;
 
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
@@ -8,6 +13,7 @@ import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.datasource.Day;
+import com.project4.datasource.Day.WeatherEnum;
 
 public class DayDetails extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -18,6 +24,7 @@ public class DayDetails extends VizPanel implements TouchEnabled, EventSubscribe
   public float endX;
   private Day day;
   private ArrayList<Day> days;
+  private HashMap<String, PImage> weatherShapes;
 
   public DayDetails(float x0, float y0, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -28,15 +35,35 @@ public class DayDetails extends VizPanel implements TouchEnabled, EventSubscribe
     m.notificationCenter.registerToEvent(EventName.DAY_DESELECTED, this);
     m.notificationCenter.registerToEvent(EventName.DAY_SELECTED, this);
     m.notificationCenter.registerToEvent(EventName.DAYS_UPDATED, this);
+    weatherShapes = new HashMap<String, PImage>();
+    for (String name : new String[] {"clear", "cloudy", "rain", "showers"}) {
+      weatherShapes.put(name, c.getImage("weather/" + name, "png"));
+    }
     setVisible(false);
   }
 
   @Override
   public boolean draw() {
     if (!isVisible()) return false;
-    background(MyColorEnum.RED);
+    drawBackground();
+    drawWeather();
     text(day.getDay() + " - " + day.getWindSpeed(), getWidth() / 2, getHeight() / 2);
     return false;
+  }
+
+  private void drawWeather() {
+    image(weatherShapes.get(day.getWeather().toString().toLowerCase()), 10, 10);
+  }
+
+  private void drawBackground() {
+    noStroke();
+    fill(MyColorEnum.LIGHT_BLUE, 200f);
+    beginShape();
+    vertex(getWidth() / 2 - 10, getHeight() - 20);
+    vertex(getWidth() / 2 + 10, getHeight() - 20);
+    vertex(getWidth() / 2, getHeight());
+    endShape(PApplet.CLOSE);
+    rect(0, 0, getWidth(), getHeight() - 20, 10, 10, 10, 10);
   }
 
   @SuppressWarnings("unchecked")

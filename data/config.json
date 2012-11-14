@@ -1,7 +1,7 @@
 {
 'on_local_server' : false,
 'on_wall' : false,
-'multiply_by_2' : false,
+'multiply_by_2' : true,
 'translate_to_italian' : false,
 'enable_safe_line' : false,
 'enable_grid_lines' : false,
