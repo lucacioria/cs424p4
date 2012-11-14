@@ -23,6 +23,7 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
   private int startTime;
   private float originalY0;
   private float animationDuration = 5000;
+  private FilterButtons filterButtons;
 
   @Override
   public void setup() {
@@ -30,6 +31,7 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
     setupZoomButtons();
     setupPanButtons();
     setupLayerButtons();
+    setupFilterButtons();
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
     m.notificationCenter.registerToEvent(EventName.TOGGLE_CONTROL_PANEL, this);
   }
@@ -40,6 +42,7 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
     zoomButtons.draw();
     panButtons.draw();
     layerButtons.draw();
+    filterButtons.draw();
     return false;
   }
 
@@ -83,6 +86,14 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
     layerButtons.setup();
   }
 
+  private void setupFilterButtons() {
+    filterButtons =
+        new FilterButtons(getWidth() - 80, layerButtons.getY0() - FilterButtons.height - padding, this);
+    addTouchSubscriber(filterButtons);
+    addChild(filterButtons);
+    filterButtons.setup();
+  }
+  
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.TOGGLE_CONTROL_PANEL) {

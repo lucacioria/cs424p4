@@ -10,8 +10,6 @@ import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 public class VizButton extends VizPanel implements TouchEnabled, EventSubscriber {
 
   public String text = "";
-  private float xOffset = 0;
-  private float yOffset = 0;
   public int repeatRate = -1;
   // common styles
   public String name;
@@ -21,30 +19,30 @@ public class VizButton extends VizPanel implements TouchEnabled, EventSubscriber
   private float round_d = 0;
   private int textSize;
   // standard
-  private MyColorEnum backgroundColor = MyColorEnum.WHITE;
-  private MyColorEnum strokeColor = MyColorEnum.BLACK;
-  private MyColorEnum textColor = MyColorEnum.WHITE;
-  private float fillAlpha = 255f;
-  private float strokeAlpha = 255f;
-  PImage backgroundImage;
-  PShape backgroundShape;
+  public MyColorEnum backgroundColor = MyColorEnum.WHITE;
+  public MyColorEnum strokeColor = MyColorEnum.BLACK;
+  public MyColorEnum textColor = MyColorEnum.WHITE;
+  public float fillAlpha = 255f;
+  public float strokeAlpha = 255f;
+  public PImage backgroundImage;
+  public PShape backgroundShape;
   // pressed
-  private MyColorEnum pressedTextColor = MyColorEnum.WHITE;
-  private MyColorEnum pressedStrokeColor = MyColorEnum.LIGHT_BLUE;
-  private MyColorEnum pressedBackgroundColor = MyColorEnum.DARKER_BLUE;
-  private float pressedStrokeAlpha = 255f;
-  private float pressedFillAlpha = 255f;
-  PImage pressedBackgroundImage;
+  public MyColorEnum pressedTextColor = MyColorEnum.WHITE;
+  public MyColorEnum pressedStrokeColor = MyColorEnum.LIGHT_BLUE;
+  public MyColorEnum pressedBackgroundColor = MyColorEnum.DARKER_BLUE;
+  public float pressedStrokeAlpha = 255f;
+  public float pressedFillAlpha = 255f;
+  public PImage pressedBackgroundImage;
   // selected
-  private MyColorEnum selectedBackgroundColor = backgroundColor;
-  private MyColorEnum selectedStrokeColor;
-  private float selectedFillAlpha;
-  private float selectedStrokeAlpha;
+  public MyColorEnum selectedBackgroundColor = backgroundColor;
+  public MyColorEnum selectedStrokeColor;
+  public float selectedFillAlpha;
+  public float selectedStrokeAlpha;
   // disabled
-  private MyColorEnum disabledBackgroundColor = backgroundColor;
-  private MyColorEnum disabledStrokeColor;
-  private float disabledFillAlpha;
-  private float disabledStrokeAlpha;
+  public MyColorEnum disabledBackgroundColor = backgroundColor;
+  public MyColorEnum disabledStrokeColor;
+  public float disabledFillAlpha;
+  public float disabledStrokeAlpha;
 
   //
   public static enum StateEnum {
@@ -261,16 +259,8 @@ public class VizButton extends VizPanel implements TouchEnabled, EventSubscriber
     }
   }
 
-  public void setText(String string, float xOffset, float yOffset) {
-    this.text = string;
-    this.xOffset = xOffset;
-    this.yOffset = yOffset;
-  }
-
   public void setText(String string) {
     this.text = string;
-    this.xOffset = 0;
-    this.yOffset = 0;
   }
 
   public String getText() {
