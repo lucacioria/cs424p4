@@ -2,6 +2,8 @@ package com.project4;
 
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizButton;
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.FilterPlayGround;
@@ -10,6 +12,7 @@ import com.project4.map.Map;
 
 public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
 
+  public VizButton standardButton;
   private Map map;
   private BlackBox blackBox1;
   private BlackBox blackBox2;
@@ -29,6 +32,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   @Override
   public void setup() {
+    setButtonStyles();
 //    textFont(MyFontEnum.OPENSANS_REGULAR);
     setupMap();
     setupBlackBoxes();
@@ -41,6 +45,19 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     if (c.initializeVisualization) initializeVisualization();
   }
 
+  private void setButtonStyles() {
+    standardButton = new VizButton(0, 0, 0, 0, this);
+    standardButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 155f,
+        155f, 10);
+    standardButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
+        MyColorEnum.DARK_GRAY, 155f, 10);
+    standardButton.setStyleSelected(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE,
+      MyColorEnum.WHITE, 155f, 155f, 10);
+    standardButton.setStyleDisabled(MyColorEnum.MEDIUM_GRAY, MyColorEnum.LIGHT_GRAY,
+      MyColorEnum.DARK_GRAY, 55f, 55f, 10);
+
+  }
+  
   private void setupEventManager() {
     eventManager = new EventManager(0, 0, 0, 0, this);
     eventManager.setup();

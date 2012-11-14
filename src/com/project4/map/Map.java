@@ -1,6 +1,8 @@
 package com.project4.map;
 
+import java.util.ArrayList;
 import java.util.Stack;
+import java.util.TreeMap;
 
 import processing.core.PImage;
 import processing.core.PVector;
@@ -9,6 +11,7 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.datasource.Filter;
 import com.project4.datasource.Tweet;
 
 public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
@@ -39,6 +42,26 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.BUTTON_TOUCHED) {
       manageButtons(data.toString());
+    }
+    if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals("scatterButton")) {
+      scatter.toggleVisible();
+      if (scatter.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "scatterButton");
+        heatMap.setVisible(false);
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "heatmapButton");
+      } else {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");
+      }
+    }
+    if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals("heatmapButton")) {
+      heatMap.toggleVisible();
+      if (heatMap.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "heatmapButton");
+        scatter.setVisible(false);
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");        
+      } else {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "heatmapButton");
+      }
     }
   }
 
@@ -86,7 +109,8 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void setupControlPanel() {
-    controlPanel = new ControlPanel(getWidth() - ControlPanel.width, getHeight() - ControlPanel.height, this);
+    controlPanel =
+        new ControlPanel(getWidth() - ControlPanel.width, getHeight() - ControlPanel.height, this);
     controlPanel.setup();
     addTouchSubscriber(controlPanel);
   }

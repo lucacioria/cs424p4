@@ -1,5 +1,6 @@
 package com.anotherbrick.inthewall;
 
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.project4.datasource.DataSourceSQL;
 
 public class Model {
@@ -13,11 +14,12 @@ public class Model {
   public float touchYZoom;
   public TouchEnabled currentModalVizPanel;
   public DataSourceSQL dataSourceSQL;
-  
+
+  // global application variables
+
   public static final float MAX_TIME = 1305935940;
   public static final float MIN_TIME = 1304121600;
 
-  // global application variables
 
   public static void setup(Main p, DataSourceSQL dataSourceSQL,
       VizNotificationCenter notificationCenter) {
@@ -34,7 +36,6 @@ public class Model {
     return Model.instance;
   }
 
-  public void loadFiles() {
-  }
+  public void loadFiles() {}
 
 }

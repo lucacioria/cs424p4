@@ -3,6 +3,7 @@ package com.project4.map;
 import java.util.ArrayList;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.Model;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizButton;
 import com.anotherbrick.inthewall.VizPanel;
@@ -29,10 +30,8 @@ public class LayerButtons extends VizPanel implements TouchEnabled {
       VizButton button = new VizButton(0, 20 * i, getWidth(), 20, this);
       button.name = buttonNames[i] + "Button";
       button.text = buttonNames[i];
-      button.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 155f, 155f,
-          10);
-      button.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
-          155f, 10);
+      button.setStyleFromButton(m.p.getApplication().standardButton);
+      button.setup();
       addTouchSubscriber(button);
       addChild(button);
       buttons.add(button);

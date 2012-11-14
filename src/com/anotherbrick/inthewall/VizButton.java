@@ -7,7 +7,7 @@ import processing.core.PShape;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 
-public class VizButton extends VizPanel implements TouchEnabled {
+public class VizButton extends VizPanel implements TouchEnabled, EventSubscriber {
 
   public String text = "";
   private float xOffset = 0;
@@ -79,6 +79,31 @@ public class VizButton extends VizPanel implements TouchEnabled {
     super(x0, y0, width, height, parent);
   }
 
+  public void setStyleFromButton(VizButton b) {
+    this.backgroundColor = b.backgroundColor;
+    this.strokeColor = b.strokeColor;
+    this.fillAlpha = b.fillAlpha;
+    this.strokeAlpha = b.strokeAlpha;
+    this.textSize = b.textSize;
+    this.textColor = b.textColor;
+   
+    this.selectedBackgroundColor = b.selectedBackgroundColor;
+    this.selectedStrokeColor = b.selectedStrokeColor;
+    this.selectedFillAlpha = b.selectedFillAlpha;
+    this.selectedStrokeAlpha = b.selectedStrokeAlpha;
+    
+    this.disabledBackgroundColor = b.disabledBackgroundColor; 
+    this.disabledStrokeColor = b.disabledStrokeColor;
+    this.disabledFillAlpha = b.disabledFillAlpha;
+    this.disabledStrokeAlpha = b.disabledStrokeAlpha;
+    
+    this.pressedBackgroundColor = b.pressedBackgroundColor;
+    this.pressedStrokeColor = b.pressedStrokeColor;
+    this.pressedFillAlpha = b.pressedFillAlpha;
+    this.pressedStrokeAlpha = b.pressedStrokeAlpha;
+    this.pressedTextColor = b.pressedTextColor;
+  }
+  
   public void setStyle(MyColorEnum backgroundColor, MyColorEnum textColor, MyColorEnum strokeColor,
       float fillAlpha, float strokeAlpha, int textSize) {
     this.backgroundColor = backgroundColor;
@@ -144,21 +169,21 @@ public class VizButton extends VizPanel implements TouchEnabled {
       if (repeatRate > 0) {
         if ((millis() - touchDownTime) / repeatRate > lastRepeatAction) {
           sendTouchedEvent();
-          lastRepeatAction ++;
+          lastRepeatAction++;
         }
       }
       return false;
     }
     switch (state) {
-    case STARDARD:
-      drawStandard();
-      break;
-    case SELECTED:
-      drawSelected();
-      break;
-    case DISABLED:
-      drawDisabled();
-      break;
+      case STARDARD:
+        drawStandard();
+        break;
+      case SELECTED:
+        drawSelected();
+        break;
+      case DISABLED:
+        drawDisabled();
+        break;
     }
     drawTextCentered();
     return false;
@@ -281,6 +306,17 @@ public class VizButton extends VizPanel implements TouchEnabled {
 
   @Override
   public void setup() {
+    m.notificationCenter.registerToEvent(EventName.BUTTON_SELECTED, this);
+    m.notificationCenter.registerToEvent(EventName.BUTTON_DESELECTED, this);
+  }
+
+  @Override
+  public void eventReceived(EventName eventName, Object data) {
+    if (eventName == EventName.BUTTON_SELECTED && data.toString().equals(name)) {
+      setSelected(true);
+    } else if (eventName == EventName.BUTTON_DESELECTED && data.toString().equals(name)) {
+      setSelected(false);
+    }
 
   }
 

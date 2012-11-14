@@ -33,7 +33,7 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
   @Override
   public void setup() {
     m.notificationCenter.registerToEvent(EventName.DATA_UPDATED, this);
-    m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
+    setVisible(false);
   }
 
   @Override
@@ -64,9 +64,6 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.DATA_UPDATED) {
       this.tweets = (TreeMap<Filter, ArrayList<Tweet>>) data;
-    }
-    if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals("scatterButton")) {
-      toggleVisible();
     }
   }
 
