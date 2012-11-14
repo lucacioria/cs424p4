@@ -21,51 +21,56 @@ public class Keyboard extends VizPanel implements TouchEnabled {
     int count = 0;
     for (String val : row1) {
       buttons[count] = new VizButton(27 + count * (20), 5, 15, 15, this);
-      buttons[count].setText(val, 25, (float) 7.5);
-      buttons[count].name = val;
+      buttons[count].setText(val);
+      buttons[count].name = "keyboard|" + val;
       buttons[count].setStyle(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255,
           255, 11);
+      addTouchSubscriber(buttons[count]);
       count++;
     }
     int count1 = 0;
     for (String val : row2) {
       buttons[count] = new VizButton(37 + count1 * (20), 25, 15, 15, this);
-      buttons[count].setText(val, 25, (float) 7.5);
-      buttons[count].name = val;
+      buttons[count].setText(val);
+      buttons[count].name = "keyboard|" + val;
       buttons[count].setStyle(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255,
           255, 11);
+      addTouchSubscriber(buttons[count]);
       count++;
       count1++;
     }
     count1 = 0;
     for (String val : row3) {
       buttons[count] = new VizButton(57 + count1 * (20), 45, 15, 15, this);
-      buttons[count].setText(val, 25, (float) 7.5);
-      buttons[count].name = val;
+      buttons[count].setText(val);
+      buttons[count].name = "keyboard|" + val;
       buttons[count].setStyle(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255,
           255, 11);
+      addTouchSubscriber(buttons[count]);
       count++;
       count1++;
     }
     buttons[count] = new VizButton(27, 45, 25, 15, this);
-    buttons[count].setText("_", 25, (float) 7.5);
-    buttons[count].name = "_";
+    buttons[count].setText("_");
+    buttons[count].name = "keyboard|" + "_";
     buttons[count].setStyle(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255,
         255, 11);
     count++;
     buttons[count] = new VizButton(57 + count1 * (20), 45, 25, 15, this);
-    buttons[count].setText("DEL", 25, (float) 7.5);
-    buttons[count].name = "DEL";
+    buttons[count].setText("DEL");
+    buttons[count].name = "keyboard|" + "DEL";
     buttons[count].setStyle(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255,
         255, 11);
+    addTouchSubscriber(buttons[count]);
     count1 = 0;
     count++;
     for (String val : row4) {
       buttons[count] = new VizButton(27 + count1 * (20), 65, 15, 15, this);
-      buttons[count].setText(val, 25, (float) 7.5);
-      buttons[count].name = val;
+      buttons[count].setText(val);
+      buttons[count].name = "keyboard|" + val;
       buttons[count].setStyle(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255,
           255, 11);
+      addTouchSubscriber(buttons[count]);
       count++;
       count1++;
     }
@@ -84,7 +89,7 @@ public class Keyboard extends VizPanel implements TouchEnabled {
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    System.out.println("Keyboard.touch()");
+    propagateTouch(x, y, down, touchType);
     return false;
   }
 }
