@@ -57,6 +57,7 @@ public class VizButton extends VizPanel implements TouchEnabled {
   private boolean pressed;
   private int touchDownTime;
   private int lastRepeatAction = 1;
+  public boolean eventOnPressed = false;
 
   public boolean isSelected() {
     return state == StateEnum.SELECTED;
@@ -257,6 +258,7 @@ public class VizButton extends VizPanel implements TouchEnabled {
     if (down) {
       pressed = true;
       touchDownTime = millis();
+      sendPressedEvent();
     } else {
       lastRepeatAction = 1;
       pressed = false;
@@ -267,6 +269,10 @@ public class VizButton extends VizPanel implements TouchEnabled {
 
   private void sendTouchedEvent() {
     m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, name);
+  }
+
+  private void sendPressedEvent() {
+    m.notificationCenter.notifyEvent(EventName.BUTTON_PRESSED, name);
   }
 
   public void setShapeFillingColor(MyColorEnum shapeFillingColor) {

@@ -1,7 +1,5 @@
 package com.anotherbrick.inthewall;
 
-import java.util.ArrayList;
-
 import com.project4.datasource.DataSourceSQL;
 
 public class Model {
@@ -15,6 +13,9 @@ public class Model {
   public float touchYZoom;
   public TouchEnabled currentModalVizPanel;
   public DataSourceSQL dataSourceSQL;
+  
+  public static final float MAX_TIME = 1305935940;
+  public static final float MIN_TIME = 1304121600;
 
   // global application variables
 
@@ -34,8 +35,6 @@ public class Model {
   }
 
   public void loadFiles() {
-    // TODO Auto-generated method stub
-
   }
 
 }

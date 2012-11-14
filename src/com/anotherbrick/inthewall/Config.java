@@ -41,7 +41,7 @@ public class Config {
   }
 
   public enum MyColorEnum {
-    BLACK, DARK_GRAY, BACKGROUND_COLOR, LIGHT_GRAY, DARK_ORANGE, DARK_BROWN, LIGHT_ORANGE, DARK_BLUE, LIGHT_BLUE, MEDIUM_GRAY, WHITE, LIGHT_GREEN, DARKER_ORANGE, DARKER_BLUE, DARKERER_ORANGE, DARKERER_BLUE, RED, GRAPH_COLOR_1, GRAPH_COLOR_2, GRAPH_COLOR_3, GRAPH_COLOR_4, DARK_WHITE, TEXT_GRAY, YELLOW,
+    BLACK, DARK_GRAY, BACKGROUND_COLOR, LIGHT_GRAY, DARK_ORANGE, DARK_BROWN, LIGHT_ORANGE, DARK_BLUE, LIGHT_BLUE, MEDIUM_GRAY, WHITE, LIGHT_GREEN, DARKER_ORANGE, DARKER_BLUE, DARKERER_ORANGE, DARKERER_BLUE, RED, GRAPH_COLOR_1, GRAPH_COLOR_2, GRAPH_COLOR_3, GRAPH_COLOR_4, DARK_WHITE, TEXT_GRAY, YELLOW, HEAT_MAP_1, HEAT_MAP_2, HEAT_MAP_3, HEAT_MAP_4
   }
 
   public static void setup(PApplet p) {
@@ -169,16 +169,16 @@ public class Config {
       return hex("#E14C41");
     case BACKGROUND_COLOR:
       return hex("#1f1f1f");
-    case GRAPH_COLOR_1:
-      return hex("#8da940");
-    case GRAPH_COLOR_2:
-      return hex("#adb0b0");
-    case GRAPH_COLOR_3:
-      return hex("#f16451");
-    case GRAPH_COLOR_4:
-      return hex("#4fc1bb");
     case YELLOW:
       return hex("#FFFF00");
+    case HEAT_MAP_4:
+      return hex("#980043");
+    case HEAT_MAP_1:
+      return hex("#FECC5C");
+    case HEAT_MAP_2:
+      return hex("#FD8D3C");
+    case HEAT_MAP_3:
+      return hex("#F03B20");
     default:
       return 0;
     }

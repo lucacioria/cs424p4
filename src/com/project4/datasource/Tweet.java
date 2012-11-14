@@ -1,5 +1,8 @@
 package com.project4.datasource;
 
+import java.util.HashMap;
+import java.util.TreeMap;
+
 import com.anotherbrick.inthewall.Model;
 
 public class Tweet {
@@ -9,6 +12,7 @@ public class Tweet {
   private int date;
   private int id;
   private int userId;
+  public TreeMap<String, Double> tf;
 
   public Tweet(double lat, double lon, int date, int id, int userId) {
     super();
@@ -45,5 +49,9 @@ public class Tweet {
 
   public int getUserId() {
     return userId;
+  }
+
+  public void setText(String text) {
+    this.text = text;
   }
 }

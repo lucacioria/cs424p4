@@ -2,14 +2,24 @@ package com.project4.datasource;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.SortedSet;
 import java.util.TreeMap;
 
 
 public class Day {
 
   public enum WeatherEnum {
-    CLOUDY, CLEAR, SHOWERS, RAIN
+    CLOUDY, CLEAR, SHOWERS, RAIN;
+    
+    public static WeatherEnum fromString(String text) {
+      if (text != null) {
+        for (WeatherEnum b : WeatherEnum.values()) {
+          if (text.equalsIgnoreCase(b.toString())) {
+            return b;
+          }
+        }
+      }
+      return null;
+    }
   }
 
   private WeatherEnum weather;
@@ -21,6 +31,18 @@ public class Day {
 
   public WeatherEnum getWeather() {
     return weather;
+  }
+
+  public void setWeather(WeatherEnum weather) {
+    this.weather = weather;
+  }
+
+  public void setWindSpeed(int windSpeed) {
+    this.windSpeed = windSpeed;
+  }
+
+  public void setWindDirection(int windDirection) {
+    this.windDirection = windDirection;
   }
 
   public int getWindSpeed() {
@@ -35,12 +57,9 @@ public class Day {
     return counts;
   }
 
-  public Day(int day, WeatherEnum weather, int windSpeed, int windDirection) {
+  public Day(int day) {
     super();
     this.day = day;
-    this.weather = weather;
-    this.windSpeed = windSpeed;
-    this.windDirection = windDirection;
   }
   
   public void setCount(Filter filter, Integer count) {

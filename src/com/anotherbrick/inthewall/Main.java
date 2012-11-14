@@ -140,11 +140,11 @@ public class Main extends PApplet {
     int xPosScaled = (int) (mouseX / c.multiply);
     int yPosScaled = (int) (mouseY / c.multiply);
     if ((keyPressed == false)) {
-      sendTouch(xPosScaled, yPosScaled, true, TouchTypeEnum.ONE_FINGER);
       System.out.println("--- 1 Finger touch DOWN (mouse)");
+      sendTouch(xPosScaled, yPosScaled, true, TouchTypeEnum.ONE_FINGER);
     } else if ((keyPressed == true && key == CODED && keyCode == SHIFT)) {
-      sendTouch(xPosScaled, yPosScaled, true, TouchTypeEnum.FIVE_FINGERS);
       System.out.println("--- 5 Fingers touch DOWN (mouse)");
+      sendTouch(xPosScaled, yPosScaled, true, TouchTypeEnum.FIVE_FINGERS);
     }
     setTouchXandYinModel();
   }
@@ -169,11 +169,11 @@ public class Main extends PApplet {
     int xPosScaled = (int) (mouseX / c.multiply);
     int yPosScaled = (int) (mouseY / c.multiply);
     if ((keyPressed == false)) {
-      sendTouch(xPosScaled, yPosScaled, false, TouchTypeEnum.ONE_FINGER);
       System.out.println("--- 1 Finger touch UP (mouse)");
+      sendTouch(xPosScaled, yPosScaled, false, TouchTypeEnum.ONE_FINGER);
     } else if ((keyPressed == true && key == CODED && keyCode == SHIFT)) {
-      sendTouch(xPosScaled, yPosScaled, false, TouchTypeEnum.FIVE_FINGERS);
       System.out.println("--- 5 Fingers touch UP (mouse)");
+      sendTouch(xPosScaled, yPosScaled, false, TouchTypeEnum.FIVE_FINGERS);
     }
     setTouchXandYinModel();
   }

@@ -2,6 +2,7 @@ package com.project4.dayview;
 
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.BarChart.BarData;
@@ -12,6 +13,8 @@ import com.project4.datasource.Day;
 public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private BarChart barChart;
+  private TimeSlider timeSlider;
+  private DayDetails dayDetails;
 
   public DayView(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -26,6 +29,7 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
       for (Day d : days) {
         BarData b = new BarData();
         b.label = d.toStringForBarchart();
+        b.name = d.getDay() + "";
         b.values = d.getSortedCounts();
         barChartData.add(b);
       }
@@ -41,18 +45,40 @@ public class DayView extends VizPanel implements TouchEnabled, EventSubscriber {
   @Override
   public void setup() {
     setupBarChart();
+    setupTimeSlider();
+    setupDayDetails();
     m.notificationCenter.registerToEvent(EventName.DAYS_UPDATED, this);
   }
 
+  private void setupDayDetails() {
+    dayDetails = new DayDetails(0, - DayDetails.height + 10, this);
+    dayDetails.startX = barChart.getX0() - dayDetails.getWidth() / 2 + 50;
+    dayDetails.endX = barChart.getX1() - dayDetails.getWidth() / 2 - 20;
+    dayDetails.setup();
+    addTouchSubscriber(dayDetails);
+  }
+
+  private void setupTimeSlider() {
+    timeSlider = new TimeSlider(20, getHeight() - 27, getWidth() - 21, 20, this);
+    timeSlider.setup();
+    addTouchSubscriber(timeSlider);
+  }
+
   private void setupBarChart() {
-    barChart = new BarChart(0, 0, getWidth(), getHeight(), this);
+    barChart = new BarChart(0, 0, getWidth() - 10, getHeight(), this);
     barChart.setup();
     addTouchSubscriber(barChart);
   }
 
   @Override
   public boolean draw() {
+    pushStyle();
+    noStroke();
+    background(MyColorEnum.DARK_GRAY);
     barChart.draw();
+    timeSlider.draw();
+    dayDetails.draw();
+    popStyle();
     return false;
   }
 

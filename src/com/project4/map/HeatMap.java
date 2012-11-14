@@ -2,18 +2,21 @@ package com.project4.map;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Random;
+import java.util.TreeMap;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
-import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.datasource.Filter;
 import com.project4.datasource.Tweet;
 
 public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
 
-  private ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+  private TreeMap<Filter, ArrayList<Tweet>> tweets = new TreeMap<Filter, ArrayList<Tweet>>();
   private Map map;
   private int[][] grid;
   private int gridSizeX, gridSizeY;
@@ -56,17 +59,17 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
     return false;
   }
 
-  private void drawGrid() {
-    float alpha = 150;
+  private void drawGrid2() {
+    float alpha = 180;
     for (int j = 0; j < grid.length; j++) {
       for (int i = 0; i < grid[j].length; i++) {
-        if (grid[j][i] > maxCount / 2)
+        if (grid[j][i] > maxCount / 1.5)
           fill(MyColorEnum.DARK_BLUE, alpha);
-        else if (grid[j][i] > maxCount / 10)
+        else if (grid[j][i] > maxCount / 2)
           fill(MyColorEnum.RED, alpha);
-        else if (grid[j][i] > maxCount / 20)
+        else if (grid[j][i] > maxCount / 5)
           fill(MyColorEnum.LIGHT_ORANGE, alpha);
-        else if (grid[j][i] > maxCount / 30)
+        else if (grid[j][i] > maxCount / 10)
           fill(MyColorEnum.YELLOW, alpha);
         else
           noFill();
@@ -74,14 +77,21 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
       }
     }
   }
-
-  private void drawGrid2() {
-    float alpha = 150;
+  
+  private void drawGrid() {
+    float alpha = 255;
     for (int j = 0; j < grid.length; j++) {
       for (int i = 0; i < grid[j].length; i++) {
-        if (grid[j][i] < 5) continue;
-        fill(m.p.lerpColor(Helper.hex2Rgb("#ff0000", m.p), Helper.hex2Rgb("#00ff00", m.p),
-            map(grid[j][i], 0, maxCount, 0, 1)));
+        if (grid[j][i] > maxCount / 1.5)
+          fill(MyColorEnum.HEAT_MAP_4, alpha*0.9f);
+        else if (grid[j][i] > maxCount / 2)
+          fill(MyColorEnum.HEAT_MAP_3, alpha*0.8f);
+        else if (grid[j][i] > maxCount / 5)
+          fill(MyColorEnum.HEAT_MAP_2, alpha*0.7f);
+        else if (grid[j][i] > maxCount / 10)
+          fill(MyColorEnum.HEAT_MAP_1, alpha*0.6f);
+        else
+          noFill();
         rect(i * gridW, j * gridH, gridW, gridH);
       }
     }
@@ -91,7 +101,7 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.DATA_UPDATED) {
-      this.tweets = (ArrayList<Tweet>) data;
+      this.tweets = (TreeMap<Filter, ArrayList<Tweet>>) data;
       gridUpdate();
     }
     if (eventName == EventName.MAP_ZOOMED_OR_PANNED) {
@@ -105,14 +115,20 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private void gridUpdate() {
     gridInit();
     int x, y;
-    for (Tweet t : tweets) {
-      if (map.isVisible(t)) {
-        x =
-            (int) ((t.getLon() - map.getMinLon()) / (map.getMaxLon() - map.getMinLon()) * gridSizeX);
-        y =
-            (int) ((t.getLat() - map.getMinLat()) / (map.getMaxLat() - map.getMinLat()) * gridSizeY);
-        increaseValue(x, y);
+    Iterator<Filter> i = tweets.keySet().iterator();
+    while (i.hasNext()) {
+      Filter key = i.next();
+      for (Tweet t : tweets.get(key)) {
+        if (map.isVisible(t)) {
+          x =
+              (int) ((t.getLon() - map.getMinLon()) / (map.getMaxLon() - map.getMinLon()) * gridSizeX);
+          y =
+              (int) ((t.getLat() - map.getMinLat()) / (map.getMaxLat() - map.getMinLat()) * gridSizeY);
+          increaseValue(x, y);
+        }
       }
+      // TODO disegna solo la prima heatmap a caso..
+      break;
     }
     updateMax();
   }
@@ -127,7 +143,7 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void increaseValue(int x, int y) {
-    int square = 31;
+    int square = 41;
     int incr;
     int finX, finY;
     for (int j = 0; j < square; j++) {
@@ -135,7 +151,8 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
         finX = (int) (x - Math.floor(square / 2) + i);
         finY = (int) (y - Math.floor(square / 2) + j);
         if (finX > 0 && finX < gridSizeX && finY > 0 && finY < gridSizeY) {
-          incr = Math.max(Math.abs(x - finX), Math.abs(y - finY));
+          //incr = Math.max(Math.abs(x - finX), Math.abs(y - finY));
+          incr = (int) Math.floor(Math.sqrt((Math.pow((x - finX), 2.0) + (int) (Math.pow((y - finY), 2.0)))));
           grid[finY][finX] += (Math.floor(square / 2) - incr + 1);
         }
       }

@@ -1,8 +1,8 @@
 package com.project4.datasource;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 
@@ -17,6 +17,8 @@ public class DataSourceSQL {
 
   private MySQL sql;
   private boolean connected = false;
+  private HashMap<String, Double> idf;
+  private Day[] weather;
 
   public DataSourceSQL(PApplet context) {
     String user, pass, database, host;
@@ -40,42 +42,68 @@ public class DataSourceSQL {
     }
   }
 
-  public ArrayList<User> getUsers(String where, int minTweets) {
-    ArrayList<User> users = new ArrayList<User>();
-    String query;
-    if (connect()) {
-      query =
-          "select t.user_id, group_concat(t.lat) as lat, group_concat(t.lon) as lon, "
-              + "group_concat(t.creation_date_posix) as creation_date_posix, group_concat(t.id) as id"
-              + " from (select * from tweets as t1 where " + where
-              + " order by t1.creation_date_posix) t group by t.user_id having count(*) >= "
-              + minTweets;
-      query(query);
-      while (sql.next()) {
-        ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-        // get group attributes
-        String[] lat = sql.getString("lat").split(",");
-        String[] lon = sql.getString("lon").split(",");
-        String[] id = sql.getString("id").split(",");
-        String[] creation_date_posix = sql.getString("creation_date_posix").split(",");
-        // for loop..
-        int userId = sql.getInt("user_id");
-        for (int i = 0; i < lat.length; i++) {
-          try {
-            Tweet tweet =
-                new Tweet(Double.valueOf(lat[i]).doubleValue(), -Double.valueOf(lon[i])
-                    .doubleValue(), Integer.valueOf(creation_date_posix[i]).intValue(), Integer
-                    .valueOf(id[i]).intValue(), userId);
-            tweets.add(tweet);
-          } catch (ArrayIndexOutOfBoundsException e) {
-            System.out.println("error in parsing tweet");
+  public TreeMap<Filter, ArrayList<User>> getUsers(ArrayList<Filter> filters, int[] minMax,
+      int minTweets) {
+    TreeMap<Filter, ArrayList<User>> out = new TreeMap<Filter, ArrayList<User>>();
+    for (Filter f : filters) {
+      ArrayList<User> users = new ArrayList<User>();
+      String query;
+      if (connect()) {
+        query =
+            "select t.user_id, group_concat(t.lat) as lat, group_concat(t.lon) as lon, "
+                + "group_concat(t.creation_date_posix) as creation_date_posix, group_concat(t.id) as id"
+                + " from (select * from tweets as t1 where " + getCompleteWhere(minMax, f)
+                + " order by t1.creation_date_posix) t group by t.user_id having count(*) >= "
+                + minTweets;
+        query(query);
+        while (sql.next()) {
+          ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+          // get group attributes
+          String[] lat = sql.getString("lat").split(",");
+          String[] lon = sql.getString("lon").split(",");
+          String[] id = sql.getString("id").split(",");
+          String[] creation_date_posix = sql.getString("creation_date_posix").split(",");
+          // for loop..
+          int userId = sql.getInt("user_id");
+          for (int i = 0; i < lat.length; i++) {
+            try {
+              Tweet tweet =
+                  new Tweet(Double.valueOf(lat[i]).doubleValue(), -Double.valueOf(lon[i])
+                      .doubleValue(), Integer.valueOf(creation_date_posix[i]).intValue(), Integer
+                      .valueOf(id[i]).intValue(), userId);
+              tweets.add(tweet);
+            } catch (ArrayIndexOutOfBoundsException e) {
+              System.out.println("error in parsing tweet");
+            }
           }
+          users.add(new User(userId, tweets));
         }
-        users.add(new User(userId, tweets));
+        out.put(f, users);
       }
-      return users;
     }
-    return null;
+    return out;
+  }
+
+  private void addWeatherToDay(Day day) {
+    String query;
+    if (weather == null) {
+      weather = new Day[21];
+      if (connect()) {
+        query = "SELECT day, weather, wind_speed, wind_direction FROM p4weather";
+        query(query);
+        while (sql.next()) {
+          Day d = new Day(sql.getInt("day"));
+          d.setWindDirection(sql.getInt("wind_direction"));
+          d.setWindSpeed(sql.getInt("wind_speed"));
+          d.setWeather(WeatherEnum.fromString(sql.getString("weather")));
+          weather[d.getDay()] = d;
+        }
+      }
+    }
+    Day weatherDay = weather[day.getDay()];
+    day.setWindDirection(weatherDay.getWindDirection());
+    day.setWindSpeed(weatherDay.getWindSpeed());
+    day.setWeather(weatherDay.getWeather());
   }
 
   public ArrayList<Day> getDays(ArrayList<Filter> filters) {
@@ -106,49 +134,113 @@ public class DataSourceSQL {
       }
     }
     //
+    for (Day day : days) {
+      addWeatherToDay(day);
+    }
     return new ArrayList<Day>(Arrays.asList(days));
   }
 
   private Day emptyDay(int dayNumber, ArrayList<Filter> filters) {
-    Day day = new Day(dayNumber, WeatherEnum.CLEAR, 5, 0);
+    Day day = new Day(dayNumber);
     for (Filter f : filters) {
       day.setCount(f, 0);
     }
     return day;
   }
 
-  public ArrayList<Tweet> getTweets(String where) {
-    ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-    String query;
-    if (connect()) {
-      query = "SELECT id, user_id, lat, lon, creation_date_posix FROM tweets WHERE " + where;
-      query(query);
-      while (sql.next()) {
-        Tweet tweet =
-            new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
-                sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
-        tweets.add(tweet);
+  public TreeMap<Filter, ArrayList<Tweet>> getTweets(ArrayList<Filter> filters, int[] minMax) {
+    TreeMap<Filter, ArrayList<Tweet>> out = new TreeMap<Filter, ArrayList<Tweet>>();
+    for (Filter f : filters) {
+      ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+      String query;
+      if (connect()) {
+        query =
+            "SELECT id, user_id, lat, lon, creation_date_posix FROM tweets WHERE "
+                + getCompleteWhere(minMax, f);
+        query(query);
+        while (sql.next()) {
+          Tweet tweet =
+              new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
+                  sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
+          tweets.add(tweet);
+        }
+        out.put(f, tweets);
       }
-      return tweets;
     }
-    return null;
+    return out;
   }
 
-  public ArrayList<Tweet> getCountByDay(String where) {
-    ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-    String query;
+  private String getCompleteWhere(int[] minMax, Filter f) {
+    String where =
+        "creation_date_posix > " + minMax[0] + " AND creation_date_posix < " + minMax[1]
+            + (f.getWhere().length() > 0 ? " AND " + f.getWhere() : "");
+    return where;
+  }
+
+  public void doStuff() {
+    idf = new HashMap<String, Double>();
     if (connect()) {
-      query = "SELECT count(id, user_id, lat, lon, creation_date_posix FROM tweets WHERE " + where;
+      // prendi le stringhe dal db
+      String query = "SELECT id, LOWER(text) as text FROM tweets WHERE id < 10000";
       query(query);
+      ArrayList<Tweet> tweets = new ArrayList<Tweet>();
       while (sql.next()) {
-        Tweet tweet =
-            new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
-                sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
-        tweets.add(tweet);
+        Tweet t = new Tweet(0, 0, 0, sql.getInt("id"), 0);
+        t.setText(sql.getString("text"));
+        tweets.add(t);
       }
-      return tweets;
+      // conta roba
+      for (Tweet t : tweets) {
+        String x = t.getText();
+        String[] parole = x.split(" ");
+        for (String parola : parole) {
+          if (!idf.containsKey(parola)) {
+            idf.put(parola, 0.0);
+          }
+          idf.put(parola, idf.get(parola) + 1);
+        }
+      }
+      // fai idf figo
+      Iterator<String> i = idf.keySet().iterator();
+      while (i.hasNext()) {
+        String key = i.next();
+        idf.put(key, (100000 / idf.get(key)));
+      }
+      // conto il tf
+      for (Tweet t : tweets) {
+        String x = t.getText();
+        t.tf = new TreeMap<String, Double>();
+        String[] parole = x.split(" ");
+        for (String parola : parole) {
+          if (!t.tf.containsKey(parola)) {
+            t.tf.put(parola, 0.0);
+          }
+          t.tf.put(parola, t.tf.get(parola) + 1);
+        }
+      }
+      // moltiplico la roba
+      for (Tweet t : tweets) {
+        i = t.tf.keySet().iterator();
+        while (i.hasNext()) {
+          String key = i.next();
+          t.tf.put(key, t.tf.get(key) * idf.get(key));
+        }
+      }
+      // tengo il maggiore
+      for (Tweet t : tweets) {
+        i = t.tf.keySet().iterator();
+        String max = null;
+        Double maxn = Double.MAX_VALUE;
+        while (i.hasNext()) {
+          String key = i.next();
+          if (t.tf.get(key) > 5000 && t.tf.get(key) < maxn) {
+            maxn = t.tf.get(key);
+            max = key;
+          }
+        }
+        System.out.println(max + " (" + maxn + ") " + t.getText());
+      }
     }
-    return null;
   }
 
   private boolean connect() {

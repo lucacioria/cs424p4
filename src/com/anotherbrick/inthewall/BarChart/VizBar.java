@@ -21,7 +21,6 @@ public class VizBar extends VizPanel implements TouchEnabled {
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    log("bar touched: " + barData.label);
     return true;
   }
 
@@ -39,7 +38,7 @@ public class VizBar extends VizPanel implements TouchEnabled {
       fill(barColors[i]);
       float xLeftBar = xLeft + (xRight - xLeft) / n * i;
       float xRightBar = xLeftBar + (xRight - xLeft) / n;
-      float yTop = yBottom - (barData.values[i] / maxValue) * getHeight();      
+      float yTop = yBottom - (barData.values[i] / maxValue) * getHeight();
       rect(xLeftBar, yTop, xRightBar - xLeftBar, yBottom - yTop);
     }
     // label
@@ -54,12 +53,12 @@ public class VizBar extends VizPanel implements TouchEnabled {
     float xRight = getWidth() - getWidth() * paddingPercentage;
     float yBottom = getHeight();
     textSize(8);
+    textLeading(7);
     textAlign(PApplet.CENTER, PApplet.TOP);
-    text(barData.label, xLeft + (xRight - xLeft) / 2, yBottom + 3);
+    text(barData.label, xLeft + (xRight - xLeft) / 2, yBottom + 6);
   }
 
   @Override
-  public void setup() {
-  }
+  public void setup() {}
 
 }
