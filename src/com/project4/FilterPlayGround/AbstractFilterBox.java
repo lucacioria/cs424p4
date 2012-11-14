@@ -32,15 +32,17 @@ public abstract class AbstractFilterBox extends VizPanel implements Serializable
         new BoxConnectorIngoing(0, getHeight() / 2, CONNECTOR_SIZE, CONNECTOR_SIZE, this);
   }
 
-  private ArrayList<AbstractFilterBox> outgoingConnections = new ArrayList<AbstractFilterBox>();
+  private ArrayList<AbstractFilterBox> ingoingConnections = new ArrayList<AbstractFilterBox>();
 
-  public void addOutgoingConnection(AbstractFilterBox afb) {
-    outgoingConnections.add(afb);
+  public void addIngoingConnection(AbstractFilterBox afb) {
+    ingoingConnections.add(afb);
   }
 
-  public void removeOutgoingConnection(AbstractFilterBox afb) {
-    outgoingConnections.remove(afb);
+  public void removeIngoingConnection(AbstractFilterBox afb) {
+    ingoingConnections.remove(afb);
   }
+
+  public abstract String getFilter();
 
   float spanX;
   float spanY;
@@ -55,14 +57,26 @@ public abstract class AbstractFilterBox extends VizPanel implements Serializable
     popStyle();
     if (dragging) {
       modifyPositionWithAbsoluteValue(m.touchX - spanX, m.touchY - spanY);
-      inputConnector.modifyPosition(0, getHeight() / 2);
-      if (!isTerminal()) outputConnector.modifyPosition(getWidth(), getHeight() / 2);
     }
     return false;
   }
 
-  public ArrayList<AbstractFilterBox> getOutgoingConnections() {
-    return outgoingConnections;
+  @Override
+  public void modifyPosition(float newX0, float newY0) {
+    super.modifyPosition(newX0, newY0);
+    inputConnector.modifyPosition(0, getHeight() / 2);
+    if (!isTerminal()) outputConnector.modifyPosition(getWidth(), getHeight() / 2);
+  }
+
+  @Override
+  public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
+    super.modifyPositionWithAbsoluteValue(newX0, newY0);
+    inputConnector.modifyPosition(0, getHeight() / 2);
+    if (!isTerminal()) outputConnector.modifyPosition(getWidth(), getHeight() / 2);
+  }
+
+  public ArrayList<AbstractFilterBox> getIngoingConnections() {
+    return ingoingConnections;
   }
 
   private boolean dragging = false;

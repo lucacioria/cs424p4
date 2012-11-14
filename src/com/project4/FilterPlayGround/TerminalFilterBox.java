@@ -25,4 +25,9 @@ public class TerminalFilterBox extends AbstractFilterBox {
 
   }
 
+  @Override
+  public String getFilter() {
+    return "";
+  }
+
 }
