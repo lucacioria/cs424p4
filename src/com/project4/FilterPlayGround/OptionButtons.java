@@ -12,7 +12,7 @@ public class OptionButtons extends VizPanel implements TouchEnabled {
   private ArrayList<VizButton> buttons = new ArrayList<VizButton>();
 
   public OptionButtons(float x0, float y0, VizPanel parent) {
-    super(x0, y0, 60, 40, parent);
+    super(x0, y0, 60, 60, parent);
   }
 
   @Override
@@ -21,7 +21,7 @@ public class OptionButtons extends VizPanel implements TouchEnabled {
   }
 
   public void setupButtons() {
-    String[] buttonNames = {"Add Filter", "Add Output"};
+    String[] buttonNames = {"Add Filter", "Add Output", "Apply"};
     for (int i = 0; i < buttonNames.length; i++) {
       VizButton button = new VizButton(0, 20 * i, getWidth(), 20, this);
       button.name = buttonNames[i] + "Button";

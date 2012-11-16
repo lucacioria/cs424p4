@@ -38,9 +38,17 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     buttons.setup();
     addTouchSubscriber(buttons);
     keyboard.setup();
+    keyboard.setVisible(false);
     addTouchSubscriber(keyboard);
   }
 
+  private ArrayList<String> getFilterStrings() {
+    ArrayList<String> ret = new ArrayList<String>();
+    for (AbstractFilterBox tb : terminalBoxes) {
+      ret.add(FilterBuilder.getFilterString(tb));
+    }
+    return ret;
+  }
 
   public AbstractFilterBox newTerminalBox() {
     if (terminalCount >= TERMINAL_COUNT_LIMIT) return null;
@@ -58,6 +66,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       terminalBoxes.add(box);
     else
       boxes.add(box);
+    box.setFocus(true);
     addTouchSubscriber(box);
   }
 
@@ -102,14 +111,16 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    if (down) {
-
+    if (down && !keyboard.containsPoint(x, y)) {
+      keyboard.setVisible(false);
       for (AbstractFilterBox afb : boxes) {
         handleConnectorTouch(x, y, afb, OUTGOING);
         handleConnectorTouch(x, y, afb, INGOING);
+        handleFocus(x, y, afb);
       }
       for (AbstractFilterBox afb : terminalBoxes) {
         handleConnectorTouch(x, y, afb, OUTGOING);
+        handleFocus(x, y, afb);
       }
 
       if (boxToBeDropped != null) {
@@ -119,6 +130,14 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     }
     propagateTouch(x, y, down, touchType);
     return false;
+  }
+
+  private void handleFocus(float x, float y, AbstractFilterBox afb) {
+    if (afb.containsPoint(x, y)) {
+      afb.setFocus(true);
+      keyboard.setVisible(true);
+    } else
+      afb.setFocus(false);
   }
 
   private AbstractFilterBox currentBox = null;
@@ -155,6 +174,10 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     if (eventName.equals(EventName.BUTTON_TOUCHED)) {
       if (data.toString().equals("Add FilterButton")) boxToBeDropped = newFilterBox();
       if (data.toString().equals("Add OutputButton")) boxToBeDropped = newTerminalBox();
+      if (data.toString().equals("Apply")) {
+        for (String s : getFilterStrings())
+          System.out.println(s);
+      }
     }
 
   }

@@ -79,6 +79,16 @@ public abstract class AbstractFilterBox extends VizPanel implements Serializable
     return ingoingConnections;
   }
 
+  private boolean focus = false;
+
+  public void setFocus(boolean focus) {
+    this.focus = focus;
+  }
+
+  public boolean hasFocus() {
+    return focus;
+  }
+
   private boolean dragging = false;
 
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {

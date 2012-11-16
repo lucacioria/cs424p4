@@ -78,6 +78,7 @@ public class Keyboard extends VizPanel implements TouchEnabled {
 
   @Override
   public boolean draw() {
+    if (!isVisible()) return false;
     noStroke();
     background(MyColorEnum.MEDIUM_GRAY);
     for (VizButton but : buttons) {
