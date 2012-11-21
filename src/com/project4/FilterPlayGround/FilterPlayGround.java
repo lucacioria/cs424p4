@@ -45,7 +45,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   private ArrayList<String> getFilterStrings() {
     ArrayList<String> ret = new ArrayList<String>();
     for (AbstractFilterBox tb : terminalBoxes) {
-      ret.add(FilterBuilder.getFilterString(tb));
+      ret.add((new FilterBuilder()).getFilterString(tb));
     }
     return ret;
   }
@@ -96,14 +96,12 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     strokeWeight(2);
     for (AbstractFilterBox abc : boxes) {
       abc.draw();
-      AbstractFilterBox prev = abc;
       for (AbstractFilterBox next : abc.getIngoingConnections()) {
-        float sourceX = prev.getInputConnector().getX0() + prev.getX0();
-        float sourceY = prev.getInputConnector().getY0() + prev.getY0();
+        float sourceX = abc.getInputConnector().getX0() + abc.getX0();
+        float sourceY = abc.getInputConnector().getY0() + abc.getY0();
         float destX = next.getOutputConnector().getX0() + next.getX0();
         float destY = next.getOutputConnector().getY0() + next.getY0();
         line(sourceX, sourceY, destX, destY);
-        prev = next;
       }
     }
     popStyle();
@@ -150,6 +148,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
         matchAgainst == INGOING ? afb.getOutputConnector() : afb.getInputConnector();
     if (!connector.containsPoint(x, y)) return;
     if (currentBox != null && currentConnector.getType() == matchAgainst) {
+      System.out.println("connecting " + currentBox.getFilter() + "---" + afb.getFilter());
       if (matchAgainst == INGOING) addConection(afb, currentBox);
       if (matchAgainst == OUTGOING) addConection(currentBox, afb);
       connector.deactivate();
@@ -160,7 +159,9 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       currentBox = afb;
       currentConnector = connector;
       connector.activate();
+      System.out.println("activated " + afb.getFilter());
     }
+
   }
 
   private void addConection(AbstractFilterBox from, AbstractFilterBox to) {
@@ -174,7 +175,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     if (eventName.equals(EventName.BUTTON_TOUCHED)) {
       if (data.toString().equals("Add FilterButton")) boxToBeDropped = newFilterBox();
       if (data.toString().equals("Add OutputButton")) boxToBeDropped = newTerminalBox();
-      if (data.toString().equals("Apply")) {
+      if (data.toString().equals("ApplyButton")) {
         for (String s : getFilterStrings())
           System.out.println(s);
       }
