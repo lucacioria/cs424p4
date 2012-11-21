@@ -8,7 +8,7 @@ public class VizNotificationCenter {
   private static VizNotificationCenter instance = new VizNotificationCenter();
 
   public enum EventName {
-    SCROLLING_TWEETS_UPDATED, BUTTON_TOUCHED, DATA_UPDATED, MAP_ZOOMED_OR_PANNED, USERS_UPDATED, TWEET_SELECTED, TWEET_DESELECTED, DAYS_UPDATED, BUTTON_PRESSED, TIME_SLIDER_UPDATED, FILTERS_UPDATED, TOGGLE_CONTROL_PANEL, DAY_SELECTED, DAY_DESELECTED, BUTTON_SELECTED, BUTTON_DESELECTED
+    SCROLLING_TWEETS_UPDATED, BUTTON_TOUCHED, DATA_UPDATED, MAP_ZOOMED_OR_PANNED, USERS_UPDATED, TWEET_SELECTED, TWEET_DESELECTED, DAYS_UPDATED, BUTTON_PRESSED, TIME_SLIDER_UPDATED, FILTERS_UPDATED, TOGGLE_CONTROL_PANEL, DAY_SELECTED, DAY_DESELECTED, BUTTON_SELECTED, BUTTON_DESELECTED, CHECKBOX_CHANGED
   }
 
   private HashMap<EventName, ArrayList<EventSubscriber>> subscribers;
@@ -31,16 +31,20 @@ public class VizNotificationCenter {
   }
 
   public void notifyEvent(EventName eventName) {
-    notifyEvent(eventName, null);
+    notifyEvent(eventName, (Object) null);
   }
 
-  public void notifyEvent(EventName eventName, Object data) {
+  public void notifyEvent(EventName eventName, Object... data) {
     System.out.println("=== EVENT: " + eventName.toString() + "("
         + (data == null ? "" : Helper.limitStringLength(data.toString(), 50, true)) + ")");
     if (subscribers.get(eventName) == null) return;
     for (EventSubscriber es : subscribers.get(eventName)) {
       System.out.println("    --> " + es.getClass().getSimpleName().toString());
-      es.eventReceived(eventName, data);
+      if (data.length > 1) {
+        es.eventReceived(eventName, data);
+      } else {
+        es.eventReceived(eventName, data[0]);
+      }
     }
   }
 }
