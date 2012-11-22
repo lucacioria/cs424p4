@@ -30,12 +30,12 @@ public class FilterBuilder {
       }
     }
     for (AbstractFilterBox a : levels.keySet()) {
+      if (a.isTerminal()) continue;
       if (!list.containsKey(levels.get(a)))
         list.put(levels.get(a), new ArrayList<AbstractFilterBox>());
       list.get(levels.get(a)).add(a);
     }
     for (Integer i : list.descendingKeySet()) {
-      if (i == 0) continue;
       ret += "MATCH (tweets) AGAINST (\"";
       for (AbstractFilterBox af : list.get(i)) {
         ret += " " + af.getFilter();

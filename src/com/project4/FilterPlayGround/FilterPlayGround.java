@@ -131,7 +131,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   }
 
   private void handleFocus(float x, float y, AbstractFilterBox afb) {
-    if (afb.containsPoint(x, y)) {
+    if (afb.containsPoint(x, y) && !afb.isTerminal()) {
       afb.setFocus(true);
       keyboard.setVisible(true);
     } else
@@ -141,12 +141,12 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   private AbstractFilterBox currentBox = null;
   private AbstractBoxConnector currentConnector = null;
 
-  private void handleConnectorTouch(float x, float y, AbstractFilterBox afb,
+  private boolean handleConnectorTouch(float x, float y, AbstractFilterBox afb,
       BoxConnectorType matchAgainst) {
-    if (afb.equals(currentBox)) return;
+    if (afb.equals(currentBox)) return false;
     AbstractBoxConnector connector =
         matchAgainst == INGOING ? afb.getOutputConnector() : afb.getInputConnector();
-    if (!connector.containsPoint(x, y)) return;
+    if (!connector.containsPoint(x, y)) return false;
     if (currentBox != null && currentConnector.getType() == matchAgainst) {
       System.out.println("connecting " + currentBox.getFilter() + "---" + afb.getFilter());
       if (matchAgainst == INGOING) addConection(afb, currentBox);
@@ -161,7 +161,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       connector.activate();
       System.out.println("activated " + afb.getFilter());
     }
-
+    return true;
   }
 
   private void addConection(AbstractFilterBox from, AbstractFilterBox to) {
