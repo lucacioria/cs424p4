@@ -1,13 +1,10 @@
 package com.project4.FilterPlayGround;
 
-import java.io.Serializable;
-
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizPanel;
 
-public abstract class AbstractBoxConnector extends VizPanel implements Serializable {
+public abstract class AbstractBoxConnector extends VizPanel {
 
-  private static final long serialVersionUID = 8197227398393603393L;
   private boolean active = false;
   public MyColorEnum ACTIVE_COLOR = MyColorEnum.RED;
   public MyColorEnum UNACTIVE_COLOR = MyColorEnum.DARK_GRAY;

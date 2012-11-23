@@ -3,6 +3,12 @@ package com.project4.FilterPlayGround;
 import static com.project4.FilterPlayGround.BoxConnectorType.INGOING;
 import static com.project4.FilterPlayGround.BoxConnectorType.OUTGOING;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
@@ -10,6 +16,8 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
+import com.project4.FilterPlayGround.serializables.SerializableFilterBox;
 
 public final class FilterPlayGround extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -40,6 +48,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     keyboard.setup();
     keyboard.setVisible(false);
     addTouchSubscriber(keyboard);
+    loadLastConfiguration();
   }
 
   private ArrayList<String> getFilterStrings() {
@@ -168,6 +177,52 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     if (!from.isTerminal()) to.addIngoingConnection(from);
   }
 
+  public boolean storeCurrentConfiguration() {
+    try {
+      FileOutputStream fos = new FileOutputStream(new File("./data/filters/filter1.ser"));
+      ObjectOutputStream oos = new ObjectOutputStream(fos);
+      ArrayList<AbstractSerializableBox> sBoxes = new ArrayList<AbstractSerializableBox>();
+      ArrayList<AbstractSerializableBox> sTerminalBoxes = new ArrayList<AbstractSerializableBox>();
+      for (AbstractFilterBox afb : boxes)
+        sBoxes.add(afb.serialize());
+      for (AbstractFilterBox afb : terminalBoxes)
+        sTerminalBoxes.add(afb.serialize());
+      oos.writeObject(sBoxes);
+      oos.close();
+      fos.close();
+    } catch (IOException ex) {
+      return false;
+    }
+    return true;
+  }
+
+  @SuppressWarnings("unchecked")
+  public boolean loadLastConfiguration() {
+    try {
+      FileInputStream fis = new FileInputStream(new File("./data/filters/filter1.ser"));
+      ObjectInputStream ois = new ObjectInputStream(fis);
+      ArrayList<AbstractSerializableBox> sBoxes =
+          (ArrayList<AbstractSerializableBox>) ois.readObject();
+      // ArrayList<AbstractSerializableBox> sTerminalBoxes =
+      // (ArrayList<AbstractSerializableBox>) ois.readObject();
+      terminalCount = terminalBoxes.size();
+      for (AbstractSerializableBox asb : sBoxes) {
+        AbstractFilterBox afb = new FilterBox((SerializableFilterBox) asb, this);
+        afb.setup();
+        this.boxes.add(afb);
+      }
+      ois.close();
+      fis.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    } catch (ClassNotFoundException e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
+  }
+
   AbstractFilterBox boxToBeDropped = null;
 
   @Override
@@ -179,6 +234,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
         for (String s : getFilterStrings())
           System.out.println(s);
       }
+      if (data.toString().equals("SaveButton")) storeCurrentConfiguration();
     }
 
   }

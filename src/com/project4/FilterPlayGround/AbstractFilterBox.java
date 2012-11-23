@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
 
-public abstract class AbstractFilterBox extends VizPanel implements Serializable, TouchEnabled {
+public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled {
 
-  private static final long serialVersionUID = 5807010684381393247L;
   protected BoxConnectorIngoing inputConnector;
   protected BoxConnectorOutgoing outputConnector;
 
@@ -106,5 +106,7 @@ public abstract class AbstractFilterBox extends VizPanel implements Serializable
   }
 
   public abstract boolean isTerminal();
+
+  public abstract AbstractSerializableBox serialize();
 
 }

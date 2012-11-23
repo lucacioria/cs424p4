@@ -4,10 +4,10 @@ import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
+import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
+import com.project4.FilterPlayGround.serializables.SerializableFilterBox;
 
 public class FilterBox extends AbstractFilterBox implements EventSubscriber {
-
-  private static final long serialVersionUID = 4567678179498517824L;
 
   public FilterBox(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -15,6 +15,11 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     outputConnector =
         new BoxConnectorOutgoing(getWidth(), getHeight() / 2, CONNECTOR_SIZE, CONNECTOR_SIZE, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_PRESSED, this);
+  }
+
+  public FilterBox(SerializableFilterBox asb, VizPanel parent) {
+    this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), parent);
+    this.content = asb.getFilter();
   }
 
   public static MyColorEnum TEXT_COLOR = MyColorEnum.BLACK;
@@ -60,4 +65,8 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     }
   }
 
+  @Override
+  public AbstractSerializableBox serialize() {
+    return new SerializableFilterBox(getX0(), getY0(), getWidth(), getHeight(), getFilter());
+  }
 }

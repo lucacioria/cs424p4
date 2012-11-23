@@ -15,7 +15,7 @@ import com.anotherbrick.inthewall.Config.MyFontEnum;
 import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 
 public abstract class VizPanel {
-  
+
   // public static VizPanel createFromXY0andXY1(float x0, float y0, float x1,
   // float y1) {
   // return new VizPanel(x0, y0, x1 - x0, y1 - y0);
@@ -35,7 +35,7 @@ public abstract class VizPanel {
   PGraphics pg;
   boolean redraw = true, firstDraw = true;
   ArrayList<TouchEnabled> touchChildren = new ArrayList<TouchEnabled>();
-  ArrayList<VizPanel> children = new ArrayList<VizPanel>(); 
+  ArrayList<VizPanel> children = new ArrayList<VizPanel>();
   private boolean visible = true;
 
   private float x0, y0, width, height;
@@ -87,6 +87,11 @@ public abstract class VizPanel {
   public VizPanel(float x0, float y0, float width, float height, VizPanel parent) {
     this(x0, y0, width, height, parent.getX0Absolute(), parent.getY0Absolute());
     this.parent = parent;
+  }
+
+
+  public VizPanel() {
+    this(0, 0, 0, 0);
   }
 
   public void addTouchSubscriber(TouchEnabled child) {
@@ -307,7 +312,7 @@ public abstract class VizPanel {
     modifyPosition((x0 - parent.x0) + xOffset, (y0 - parent.y0) + yOffset);
     propagateMove(xOffset, yOffset);
   }
-  
+
   public void translate(float tx, float ty) {
     p.translate(s(tx), s(ty));
   }
@@ -317,7 +322,7 @@ public abstract class VizPanel {
   }
 
   private void propagateMove(float xOffset, float yOffset) {
-    for (VizPanel child: children) {
+    for (VizPanel child : children) {
       child.move(xOffset, yOffset);
     }
   }
