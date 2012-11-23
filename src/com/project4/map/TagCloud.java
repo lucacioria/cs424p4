@@ -177,14 +177,14 @@ public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber 
 //  }
   
   private void computeRealPosition(int j, int k, int i, int count) {
-    for (int g1 = 0; g1 < wordPoses.length; g1++) {
+    for (int g1 = 0; g1 <= j; g1++) {
       for (int g2 = 0; g2 < wordPoses[g1].length; g2++) {
-        for (int l = 0; l < i; l++) {
-          if(g1==j && g2==k && l==i) continue;
+        for (int l = 0; l < wordPoses[g1][g2].size(); l++) {
+          if(g1==j&&g2==k&&l==i) continue;
           int sizep1 = (int) map(wordPoses[j][k].get(i).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);;
           int sizep2 = (int) map(wordPoses[g1][g2].get(l).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);
           if (overlaps(wordPoses[j][k].get(i), wordPoses[g1][g2].get(l), sizep1, sizep2)) {
-            move(wordPoses[j][k].get(i), sizep1,sizep2,count);
+            move(wordPoses[j][k].get(i),wordPoses[g1][g2].get(l),sizep1,sizep2,count);
             log(wordPoses[j][k].get(i).word + "," + wordPoses[g1][g2].get(l).word + " "
                 + wordPoses[j][k].get(i).getPosition().y);
             computeRealPosition(j, k, i, count);
@@ -195,19 +195,40 @@ public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber 
   }
   
 
-  private void move(WordPos wordPos, int sizep1,int sizep2,int count) {
+  private void move(WordPos wordPos1,WordPos wordPos2,int sizep1,int sizep2,int count) {
     textSize(sizep1);
     float height1 = m.p.textAscent();
+    float widthp1 = m.p.textWidth(wordPos1.word);
     textSize(sizep2);
     float height2 = m.p.textAscent();
-    if(count % 4 == 0)
-      wordPos.getPosition().y -= 2;
-    else if(count % 4 == 1)
-      wordPos.getPosition().y += 2;
-    else if(count % 4 == 2)
-      wordPos.getPosition().x -= 2;
-    else
-      wordPos.getPosition().x += 2;
+    float widthp2 = m.p.textWidth(wordPos2.word);
+    int sumHeights = (int) (height1/2 + height2/2);
+    int distY = (int) (wordPos2.getPosition().y-wordPos1.getPosition().y);
+    int sumWidths = (int) (widthp1/2 + widthp2/2);
+    int distX = (int) (wordPos2.getPosition().x-wordPos1.getPosition().x);
+    if(count % 4 == 0){
+      if(distY>0)
+        wordPos1.getPosition().y += (int) Math.abs(distY) - sumHeights - 1 ;
+      else
+        wordPos1.getPosition().y += (int) - Math.abs(distY) - sumHeights - 1 ;
+    }
+    else if(count % 4 == 1){
+      if(distY>0) wordPos1.getPosition().y += Math.abs(distY) + sumHeights +1 ;
+      else wordPos1.getPosition().y += - Math.abs(distY) + sumHeights +1;
+    }
+    else if(count % 4 == 2){
+      if(distX>0)
+        wordPos1.getPosition().x += Math.abs(distX) + sumWidths +1 ;
+      else
+        wordPos1.getPosition().x += - Math.abs(distX) + sumWidths +1;
+    }
+    else{
+      if(distX>0)
+        wordPos1.getPosition().x += Math.abs(distX) + sumWidths +1 ;
+      else
+        wordPos1.getPosition().x += - Math.abs(distX) + sumWidths +1;
+    }
+
   }
 
   private boolean overlaps(WordPos wordPos1, WordPos wordPos2, int sizep1, int sizep2) {
