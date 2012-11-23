@@ -290,10 +290,14 @@ public abstract class VizPanel {
 
   }
 
-  public float dist(float x1, float y1, float x2, float y2) {
-    return p.dist(s(x1), s(y1), s(x2), s(y2));
+  public float distZoom(float x1, float y1, float x2, float y2) {
+    return PApplet.dist(s(x1), s(y1), s(x2), s(y2));
   }
 
+  public float dist(float x1, float y1, float x2, float y2) {
+    return PApplet.dist(x1, y1, x2, y2);
+  }
+  
   public void log(String msg) {
     DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     Date date = new Date();
