@@ -112,7 +112,7 @@ public class Config {
     }
 
     // load fonts
-    //helvetica = p.loadFont(path + "fonts/Helvetica-120.vlw");
+    helvetica = p.loadFont(path + "fonts/Helvetica-120.vlw");
     //myriad = p.loadFont(path + "fonts/MyriadPro-200.vlw");
     openSansRegular = p.loadFont(path + "fonts/OpenSans-200.vlw");
   }

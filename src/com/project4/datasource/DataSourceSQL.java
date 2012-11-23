@@ -155,13 +155,14 @@ public class DataSourceSQL {
       String query;
       if (connect()) {
         query =
-            "SELECT id, user_id, lat, lon, creation_date_posix FROM tweets WHERE "
+            "SELECT id, user_id, lat, lon, text, creation_date_posix FROM tweets WHERE "
                 + getCompleteWhere(minMax, f);
         query(query);
         while (sql.next()) {
           Tweet tweet =
               new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
                   sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
+          tweet.setText(sql.getString("text"));
           tweets.add(tweet);
         }
         out.put(f, tweets);

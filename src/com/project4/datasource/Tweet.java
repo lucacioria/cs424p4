@@ -13,6 +13,8 @@ public class Tweet {
   private int id;
   private int userId;
   public TreeMap<String, Double> tf;
+  public String[] words;
+
 
   public Tweet(double lat, double lon, int date, int id, int userId) {
     super();
@@ -53,5 +55,11 @@ public class Tweet {
 
   public void setText(String text) {
     this.text = text;
+  }
+  
+  public void generateWords(){
+    if(words==null){
+      words = text.split(" ");
+    } 
   }
 }
