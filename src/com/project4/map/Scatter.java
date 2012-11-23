@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.TreeMap;
 
-import processing.core.PApplet;
 import processing.core.PVector;
 
-import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
@@ -19,6 +17,8 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private TreeMap<Filter, ArrayList<Tweet>> tweets = new TreeMap<Filter, ArrayList<Tweet>>();
   private Map map;
+  private boolean touching;
+  private Tweet selectedTweet;
 
   public Scatter(float x0, float y0, float width, float height, Map parent) {
     super(x0, y0, width, height, parent);
@@ -27,7 +27,14 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    return false;
+    if (down) {
+      touching = true;
+      setModal(true);
+    } else {
+      touching = false;
+      setModal(false);
+    }
+    return true;
   }
 
   @Override
@@ -39,6 +46,9 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
   @Override
   public boolean draw() {
     if (!isVisible()) return false;
+    if (touching) {
+      updateSelectedTweet();
+    }
     pushStyle();
     noStroke();
     Iterator<Filter> i = tweets.keySet().iterator();
@@ -51,6 +61,20 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
     }
     popStyle();
     return false;
+  }
+
+  private void updateSelectedTweet() {
+    for (Tweet t: tweets.firstEntry().getValue()) {
+      PVector tweetPosition = map.getPositionByLatLon(t.getLat(), t.getLon());
+      if (dist(m.touchX, m.touchY, tweetPosition.x, tweetPosition.y) < 5 &&
+          t != selectedTweet) {
+        m.notificationCenter.notifyEvent(EventName.TWEET_SELECTED, t);
+        log("selected tweet: " + t.getText());
+        selectedTweet = t;
+        return;
+      }
+    }
+    
   }
 
   private void drawTweet(Tweet t) {
