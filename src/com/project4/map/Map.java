@@ -29,6 +29,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   private PImage mapImage;
   private Scatter scatter;
   private HeatMap heatMap;
+  private TagCloud tagCloud;
   private Stack<Double> zoomStackLon = new Stack<Double>();
   private Stack<Double> zoomStackLat = new Stack<Double>();
   private LinkMap linkMap;
@@ -61,6 +62,16 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
         m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");        
       } else {
         m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "heatmapButton");
+      }
+    }
+    if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals("wordcloudButton")) {
+      tagCloud.toggleVisible();
+      if (tagCloud.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "heatmapButton");
+        scatter.setVisible(false);
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");        
+      } else {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "wordcloudButton");
       }
     }
   }
@@ -105,7 +116,14 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     setupScatter();
     setupHeatMap();
     setupLinkMap();
+    setupTagCloud();
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
+  }
+
+  private void setupTagCloud() {
+    tagCloud = new TagCloud(0, 0, getWidth(), getHeight(), this);
+    tagCloud.setup();
+    addTouchSubscriber(tagCloud);
   }
 
   private void setupControlPanel() {
@@ -139,6 +157,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     scatter.draw();
     heatMap.draw();
     linkMap.draw();
+    tagCloud.draw();
     controlPanel.draw();
     return false;
   }
