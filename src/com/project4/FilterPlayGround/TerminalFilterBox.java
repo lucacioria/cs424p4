@@ -17,6 +17,7 @@ public class TerminalFilterBox extends AbstractFilterBox {
 
   public TerminalFilterBox(SerializableTerminalBox asb, MyColorEnum color, VizPanel parent) {
     this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), color, parent);
+    setId(asb.getId());
   }
 
 
@@ -35,6 +36,6 @@ public class TerminalFilterBox extends AbstractFilterBox {
 
   @Override
   public AbstractSerializableBox serialize() {
-    return new SerializableTerminalBox(getX0(), getY0(), getWidth(), getHeight());
+    return new SerializableTerminalBox(getId(), getX0(), getY0(), getWidth(), getHeight());
   }
 }

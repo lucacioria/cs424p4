@@ -11,6 +11,7 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
 
   protected BoxConnectorIngoing inputConnector;
   protected BoxConnectorOutgoing outputConnector;
+  private Integer id = 0;
 
   protected MyColorEnum COLOR = MyColorEnum.LIGHT_GREEN;
 
@@ -108,5 +109,13 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
   public abstract boolean isTerminal();
 
   public abstract AbstractSerializableBox serialize();
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
 }

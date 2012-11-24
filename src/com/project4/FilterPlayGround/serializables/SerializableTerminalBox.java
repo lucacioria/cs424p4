@@ -4,7 +4,7 @@ public class SerializableTerminalBox extends AbstractSerializableBox {
 
   private static final long serialVersionUID = -853428371338789082L;
 
-  public SerializableTerminalBox(float x0, float y0, float width, float height) {
-    super(x0, y0, width, height);
+  public SerializableTerminalBox(Integer id, float x0, float y0, float width, float height) {
+    super(id, x0, y0, width, height);
   }
 }

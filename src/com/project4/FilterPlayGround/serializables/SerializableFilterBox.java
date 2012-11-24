@@ -8,9 +8,9 @@ public class SerializableFilterBox extends AbstractSerializableBox {
   private String filter = "";
   private boolean selected;
 
-  public SerializableFilterBox(float x0, float y0, float width, float height, String filter,
-      boolean c) {
-    super(x0, y0, width, height);
+  public SerializableFilterBox(Integer id, float x0, float y0, float width, float height,
+      String filter, boolean c) {
+    super(id, x0, y0, width, height);
     this.filter = filter;
     this.selected = c;
   }

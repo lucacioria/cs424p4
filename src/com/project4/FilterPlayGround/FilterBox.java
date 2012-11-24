@@ -22,6 +22,7 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
 
   public FilterBox(SerializableFilterBox asb, VizPanel parent) {
     this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), parent);
+    setId(asb.getId());
     this.content = asb.getFilter();
     checkBox.setSelected(asb.isSelected());
   }
@@ -73,7 +74,7 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
 
   @Override
   public AbstractSerializableBox serialize() {
-    return new SerializableFilterBox(getX0(), getY0(), getWidth(), getHeight(), content,
+    return new SerializableFilterBox(getId(), getX0(), getY0(), getWidth(), getHeight(), content,
         checkBox.isSelected());
   }
 

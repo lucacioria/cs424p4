@@ -9,13 +9,23 @@ public class AbstractSerializableBox implements Serializable {
   public AbstractSerializableBox() {};
 
   private float x0, y0, width, height;
+  private Integer id;
 
-  public AbstractSerializableBox(float x0, float y0, float width, float height) {
+  public AbstractSerializableBox(Integer id, float x0, float y0, float width, float height) {
     super();
     this.x0 = x0;
     this.y0 = y0;
     this.width = width;
     this.height = height;
+    this.id = id;
+  }
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
   }
 
   public float getX0() {

@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
@@ -77,6 +78,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     else
       boxes.add(box);
     box.setFocus(true);
+    box.setId(boxes.size() + terminalBoxes.size());
     addTouchSubscriber(box);
   }
 
@@ -184,12 +186,24 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       ObjectOutputStream oos = new ObjectOutputStream(fos);
       ArrayList<AbstractSerializableBox> sBoxes = new ArrayList<AbstractSerializableBox>();
       ArrayList<AbstractSerializableBox> sTerminalBoxes = new ArrayList<AbstractSerializableBox>();
-      for (AbstractFilterBox afb : boxes)
+      HashMap<Integer, ArrayList<Integer>> connections = new HashMap<Integer, ArrayList<Integer>>();
+      for (AbstractFilterBox afb : boxes) {
+        connections.put(afb.getId(), new ArrayList<Integer>());
         sBoxes.add(afb.serialize());
-      for (AbstractFilterBox afb : terminalBoxes)
+        for (AbstractFilterBox a : afb.getIngoingConnections()) {
+          connections.get(afb.getId()).add(a.getId());
+        }
+      }
+      for (AbstractFilterBox afb : terminalBoxes) {
+        connections.put(afb.getId(), new ArrayList<Integer>());
         sTerminalBoxes.add(afb.serialize());
+        for (AbstractFilterBox a : afb.getIngoingConnections()) {
+          connections.get(afb.getId()).add(a.getId());
+        }
+      }
       oos.writeObject(sBoxes);
       oos.writeObject(sTerminalBoxes);
+      oos.writeObject(connections);
       oos.close();
       fos.close();
     } catch (IOException ex) {
@@ -207,6 +221,9 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
           (ArrayList<AbstractSerializableBox>) ois.readObject();
       ArrayList<AbstractSerializableBox> sTerminalBoxes =
           (ArrayList<AbstractSerializableBox>) ois.readObject();
+      HashMap<Integer, ArrayList<Integer>> connections =
+          (HashMap<Integer, ArrayList<Integer>>) ois.readObject();
+
       terminalCount = terminalBoxes.size();
       for (AbstractSerializableBox asb : sBoxes) {
         AbstractFilterBox afb = new FilterBox((SerializableFilterBox) asb, this);
@@ -221,18 +238,36 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
                 % colors.length], this);
         afb.setup();
         addTouchSubscriber(afb);
-        this.boxes.add(afb);
+        this.terminalBoxes.add(afb);
+      }
+      for (AbstractFilterBox asb : boxes) {
+        for (Integer i : connections.get(asb.getId())) {
+          addConection(getBoxById(i), asb);
+        }
+      }
+      for (AbstractFilterBox asb : terminalBoxes) {
+        for (Integer i : connections.get(asb.getId())) {
+          addConection(getBoxById(i), asb);
+        }
       }
       ois.close();
       fis.close();
     } catch (IOException e) {
-      e.printStackTrace();
       return false;
     } catch (ClassNotFoundException e) {
-      e.printStackTrace();
       return false;
     }
     return true;
+  }
+
+  private AbstractFilterBox getBoxById(Integer i) {
+    for (AbstractFilterBox afb : boxes) {
+      if (afb.getId().equals(i)) return afb;
+    }
+    for (AbstractFilterBox afb : terminalBoxes) {
+      if (afb.getId().equals(i)) return afb;
+    }
+    return null;
   }
 
   AbstractFilterBox boxToBeDropped = null;
