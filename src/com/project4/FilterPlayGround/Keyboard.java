@@ -55,6 +55,7 @@ public class Keyboard extends VizPanel implements TouchEnabled {
     buttons[count].name = "keyboard|" + "_";
     buttons[count].setStyle(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255,
         255, 11);
+    addTouchSubscriber(buttons[count]);
     count++;
     buttons[count] = new VizButton(57 + count1 * (20), 45, 25, 15, this);
     buttons[count].setText("DEL");

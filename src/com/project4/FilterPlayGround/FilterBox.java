@@ -67,8 +67,16 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     String d = (String) data;
     if (hasFocus() && d.contains("keyboard|")) {
       String symbol = d.split("\\|")[1];
+      if (symbol.equals("DEL")) {
+        if (content.length() > 0) content = content.substring(0, content.length() - 1);
+        return;
+      }
+      if (symbol.equals("_")) {
+        content += " ";
+        return;
+      }
+
       content += symbol;
-      System.out.println(symbol);
     }
   }
 
