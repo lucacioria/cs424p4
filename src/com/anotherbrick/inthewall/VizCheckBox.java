@@ -59,6 +59,14 @@ public class VizCheckBox extends VizPanel implements TouchEnabled {
     sendEvent();
   }
 
+  public boolean isSelected() {
+    return selected;
+  }
+
+  public void setSelected(boolean selected) {
+    this.selected = selected;
+  }
+
   private void sendEvent() {
     m.notificationCenter.notifyEvent(EventName.CHECKBOX_CHANGED, name, selected);
   }

@@ -2,6 +2,7 @@ package com.project4.FilterPlayGround;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
+import com.anotherbrick.inthewall.VizCheckBox;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
@@ -15,18 +16,23 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     outputConnector =
         new BoxConnectorOutgoing(getWidth(), getHeight() / 2, CONNECTOR_SIZE, CONNECTOR_SIZE, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_PRESSED, this);
+    addTouchSubscriber(checkBox);
+    checkBox.setSelected(true);
   }
 
   public FilterBox(SerializableFilterBox asb, VizPanel parent) {
     this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), parent);
     this.content = asb.getFilter();
+    checkBox.setSelected(asb.isSelected());
   }
 
   public static MyColorEnum TEXT_COLOR = MyColorEnum.BLACK;
-  public static float TEXT_X = 12;
+  public static float TEXT_X = 32;
   public static float TEXT_Y = 20;
   public static float TEXT_SIZE = 12;
 
+  private VizCheckBox checkBox = new VizCheckBox(getHeight() / 4, getHeight() / 4, getHeight() / 2,
+      getHeight() / 2, this);
   private String content = "";
 
   @Override
@@ -34,10 +40,9 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     return false;
   }
 
-  @Override
-  public void setup() {
 
-  }
+  @Override
+  public void setup() {}
 
   @Override
   public boolean draw() {
@@ -46,13 +51,14 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     fill(TEXT_COLOR);
     textSize(TEXT_SIZE);
     text(content, TEXT_X, TEXT_Y);
+    checkBox.draw();
     popStyle();
     return false;
   }
 
   @Override
   public String getFilter() {
-    return content;
+    return checkBox.isSelected() ? "+" : "-" + content;
   }
 
   @Override
@@ -67,6 +73,19 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
 
   @Override
   public AbstractSerializableBox serialize() {
-    return new SerializableFilterBox(getX0(), getY0(), getWidth(), getHeight(), getFilter());
+    return new SerializableFilterBox(getX0(), getY0(), getWidth(), getHeight(), content,
+        checkBox.isSelected());
+  }
+
+  @Override
+  public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
+    propagateTouch(x, y, down, touchType);
+    return super.touch(x, y, down, touchType);
+  }
+
+  @Override
+  public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
+    super.modifyPositionWithAbsoluteValue(newX0, newY0);
+    checkBox.modifyPosition(getHeight() / 4, getHeight() / 4);
   }
 }

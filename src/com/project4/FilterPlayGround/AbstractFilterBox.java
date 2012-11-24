@@ -1,6 +1,5 @@
 package com.project4.FilterPlayGround;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
@@ -13,7 +12,7 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
   protected BoxConnectorIngoing inputConnector;
   protected BoxConnectorOutgoing outputConnector;
 
-  protected MyColorEnum COLOR = MyColorEnum.RED;
+  protected MyColorEnum COLOR = MyColorEnum.LIGHT_GREEN;
 
   public AbstractBoxConnector getInputConnector() {
     return inputConnector;
@@ -102,6 +101,7 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
       dragging = false;
       setModal(false);
     }
+
     return false;
   }
 

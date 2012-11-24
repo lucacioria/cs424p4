@@ -209,6 +209,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       for (AbstractSerializableBox asb : sBoxes) {
         AbstractFilterBox afb = new FilterBox((SerializableFilterBox) asb, this);
         afb.setup();
+        addTouchSubscriber(afb);
         this.boxes.add(afb);
       }
       ois.close();
