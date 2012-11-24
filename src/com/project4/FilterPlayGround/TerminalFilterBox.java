@@ -15,6 +15,11 @@ public class TerminalFilterBox extends AbstractFilterBox {
   }
 
 
+  public TerminalFilterBox(SerializableTerminalBox asb, MyColorEnum color, VizPanel parent) {
+    this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), color, parent);
+  }
+
+
   @Override
   public boolean isTerminal() {
     return true;

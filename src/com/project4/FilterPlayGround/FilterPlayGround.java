@@ -18,6 +18,7 @@ import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
 import com.project4.FilterPlayGround.serializables.SerializableFilterBox;
+import com.project4.FilterPlayGround.serializables.SerializableTerminalBox;
 
 public final class FilterPlayGround extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -188,6 +189,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       for (AbstractFilterBox afb : terminalBoxes)
         sTerminalBoxes.add(afb.serialize());
       oos.writeObject(sBoxes);
+      oos.writeObject(sTerminalBoxes);
       oos.close();
       fos.close();
     } catch (IOException ex) {
@@ -203,11 +205,20 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       ObjectInputStream ois = new ObjectInputStream(fis);
       ArrayList<AbstractSerializableBox> sBoxes =
           (ArrayList<AbstractSerializableBox>) ois.readObject();
-      // ArrayList<AbstractSerializableBox> sTerminalBoxes =
-      // (ArrayList<AbstractSerializableBox>) ois.readObject();
+      ArrayList<AbstractSerializableBox> sTerminalBoxes =
+          (ArrayList<AbstractSerializableBox>) ois.readObject();
       terminalCount = terminalBoxes.size();
       for (AbstractSerializableBox asb : sBoxes) {
         AbstractFilterBox afb = new FilterBox((SerializableFilterBox) asb, this);
+        afb.setup();
+        addTouchSubscriber(afb);
+        this.boxes.add(afb);
+      }
+      for (AbstractSerializableBox asb : sTerminalBoxes) {
+        terminalCount++;
+        AbstractFilterBox afb =
+            new TerminalFilterBox((SerializableTerminalBox) asb, colors[terminalCount
+                % colors.length], this);
         afb.setup();
         addTouchSubscriber(afb);
         this.boxes.add(afb);
