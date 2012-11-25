@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.xml.soap.Text;
+
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.core.PImage;
@@ -505,6 +507,17 @@ public abstract class VizPanel {
   public void textSize(float size) {
     p.textSize(s(size));
   }
+  
+  //TODO basta cos“?
+  public float textAscent(){
+    return p.textAscent();
+  }
+  
+  public float textWidth(String str){
+    return p.textWidth(str);
+  }
+  
+  
 
   public boolean toggleVisible() {
     this.visible = !visible;

@@ -197,11 +197,11 @@ public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber 
 
   private void move(WordPos wordPos1,WordPos wordPos2,int sizep1,int sizep2,int count) {
     textSize(sizep1);
-    float height1 = m.p.textAscent();
-    float widthp1 = m.p.textWidth(wordPos1.word);
+    float height1 = textAscent();
+    float widthp1 = textWidth(wordPos1.word);
     textSize(sizep2);
-    float height2 = m.p.textAscent();
-    float widthp2 = m.p.textWidth(wordPos2.word);
+    float height2 = textAscent();
+    float widthp2 = textWidth(wordPos2.word);
     int sumHeights = (int) (height1/2 + height2/2);
     int distY = (int) (wordPos2.getPosition().y-wordPos1.getPosition().y);
     int sumWidths = (int) (widthp1/2 + widthp2/2);
@@ -233,11 +233,11 @@ public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber 
 
   private boolean overlaps(WordPos wordPos1, WordPos wordPos2, int sizep1, int sizep2) {
     textSize(sizep1);
-    float heightp1 = m.p.textAscent();
-    float widthp1 = m.p.textWidth(wordPos1.word);
+    float heightp1 = textAscent();
+    float widthp1 = textWidth(wordPos1.word);
     textSize(sizep2);
-    float heightp2 = m.p.textAscent();
-    float widthp2 = m.p.textWidth(wordPos2.word);
+    float heightp2 = textAscent();
+    float widthp2 = textWidth(wordPos2.word);
     if(Math.abs(wordPos1.getPosition().y - wordPos2.getPosition().y) < (heightp1 / 2 + heightp2 / 2)
         && Math.abs(wordPos1.getPosition().x - wordPos2.getPosition().x) < (widthp1 / 2 + widthp2 / 2))
       return true;
