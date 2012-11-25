@@ -275,6 +275,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName.equals(EventName.BUTTON_TOUCHED)) {
+      if (data.toString().equals("Add TFilterButton")) boxToBeDropped = newFilterBoxTemporal();
       if (data.toString().equals("Add FilterButton")) boxToBeDropped = newFilterBox();
       if (data.toString().equals("Add OutputButton")) boxToBeDropped = newTerminalBox();
       if (data.toString().equals("ApplyButton")) {
@@ -284,5 +285,11 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       if (data.toString().equals("SaveButton")) storeCurrentConfiguration();
     }
 
+  }
+
+  private AbstractFilterBox newFilterBoxTemporal() {
+    FilterBoxTemporal fb = new FilterBoxTemporal(0, 0, FILTER_BOX_WIDTH, BOX_HEIGHT, this);
+    fb.setup();
+    return fb;
   }
 }

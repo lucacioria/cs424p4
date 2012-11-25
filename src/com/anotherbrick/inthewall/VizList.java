@@ -274,6 +274,12 @@ public class VizList extends VizPanel implements TouchEnabled {
   }
 
   private class VizSlider extends VizPanel implements TouchEnabled {
+    
+    @Override
+    public void modifyPosition(float newX0, float newY0) {
+      super.modifyPosition(newX0, newY0);
+      handle.modifyPosition(0, 0);
+    }
 
     private Handle handle;
 
@@ -325,7 +331,7 @@ public class VizList extends VizPanel implements TouchEnabled {
     private float costrain(float value, float maxValue, float minValue) {
       return Math.min(Math.max(value, minValue), maxValue);
     }
-
+    
     @Override
     public void setup() {
     }
@@ -344,7 +350,13 @@ public class VizList extends VizPanel implements TouchEnabled {
   @Override
   public void setup() {
   }
-
+  
+  @Override
+  public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
+    super.modifyPositionWithAbsoluteValue(newX0, newY0);
+    slider.modifyPosition(getWidth()-slider.getWidth(), 0);
+  }
+  
   public void selectElementByString(String elementName) {
     for (Object o : elements) {
       if (o.toString().equals(elementName)) {

@@ -44,7 +44,7 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
    * 
    */
   private static final long serialVersionUID = -8820332797371602488L;
-  
+
   @Override
   public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
     super.modifyPositionWithAbsoluteValue(newX0, newY0);
@@ -53,7 +53,7 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
     toButton.modifyPositionWithAbsoluteValue(newX0+getWidth()/2, newY0+getHeight()/6);
     toList.modifyPositionWithAbsoluteValue(newX0+getWidth()/2, newY0+getHeight()/6);
   }
-  
+
   @Override
   public boolean draw() {
     super.draw();
@@ -94,7 +94,7 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
       hours, false, SelectionMode.SINGLE);
     addTouchSubscriber(fromList);
   }
-  
+
   private void setupToVizList() {
     toList = new VizList(0, 0, getWidth(), getHeight()*3, this);
     toList.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 4,
@@ -108,9 +108,9 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
     toButton.name = "toButton"+myCount;
     toButton.text = "to";
     toButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
+      255f, 10);
     toButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
-        255f, 10);
+      255f, 10);
     addTouchSubscriber(toButton);
   }
 
@@ -120,12 +120,12 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
     fromButton.name = "fromButton"+myCount;
     fromButton.text = "from";
     fromButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
+      255f, 10);
     fromButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
-        255f, 10);
+      255f, 10);
     addTouchSubscriber(fromButton);
   }
-  
+
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     propagateTouch(x, y, down, touchType);
