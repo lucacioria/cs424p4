@@ -11,8 +11,7 @@ import com.anotherbrick.inthewall.VizList.SelectionMode;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
-import com.project4.datasource.Day;
-import com.project4.datasource.Filter;
+import com.project4.FilterPlayGround.serializables.SerializableTemporalBox;
 
 public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscriber {
 
@@ -22,7 +21,13 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
     myCount = instanceCount;
     outputConnector =
         new BoxConnectorOutgoing(getWidth(), getHeight() / 2, CONNECTOR_SIZE, CONNECTOR_SIZE, this);
-    m.notificationCenter.registerToEvent(EventName.BUTTON_PRESSED, this);  }
+    m.notificationCenter.registerToEvent(EventName.BUTTON_PRESSED, this);
+  }
+
+  public FilterBoxTemporal(SerializableTemporalBox asb, VizPanel parent) {
+    this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), parent);
+    this.setId(asb.getId());
+  }
 
   private static int instanceCount = 0;
   private int myCount;
@@ -34,36 +39,31 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
   private VizList toList;
   private VizButton fromButton;
   private boolean toggleFromList;
-  private ArrayList<String> hours = new ArrayList<String>(
-      Arrays.asList("1","2","3","4","5","6","7","8","9","10","11"
-        ,"12","13","14","15","16","17","18","19","20"
-        ,"21","22","23","24"));
+  private ArrayList<String> hours = new ArrayList<String>(Arrays.asList("1", "2", "3", "4", "5",
+      "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
+      "22", "23", "24"));
   private VizButton toButton;
   private boolean toggleToList;
-  /**
-   * 
-   */
-  private static final long serialVersionUID = -8820332797371602488L;
-  
+
   @Override
   public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
     super.modifyPositionWithAbsoluteValue(newX0, newY0);
-    fromButton.modifyPositionWithAbsoluteValue(newX0+inputConnector.getWidth()/2, newY0+getHeight()/6);
-    fromList.modifyPositionWithAbsoluteValue(newX0+inputConnector.getWidth()/2, newY0+getHeight()/6);
-    toButton.modifyPositionWithAbsoluteValue(newX0+getWidth()/2, newY0+getHeight()/6);
-    toList.modifyPositionWithAbsoluteValue(newX0+getWidth()/2, newY0+getHeight()/6);
+    fromButton.modifyPositionWithAbsoluteValue(newX0 + inputConnector.getWidth() / 2, newY0
+        + getHeight() / 6);
+    fromList.modifyPositionWithAbsoluteValue(newX0 + inputConnector.getWidth() / 2, newY0
+        + getHeight() / 6);
+    toButton.modifyPositionWithAbsoluteValue(newX0 + getWidth() / 2, newY0 + getHeight() / 6);
+    toList.modifyPositionWithAbsoluteValue(newX0 + getWidth() / 2, newY0 + getHeight() / 6);
   }
-  
+
   @Override
   public boolean draw() {
     super.draw();
     fromButton.draw();
     toButton.draw();
 
-    if(toggleFromList) 
-      fromList.draw();
-    if(toggleToList) 
-      toList.draw();
+    if (toggleFromList) fromList.draw();
+    if (toggleToList) toList.draw();
     return false;
   }
 
@@ -88,36 +88,41 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
     setupFromVizList();
     setupToVizList();
   }
+
   private void setupFromVizList() {
-    fromList = new VizList(0, 0, getWidth(), getHeight()*3, this);
-    fromList.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 4,
-      hours, false, SelectionMode.SINGLE);
+    fromList = new VizList(0, 0, getWidth(), getHeight() * 3, this);
+    fromList.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 4, hours, false,
+        SelectionMode.SINGLE);
     addTouchSubscriber(fromList);
   }
-  
+
   private void setupToVizList() {
-    toList = new VizList(0, 0, getWidth(), getHeight()*3, this);
-    toList.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 4,
-      hours, false, SelectionMode.SINGLE);
+    toList = new VizList(0, 0, getWidth(), getHeight() * 3, this);
+    toList.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 4, hours, false,
+        SelectionMode.SINGLE);
     addTouchSubscriber(toList);
   }
 
   private void setupToButton() {
-    toButton = new VizButton(0, 0, getWidth()/2-inputConnector.getWidth()/2, getHeight()/1.5f, this);
-    toButton.setup(); 
-    toButton.name = "toButton"+myCount;
+    toButton =
+        new VizButton(0, 0, getWidth() / 2 - inputConnector.getWidth() / 2, getHeight() / 1.5f,
+            this);
+    toButton.setup();
+    toButton.name = "toButton" + myCount;
     toButton.text = "to";
-    toButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
+    toButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f, 255f,
+        10);
     toButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
         255f, 10);
     addTouchSubscriber(toButton);
   }
 
   private void setupFromButton() {
-    fromButton = new VizButton(0, 0, getWidth()/2-inputConnector.getWidth()/2, getHeight()/1.5f, this);
-    fromButton.setup(); 
-    fromButton.name = "fromButton"+myCount;
+    fromButton =
+        new VizButton(0, 0, getWidth() / 2 - inputConnector.getWidth() / 2, getHeight() / 1.5f,
+            this);
+    fromButton.setup();
+    fromButton.name = "fromButton" + myCount;
     fromButton.text = "from";
     fromButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
         255f, 10);
@@ -125,31 +130,30 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
         255f, 10);
     addTouchSubscriber(fromButton);
   }
-  
+
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     propagateTouch(x, y, down, touchType);
-    return super.touch(x, y, down, touchType);
+    return true;
   }
 
 
 
   @Override
   public AbstractSerializableBox serialize() {
-    // TODO Auto-generated method stub
-    return null;
+    return new SerializableTemporalBox(getId(), getX0(), getY0(), getWidth(), getHeight());
   }
 
   @Override
   public void eventReceived(EventName eventName, Object data) {
     System.out.println(data.toString());
     System.out.println(eventName.toString());
-    if(eventName.equals(EventName.BUTTON_PRESSED)){
-      if(("fromButton"+myCount).equals((String) data)){
-        toggleFromList = toggleFromList?false:true;
+    if (eventName.equals(EventName.BUTTON_PRESSED)) {
+      if (("fromButton" + myCount).equals((String) data)) {
+        toggleFromList = toggleFromList ? false : true;
       }
-      if(("toButton"+myCount).equals((String) data)){
-        toggleToList = toggleToList?false:true; 
+      if (("toButton" + myCount).equals((String) data)) {
+        toggleToList = toggleToList ? false : true;
       }
     }
   }

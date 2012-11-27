@@ -19,6 +19,7 @@ public class DataSourceSQL {
   private boolean connected = false;
   private HashMap<String, Double> idf;
   private Day[] weather;
+  public static DataSourceSQL instance;
 
   public DataSourceSQL(PApplet context) {
     String user, pass, database, host;
@@ -40,6 +41,7 @@ public class DataSourceSQL {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    instance = this;
   }
 
   public TreeMap<Filter, ArrayList<User>> getUsers(ArrayList<Filter> filters, int[] minMax,

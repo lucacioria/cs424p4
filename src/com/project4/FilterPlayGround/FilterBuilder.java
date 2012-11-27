@@ -36,7 +36,7 @@ public class FilterBuilder {
       list.get(levels.get(a)).add(a);
     }
     for (Integer i : list.descendingKeySet()) {
-      ret += "MATCH (tweets) AGAINST (\"";
+      ret += "MATCH (text) AGAINST (\"";
       for (AbstractFilterBox af : list.get(i)) {
         ret += " " + af.getFilter();
       }
