@@ -1,7 +1,6 @@
 package com.project4.FilterPlayGround;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.VizButton;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
 import com.project4.FilterPlayGround.serializables.SerializableTerminalBox;
@@ -23,8 +22,8 @@ public class TerminalFilterBox extends AbstractFilterBox {
     setId(asb.getId());
   }
 
-  public float REMOVE_BUTTON_X = 10;
-  public float REMOVE_BUTTON_Y = 30;
+  public float REMOVE_BUTTON_X = 2;
+  public float REMOVE_BUTTON_Y = 35;
 
 
   @Override

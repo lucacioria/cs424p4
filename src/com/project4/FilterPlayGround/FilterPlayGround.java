@@ -22,7 +22,6 @@ import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
 import com.project4.FilterPlayGround.serializables.SerializableFilterBox;
 import com.project4.FilterPlayGround.serializables.SerializableTemporalBox;
 import com.project4.FilterPlayGround.serializables.SerializableTerminalBox;
-import com.sun.swing.internal.plaf.synth.resources.synth;
 
 public final class FilterPlayGround extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -30,12 +29,12 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   public static float BOX_HEIGHT = 50;
   public static float FILTER_BOX_WIDTH = 100;
   public static float TERMINAL_BOX_WIDTH = 30;
-  public static MyColorEnum LINES_COLOR = MyColorEnum.DARK_WHITE;
+  public static MyColorEnum LINES_COLOR = MyColorEnum.BLACK;
 
   private ArrayList<AbstractFilterBox> boxes = new ArrayList<AbstractFilterBox>();
   private ArrayList<AbstractFilterBox> terminalBoxes = new ArrayList<AbstractFilterBox>();
 
-  private MyColorEnum[] colors = {MyColorEnum.DARKERER_ORANGE, MyColorEnum.LIGHT_GREEN};
+  private MyColorEnum[] colors = {MyColorEnum.FILTER_1, MyColorEnum.FILTER_2, MyColorEnum.FILTER_3};
   private int terminalCount = 0;
   OptionButtons buttons = new OptionButtons(0, getHeight() / 2, this);
 
@@ -91,7 +90,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   @Override
   public boolean draw() {
     pushStyle();
-    fill(MyColorEnum.DARK_BLUE);
+    fill(MyColorEnum.LIGHT_GRAY);
     rect(0, 0, getWidth(), getHeight());
     drawBoxes(boxes);
     drawBoxes(terminalBoxes);

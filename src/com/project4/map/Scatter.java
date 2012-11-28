@@ -19,6 +19,7 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
   private Map map;
   private boolean touching;
   private Tweet selectedTweet;
+  private ArrayList<Tweet> selectableTweets;
 
   public Scatter(float x0, float y0, float width, float height, Map parent) {
     super(x0, y0, width, height, parent);
@@ -32,7 +33,21 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
       setModal(true);
     } else {
       touching = false;
+      if (onEmptyArea(x, y)) {
+        m.notificationCenter.notifyEvent(EventName.TWEET_DESELECTED);
+      }
       setModal(false);
+    }
+    return true;
+  }
+
+  private boolean onEmptyArea(float x, float y) {
+    updateSelectableTweets();
+    for (Tweet t : selectableTweets) {
+      PVector tweetPosition = map.getPositionByLatLon(t.getLat(), t.getLon());
+      if (dist(x, y, tweetPosition.x, tweetPosition.y) < 5) {
+        return false;
+      }
     }
     return true;
   }
@@ -65,24 +80,26 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void updateSelectedTweet() {
-    ArrayList<Tweet> selectableTweets = new ArrayList<Tweet>();
-    Iterator<Filter> i = tweets.keySet().iterator();
-    while (i.hasNext()) {
-      Filter key = i.next();
-      if (map.isAnyFilterSelected() && !map.isFilterVisible(key.getNumber())) continue;
-      selectableTweets.addAll(tweets.get(key));
-    }
-    for (Tweet t: selectableTweets) {
+    updateSelectableTweets();
+    for (Tweet t : selectableTweets) {
       PVector tweetPosition = map.getPositionByLatLon(t.getLat(), t.getLon());
-      if (dist(m.touchX, m.touchY, tweetPosition.x, tweetPosition.y) < 5 &&
-          t != selectedTweet) {
+      if (dist(m.touchX, m.touchY, tweetPosition.x, tweetPosition.y) < 5 && t != selectedTweet) {
         m.notificationCenter.notifyEvent(EventName.TWEET_SELECTED, t);
         log("selected tweet: " + t.getText());
         selectedTweet = t;
         return;
       }
     }
-    
+  }
+
+  private void updateSelectableTweets() {
+    selectableTweets = new ArrayList<Tweet>();
+    Iterator<Filter> i = tweets.descendingKeySet().iterator();
+    while (i.hasNext()) {
+      Filter key = i.next();
+      if (map.isAnyFilterSelected() && !map.isFilterVisible(key.getNumber())) continue;
+      selectableTweets.addAll(tweets.get(key));
+    }
   }
 
   private void drawTweet(Tweet t) {

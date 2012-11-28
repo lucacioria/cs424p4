@@ -14,7 +14,7 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
   protected BoxConnectorOutgoing outputConnector;
   private Integer id = 0;
 
-  protected MyColorEnum COLOR = MyColorEnum.LIGHT_GREEN;
+  protected MyColorEnum COLOR = MyColorEnum.DARK_WHITE;
 
   public AbstractBoxConnector getInputConnector() {
     return inputConnector;
@@ -25,7 +25,6 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
   }
 
   public float CONNECTOR_SIZE = 20;
-  public MyColorEnum BOX_COLOR = MyColorEnum.RED;
 
   public float REMOVE_BUTTON_DEFAULT_X = 60;
   public float REMOVE_BUTTON_DEFAULT_Y = 25;

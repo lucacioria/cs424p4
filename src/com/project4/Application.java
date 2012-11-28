@@ -8,6 +8,7 @@ import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.FilterPlayGround;
 import com.project4.dayview.DayView;
+import com.project4.map.Details;
 import com.project4.map.Map;
 
 public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
@@ -20,6 +21,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private DayView dayView;
   private FilterPlayGround playGround;
   private EventManager eventManager;
+  private Details details;
 
   public Application(float x0, float y0, float width, float height) {
     super(x0, y0, width, height);
@@ -33,7 +35,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   @Override
   public void setup() {
     setButtonStyles();
-//    textFont(MyFontEnum.OPENSANS_REGULAR);
+    // textFont(MyFontEnum.OPENSANS_REGULAR);
     setupMap();
     setupBlackBoxes();
     setupScroller();
@@ -42,7 +44,14 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
     m.notificationCenter.registerToEvent(EventName.TIME_SLIDER_UPDATED, this);
     setupEventManager();
+    setupDetails();
     if (c.initializeVisualization) initializeVisualization();
+  }
+
+  private void setupDetails() {
+    details = new Details(0, 0, this);
+    details.setup();
+    addTouchSubscriber(details);
   }
 
   private void setButtonStyles() {
@@ -52,19 +61,19 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     standardButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
         MyColorEnum.DARK_GRAY, 155f, 10);
     standardButton.setStyleSelected(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE,
-      MyColorEnum.DARK_GRAY, 155f, 155f, 10);
+        MyColorEnum.DARK_GRAY, 155f, 155f, 10);
     standardButton.setStyleDisabled(MyColorEnum.MEDIUM_GRAY, MyColorEnum.LIGHT_GRAY,
-      MyColorEnum.DARK_GRAY, 55f, 55f, 10);
+        MyColorEnum.DARK_GRAY, 55f, 55f, 10);
 
   }
-  
+
   private void setupEventManager() {
     eventManager = new EventManager(0, 0, 0, 0, this);
     eventManager.setup();
   }
 
   private void setupFilterPlayGround() {
-    playGround = new FilterPlayGround(scroller.getX1(), 0, getWidth() - 929, getHeight(), this);
+    playGround = new FilterPlayGround(scroller.getX1(), 0, getWidth() - 900, getHeight(), this);
     playGround.setup();
     addTouchSubscriber(playGround);
   }
@@ -116,6 +125,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     scroller.draw();
     dayView.draw();
     playGround.draw();
+    details.draw();
     popStyle();
     return false;
   }
