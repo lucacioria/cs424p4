@@ -36,15 +36,19 @@ public class TimeSlider extends VizPanel implements TouchEnabled, EventSubscribe
     left = new VizButton(0, 0, 20, 20, this);
     left.name = "left";
     left.eventOnPressed = true;
+    left.setStyle(MyColorEnum.WHITE, MyColorEnum.BLACK, MyColorEnum.WHITE, 150f, 0, 0);
     addTouchSubscriber(left);
-    center = new VizButton(20, 0, 60, 20, this);
+    
+    center = new VizButton(20, 0, getWidth() - 40, 20, this);
     center.name = "center";
     center.eventOnPressed = true;
     center.setStyle(MyColorEnum.BLACK, MyColorEnum.BLACK, MyColorEnum.BLACK, 50f, 0, 0);
     addTouchSubscriber(center);
-    right = new VizButton(80, 0, 20, 20, this);
+    
+    right = new VizButton(getWidth() - 20, 0, 20, 20, this);
     right.name = "right";
     right.eventOnPressed = true;
+    right.setStyle(MyColorEnum.WHITE, MyColorEnum.BLACK, MyColorEnum.WHITE, 150f, 0, 0);
     addTouchSubscriber(right);
   }
 

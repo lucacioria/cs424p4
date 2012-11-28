@@ -80,9 +80,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals("wordcloudButton")) {
       tagCloud.toggleVisible();
       if (tagCloud.isVisible()) {
-        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "heatmapButton");
-        scatter.setVisible(false);
-        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");
+        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "wordcloudButton");
       } else {
         m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "wordcloudButton");
       }

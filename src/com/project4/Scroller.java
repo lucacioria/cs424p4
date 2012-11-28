@@ -31,14 +31,15 @@ public class Scroller extends VizPanel implements TouchEnabled, EventSubscriber 
     if (eventName == EventName.SCROLLING_TWEETS_UPDATED) {
       tweets = (ArrayList<Tweet>) data;
       startScrolling();
-    } else if (eventName == EventName.TWEET_SELECTED) {
-      selectedTweet = (Tweet) data;
-      pauseScrolling();
-
-    } else if (eventName == EventName.TWEET_DESELECTED) {
-      selectedTweet = null;
-      resumeScrolling();
     }
+    // else if (eventName == EventName.TWEET_SELECTED) {
+    // selectedTweet = (Tweet) data;
+    // pauseScrolling();
+    //
+    // } else if (eventName == EventName.TWEET_DESELECTED) {
+    // selectedTweet = null;
+    // resumeScrolling();
+    // }
   }
 
   private void pauseScrolling() {
@@ -69,7 +70,8 @@ public class Scroller extends VizPanel implements TouchEnabled, EventSubscriber 
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    return propagateTouch(x, y, down, touchType);
+    // return propagateTouch(x, y, down, touchType);
+    return true;
   }
 
   @Override

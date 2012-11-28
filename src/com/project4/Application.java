@@ -103,17 +103,6 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   private void initializeVisualization() {
     eventManager.initInterface();
-    // m.dataSourceSQL.doStuff();
-
-    // ArrayList<Tweet> scrollingTweets = new ArrayList<Tweet>();
-    // for (int i = 0; i < 50; i++) {
-    // scrollingTweets.add(tweets.get(i));
-    // }
-    // m.notificationCenter.notifyEvent(EventName.SCROLLING_TWEETS_UPDATED, scrollingTweets);
-
-    // ArrayList<User> users = m.dataSourceSQL.getUsers("id < 1000", 15);
-    // m.notificationCenter.notifyEvent(EventName.USERS_UPDATED, users);
-    //
   }
 
   @Override

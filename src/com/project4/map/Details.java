@@ -50,14 +50,17 @@ public class Details extends VizPanel implements TouchEnabled, EventSubscriber {
     textAlign(PApplet.LEFT, PApplet.TOP);
     int lineHeight = 15;
     for (int i = 0; i < Math.min(lines.size(), 4); i++) {
-      text(lines.get(i), 10, 15 + i * lineHeight);
+      text(lines.get(i), 10, 20 + i * lineHeight);
     }
     popStyle();
   }
 
   private void drawHeader() {
-    // TODO Auto-generated method stub
-
+    pushStyle();
+    textSize(9);
+    fill(MyColorEnum.DARK_GRAY);
+    text(tweet.getDateFormatted(), 10, 10);
+    popStyle();
   }
 
   private void drawBackground() {

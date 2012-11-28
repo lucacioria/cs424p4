@@ -1,6 +1,7 @@
 package com.project4.datasource;
 
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.TreeMap;
 
 import com.anotherbrick.inthewall.Model;
@@ -61,5 +62,12 @@ public class Tweet {
     if(words==null){
       words = text.split(" ");
     } 
+  }
+
+  public String getDateFormatted() {
+    Calendar c = Calendar.getInstance();
+    c.setTimeInMillis((long) getDate() * 1000l);
+    SimpleDateFormat sdf = new SimpleDateFormat("dd MMM");
+    return sdf.format(c.getTime());
   }
 }
