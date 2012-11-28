@@ -16,24 +16,34 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     outputConnector =
         new BoxConnectorOutgoing(getWidth(), getHeight() / 2, CONNECTOR_SIZE, CONNECTOR_SIZE, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_PRESSED, this);
-    addTouchSubscriber(checkBox);
-    checkBox.setSelected(true);
+    addTouchSubscriber(excludeCheckBox);
+    addTouchSubscriber(synonymCheckBox);
+    excludeCheckBox.setSelected(true);
+    synonymCheckBox.setSelected(false);
   }
 
   public FilterBox(SerializableFilterBox asb, VizPanel parent) {
     this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), parent);
     setId(asb.getId());
     this.content = asb.getFilter();
-    checkBox.setSelected(asb.isSelected());
+    excludeCheckBox.setSelected(asb.isExcludeSelected());
+    synonymCheckBox.setSelected(asb.isSynonymSelected());
   }
 
   public static MyColorEnum TEXT_COLOR = MyColorEnum.BLACK;
-  public static float TEXT_X = 32;
+  public static float TEXT_X = 10;
   public static float TEXT_Y = 20;
   public static float TEXT_SIZE = 12;
+  public static float EXCLUDE_CHECKBOX_X = 20;
+  public static float SYNONYM_CHECKBOX_X = 40;
+  public static float CHECKBOX_Y = 25;
+  public static float CHECKBOX_SIZE = 12;
+  public static float REMOVE_BUTTON_X = 60;
 
-  private VizCheckBox checkBox = new VizCheckBox(getHeight() / 4, getHeight() / 4, getHeight() / 2,
-      getHeight() / 2, this);
+  private VizCheckBox excludeCheckBox = new VizCheckBox(EXCLUDE_CHECKBOX_X, CHECKBOX_Y,
+      CHECKBOX_SIZE, CHECKBOX_SIZE, this);
+  private VizCheckBox synonymCheckBox = new VizCheckBox(SYNONYM_CHECKBOX_X, CHECKBOX_Y,
+      CHECKBOX_SIZE, CHECKBOX_SIZE, this);
   private String content = "";
 
   @Override
@@ -52,14 +62,21 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     fill(TEXT_COLOR);
     textSize(TEXT_SIZE);
     text(content, TEXT_X, TEXT_Y);
-    checkBox.draw();
+    excludeCheckBox.draw();
+    synonymCheckBox.draw();
     popStyle();
     return false;
   }
 
   @Override
   public String getFilter() {
-    return checkBox.isSelected() ? "+" : "-" + content;
+    String exclusion = excludeCheckBox.isSelected() ? "+" : "-";
+    String words = exclusion + content;
+    if (synonymCheckBox.isSelected()) {
+      for (String w : DictionaryAccess.getInstance().getWordSenses(content))
+        words += " " + exclusion + w;
+    }
+    return words;
   }
 
   @Override
@@ -83,7 +100,7 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
   @Override
   public AbstractSerializableBox serialize() {
     return new SerializableFilterBox(getId(), getX0(), getY0(), getWidth(), getHeight(), content,
-        checkBox.isSelected());
+        excludeCheckBox.isSelected(), synonymCheckBox.isSelected());
   }
 
   @Override
@@ -95,6 +112,7 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
   @Override
   public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
     super.modifyPositionWithAbsoluteValue(newX0, newY0);
-    checkBox.modifyPosition(getHeight() / 4, getHeight() / 4);
+    excludeCheckBox.modifyPosition(EXCLUDE_CHECKBOX_X, CHECKBOX_Y);
+    synonymCheckBox.modifyPosition(SYNONYM_CHECKBOX_X, CHECKBOX_Y);
   }
 }

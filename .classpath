@@ -16,6 +16,7 @@
 	<classpathentry kind="lib" path="libs/gluegen-rt-natives-linux-i586.jar"/>
 	<classpathentry kind="lib" path="libs/jogl-all-natives-linux-amd64.jar"/>
 	<classpathentry kind="lib" path="libs/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="libs/edu.mit.jwi_2.2.3_jdk.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
