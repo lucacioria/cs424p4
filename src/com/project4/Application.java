@@ -33,7 +33,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   @Override
   public void setup() {
     setButtonStyles();
-//    textFont(MyFontEnum.OPENSANS_REGULAR);
+    // textFont(MyFontEnum.OPENSANS_REGULAR);
     setupMap();
     setupBlackBoxes();
     setupScroller();
@@ -52,19 +52,19 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     standardButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
         MyColorEnum.DARK_GRAY, 155f, 10);
     standardButton.setStyleSelected(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE,
-      MyColorEnum.DARK_GRAY, 155f, 155f, 10);
+        MyColorEnum.DARK_GRAY, 155f, 155f, 10);
     standardButton.setStyleDisabled(MyColorEnum.MEDIUM_GRAY, MyColorEnum.LIGHT_GRAY,
-      MyColorEnum.DARK_GRAY, 55f, 55f, 10);
+        MyColorEnum.DARK_GRAY, 55f, 55f, 10);
 
   }
-  
+
   private void setupEventManager() {
     eventManager = new EventManager(0, 0, 0, 0, this);
     eventManager.setup();
   }
 
   private void setupFilterPlayGround() {
-    playGround = new FilterPlayGround(scroller.getX1(), 0, getWidth() - 929, getHeight(), this);
+    playGround = new FilterPlayGround(scroller.getX1(), 0, getWidth() - 900, getHeight(), this);
     playGround.setup();
     addTouchSubscriber(playGround);
   }
