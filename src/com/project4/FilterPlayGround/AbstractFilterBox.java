@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizButton;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
 
@@ -26,12 +27,26 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
   public float CONNECTOR_SIZE = 20;
   public MyColorEnum BOX_COLOR = MyColorEnum.RED;
 
+  public float REMOVE_BUTTON_DEFAULT_X = 60;
+  public float REMOVE_BUTTON_DEFAULT_Y = 25;
+  public float REMOVE_BUTTON_DEFAULT_HEIGHT = 12;
+  public float REMOVE_BUTTON_DEFAULT_WIDTH = 26;
+
   public AbstractFilterBox(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
     inputConnector =
         new BoxConnectorIngoing(0, getHeight() / 2, CONNECTOR_SIZE, CONNECTOR_SIZE, this);
   }
 
+  public float getRemoveX() {
+    return REMOVE_BUTTON_DEFAULT_X;
+  }
+
+  public float getRemoveY() {
+    return REMOVE_BUTTON_DEFAULT_Y;
+  }
+
+  protected VizButton removeButton;
   private ArrayList<AbstractFilterBox> ingoingConnections = new ArrayList<AbstractFilterBox>();
 
   public void addIngoingConnection(AbstractFilterBox afb) {
@@ -54,6 +69,7 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
     if (!isTerminal()) {
       outputConnector.draw();
     }
+    removeButton.draw();
     popStyle();
     if (dragging) {
       modifyPositionWithAbsoluteValue(m.touchX - spanX, m.touchY - spanY);
@@ -62,10 +78,24 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
   }
 
   @Override
+  public void setup() {
+    removeButton =
+        new VizButton(getRemoveX(), getRemoveY(), REMOVE_BUTTON_DEFAULT_WIDTH,
+            REMOVE_BUTTON_DEFAULT_HEIGHT, this);
+    removeButton.setText("Canc");
+    removeButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
+        255f, 10);
+    removeButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
+        255f, 10);
+    addTouchSubscriber(removeButton);
+  }
+
+  @Override
   public void modifyPosition(float newX0, float newY0) {
     super.modifyPosition(newX0, newY0);
     inputConnector.modifyPosition(0, getHeight() / 2);
     if (!isTerminal()) outputConnector.modifyPosition(getWidth(), getHeight() / 2);
+    removeButton.modifyPosition(getRemoveX(), getRemoveY());
   }
 
   @Override
@@ -73,6 +103,7 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
     super.modifyPositionWithAbsoluteValue(newX0, newY0);
     inputConnector.modifyPosition(0, getHeight() / 2);
     if (!isTerminal()) outputConnector.modifyPosition(getWidth(), getHeight() / 2);
+    removeButton.modifyPosition(getRemoveX(), getRemoveY());
   }
 
   public ArrayList<AbstractFilterBox> getIngoingConnections() {
@@ -116,6 +147,7 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
 
   public void setId(Integer id) {
     this.id = id;
+    removeButton.name = id + "|" + "remove";
   }
 
 }
