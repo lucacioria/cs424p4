@@ -22,6 +22,7 @@ import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
 import com.project4.FilterPlayGround.serializables.SerializableFilterBox;
 import com.project4.FilterPlayGround.serializables.SerializableTemporalBox;
 import com.project4.FilterPlayGround.serializables.SerializableTerminalBox;
+import com.project4.datasource.Filter;
 
 public final class FilterPlayGround extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -60,7 +61,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     if (terminalCount >= TERMINAL_COUNT_LIMIT) return null;
     terminalCount++;
     TerminalFilterBox tfb =
-        new TerminalFilterBox(0, 0, TERMINAL_BOX_WIDTH, BOX_HEIGHT, colors[terminalCount
+        new TerminalFilterBox(0, 0, TERMINAL_BOX_WIDTH, BOX_HEIGHT, colors[(terminalCount - 1)
             % colors.length], this);
     tfb.setup();
     return tfb;
@@ -237,7 +238,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       for (AbstractSerializableBox asb : sTerminalBoxes) {
         terminalCount++;
         AbstractFilterBox afb =
-            new TerminalFilterBox((SerializableTerminalBox) asb, colors[terminalCount
+            new TerminalFilterBox((SerializableTerminalBox) asb, colors[(terminalCount - 1)
                 % colors.length], this);
         afb.setup();
         addTouchSubscriber(afb);
@@ -253,6 +254,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
           addConection(getBoxById(i), asb);
         }
       }
+      lastId = boxes.size() + terminalBoxes.size();
       ois.close();
       fis.close();
     } catch (IOException e) {
@@ -291,8 +293,8 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     for (Iterator<AbstractFilterBox> it = terminalBoxes.iterator(); it.hasNext();) {
       AbstractFilterBox a = it.next();
       if (a.getId().equals(id)) {
+        terminalCount--;
         it.remove();
-
       } else {
         for (Iterator<AbstractFilterBox> it2 = a.getIngoingConnections().iterator(); it2.hasNext();) {
           AbstractFilterBox in = it2.next();
@@ -314,17 +316,13 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       if (data.toString().equals("Add FilterButton")) boxToBeDropped = newFilterBox();
       if (data.toString().equals("Add OutputButton")) boxToBeDropped = newTerminalBox();
       if (data.toString().equals("ApplyButton")) {
-        log(boxes.get(0).getFilter());
-        // ArrayList<Filter> filters = new ArrayList<Filter>();
-        // int i = 0;
-        // for (AbstractFilterBox tb : terminalBoxes) {
-        // filters.add(new Filter(i, tb.COLOR, new FilterBuilder().getFilterString(tb)));
-        // i++;
-        // }
-        // int[] interval = {1, 2};
-        // TreeMap<Filter, ArrayList<Tweet>> tweets =
-        // DataSourceSQL.instance.getTweets(filters, interval);
-        // m.notificationCenter.notifyEvent(EventName.FILTERS_UPDATED, tweets);
+        ArrayList<Filter> filters = new ArrayList<Filter>();
+        int i = 0;
+        for (AbstractFilterBox tb : terminalBoxes) {
+          filters.add(new Filter(i, tb.COLOR, new FilterBuilder().getFilterString(tb)));
+          i++;
+        }
+        m.notificationCenter.notifyEvent(EventName.FILTERS_UPDATED, filters);
       }
       if (data.toString().equals("SaveButton")) storeCurrentConfiguration();
       if (data.toString().contains("remove")) {
