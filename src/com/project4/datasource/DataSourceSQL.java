@@ -19,6 +19,8 @@ public class DataSourceSQL {
   private boolean connected = false;
   private HashMap<String, Double> idf;
   private Day[] weather;
+  private ArrayList<Filter> lastFilters;
+  private TreeMap<Filter, ArrayList<Tweet>> allTweets;
   public static DataSourceSQL instance;
 
   public DataSourceSQL(PApplet context) {
@@ -151,32 +153,56 @@ public class DataSourceSQL {
   }
 
   public TreeMap<Filter, ArrayList<Tweet>> getTweets(ArrayList<Filter> filters, int[] minMax) {
-    TreeMap<Filter, ArrayList<Tweet>> out = new TreeMap<Filter, ArrayList<Tweet>>();
-    for (Filter f : filters) {
-      ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-      String query;
-      if (connect()) {
-        query =
-            "SELECT id, user_id, lat, lon, text, creation_date_posix FROM tweets WHERE "
-                + getCompleteWhere(minMax, f);
-        query(query);
-        while (sql.next()) {
-          Tweet tweet =
-              new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
-                  sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
-          tweet.setText(sql.getString("text"));
-          tweets.add(tweet);
+    // update tweets from database if filters changed
+    if (lastFilters != filters) {
+      System.out.println("[DATA] filters changed, downloading new data...");
+      allTweets = new TreeMap<Filter, ArrayList<Tweet>>();
+      for (Filter f : filters) {
+        ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+        String query;
+        if (connect()) {
+          query =
+              "SELECT id, user_id, lat, lon, text, creation_date_posix FROM tweets WHERE "
+                  + f.getWhere();
+          query(query);
+          while (sql.next()) {
+            Tweet tweet =
+                new Tweet(sql.getDouble("lat"), -sql.getDouble("lon"),
+                    sql.getInt("creation_date_posix"), sql.getInt("id"), sql.getInt("user_id"));
+            tweet.setText(sql.getString("text"));
+            tweets.add(tweet);
+          }
+          allTweets.put(f, tweets);
         }
-        out.put(f, tweets);
       }
+    }
+    lastFilters = filters;
+    // filter based on creation_date_posix
+    return filterOnDate(allTweets, minMax);
+  }
+
+  private TreeMap<Filter, ArrayList<Tweet>> filterOnDate(TreeMap<Filter, ArrayList<Tweet>> tweetsByFilter,
+      int[] minMax) {
+    TreeMap<Filter, ArrayList<Tweet>> out = new TreeMap<Filter, ArrayList<Tweet>>();
+    Iterator<Filter> i = tweetsByFilter.keySet().iterator();
+    while (i.hasNext()) {
+      Filter key = i.next();
+      ArrayList<Tweet> tweets = tweetsByFilter.get(key);
+      ArrayList<Tweet> newTweets = new ArrayList<Tweet>();
+      for (Tweet t: tweets) {
+        if (t.getDate() > minMax[0] && t.getDate() < minMax[1]) {
+          newTweets.add(t);
+        }
+      }
+      out.put(key, newTweets);
     }
     return out;
   }
 
   private String getCompleteWhere(int[] minMax, Filter f) {
-    String where =
-        "creation_date_posix > " + minMax[0] + " AND creation_date_posix < " + minMax[1]
-            + (f.getWhere().length() > 0 ? " AND " + f.getWhere() : "");
+     String where =
+     "creation_date_posix > " + minMax[0] + " AND creation_date_posix < " + minMax[1]
+     + (f.getWhere().length() > 0 ? " AND " + f.getWhere() : "");
     return where;
   }
 

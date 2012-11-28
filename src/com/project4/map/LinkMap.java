@@ -78,7 +78,9 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
       toggleVisible();
       if (isVisible()) {
         m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "linesButton");
+        m.userLinesVisible = true;
       } else {
+        m.userLinesVisible = false;
         m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "linesButton");
       }
     }

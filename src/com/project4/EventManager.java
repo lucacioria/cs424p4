@@ -28,7 +28,10 @@ public class EventManager extends VizPanel implements EventSubscriber {
     if (eventName == EventName.TIME_SLIDER_UPDATED) {
       minMax = (int[]) data;
       log("from: " + minMax[0] + " to: " + minMax[1]);
-      updateData();
+      updateTweets();
+      if (m.userLinesVisible) {
+        updateUsers();
+      }
     }
     if (eventName == EventName.FILTERS_UPDATED) {
       filters = (ArrayList<Filter>) data;
@@ -37,12 +40,24 @@ public class EventManager extends VizPanel implements EventSubscriber {
   }
 
   private void updateData() {
-    TreeMap<Filter, ArrayList<Tweet>> tweets = m.dataSourceSQL.getTweets(filters, minMax);
-    m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
+    updateTweets();
+    udpateDays();
+    updateUsers();
+  }
+
+  private void udpateDays() {
     ArrayList<Day> days = m.dataSourceSQL.getDays(filters);
     m.notificationCenter.notifyEvent(EventName.DAYS_UPDATED, days);
+  }
+
+  private void updateUsers() {
     TreeMap<Filter, ArrayList<User>> users = m.dataSourceSQL.getUsers(filters, minMax, 2);
     m.notificationCenter.notifyEvent(EventName.USERS_UPDATED, users);
+  }
+
+  private void updateTweets() {
+    TreeMap<Filter, ArrayList<Tweet>> tweets = m.dataSourceSQL.getTweets(filters, minMax);
+    m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
   }
 
   public void initInterface() {
