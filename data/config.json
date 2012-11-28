@@ -5,7 +5,7 @@
 'translate_to_italian' : false,
 'enable_safe_line' : false,
 'enable_grid_lines' : false,
-'renderer' : 'p2d',
+'renderer' : 'java2d',
 'enable_tag_cloud' : false,
 enable_draw_mouse_position : false,
 initialize_visualization : true,
