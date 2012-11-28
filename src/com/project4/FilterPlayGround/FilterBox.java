@@ -18,12 +18,13 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     m.notificationCenter.registerToEvent(EventName.BUTTON_PRESSED, this);
     addTouchSubscriber(excludeCheckBox);
     addTouchSubscriber(synonymCheckBox);
-    excludeCheckBox.setSelected(true);
+    excludeCheckBox.setSelected(false);
     synonymCheckBox.setSelected(false);
   }
 
   public FilterBox(SerializableFilterBox asb, VizPanel parent) {
     this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), parent);
+    setup();
     setId(asb.getId());
     this.content = asb.getFilter();
     excludeCheckBox.setSelected(asb.isExcludeSelected());
@@ -34,7 +35,8 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
   public static float TEXT_X = 10;
   public static float TEXT_Y = 20;
   public static float TEXT_SIZE = 12;
-  public static float EXCLUDE_CHECKBOX_X = 20;
+  public static float LABELS_TEXT_SIZE = 5;
+  public static float EXCLUDE_CHECKBOX_X = 15;
   public static float SYNONYM_CHECKBOX_X = 40;
   public static float CHECKBOX_Y = 25;
   public static float CHECKBOX_SIZE = 12;
@@ -53,9 +55,6 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
 
 
   @Override
-  public void setup() {}
-
-  @Override
   public boolean draw() {
     super.draw();
     pushStyle();
@@ -64,13 +63,16 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     text(content, TEXT_X, TEXT_Y);
     excludeCheckBox.draw();
     synonymCheckBox.draw();
+    textSize(LABELS_TEXT_SIZE);
+    text("exclude", 10, 45);
+    text("synonyms", 35, 45);
     popStyle();
     return false;
   }
 
   @Override
   public String getFilter() {
-    String exclusion = excludeCheckBox.isSelected() ? "+" : "-";
+    String exclusion = excludeCheckBox.isSelected() ? "-" : "+";
     String words = exclusion + content;
     if (synonymCheckBox.isSelected()) {
       for (String w : DictionaryAccess.getInstance().getWordSenses(content))

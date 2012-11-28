@@ -73,7 +73,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void setupFilterPlayGround() {
-    playGround = new FilterPlayGround(scroller.getX1(), 0, getWidth() - 929, getHeight(), this);
+    playGround = new FilterPlayGround(scroller.getX1(), 0, getWidth() - 900, getHeight(), this);
     playGround.setup();
     addTouchSubscriber(playGround);
   }
