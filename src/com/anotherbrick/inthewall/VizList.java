@@ -62,10 +62,9 @@ public class VizList extends VizPanel implements TouchEnabled {
               boolean first = true;
               for (Object yy : (ArrayList<Object>) category) {
                 if (!first) {
-                  deselectElement(
-                      yy,
-                      selectionMode == SelectionMode.SINGLE_OR_WHOLE_CATEGORY ? SelectionMode.MULTIPLE
-                          : selectionMode);
+                  deselectElement(yy, selectionMode == SelectionMode.SINGLE_OR_WHOLE_CATEGORY
+                      ? SelectionMode.MULTIPLE
+                      : selectionMode);
                 }
                 first = false;
               }
@@ -74,10 +73,9 @@ public class VizList extends VizPanel implements TouchEnabled {
               if (selectionMode == SelectionMode.SINGLE_OR_WHOLE_CATEGORY) selectedObjects.clear();
               for (Object yy : (ArrayList<Object>) category) {
                 if (!first) {
-                  selectElement(
-                      yy,
-                      selectionMode == SelectionMode.SINGLE_OR_WHOLE_CATEGORY ? SelectionMode.MULTIPLE
-                          : selectionMode);
+                  selectElement(yy, selectionMode == SelectionMode.SINGLE_OR_WHOLE_CATEGORY
+                      ? SelectionMode.MULTIPLE
+                      : selectionMode);
                 }
                 first = false;
               }
@@ -173,6 +171,7 @@ public class VizList extends VizPanel implements TouchEnabled {
   public boolean draw() {
     // if (!startDraw()) return false;
     //
+    if (!isVisible()) return false;
     pushStyle();
     noStroke();
     background(MyColorEnum.MEDIUM_GRAY);
@@ -268,13 +267,12 @@ public class VizList extends VizPanel implements TouchEnabled {
     }
 
     @Override
-    public void setup() {
-    }
+    public void setup() {}
 
   }
 
   private class VizSlider extends VizPanel implements TouchEnabled {
-    
+
     @Override
     public void modifyPosition(float newX0, float newY0) {
       super.modifyPosition(newX0, newY0);
@@ -321,8 +319,9 @@ public class VizList extends VizPanel implements TouchEnabled {
       if (handle.moving) {
         handle.modifyPositionWithAbsoluteValue(getX0Absolute(),
             costrain(m.touchY - 11, getY0Absolute() + getHeight() - 20, getY0Absolute()));
-        float start = PApplet.map(handle.getY0(), 0, getHeight(), 0, isNested ? expandedSize
-            : elements.size());
+        float start =
+            PApplet.map(handle.getY0(), 0, getHeight(), 0,
+                isNested ? expandedSize : elements.size());
         setStartIndex(start);
         setStopIndex(start + numOfRows);
       }
@@ -331,10 +330,9 @@ public class VizList extends VizPanel implements TouchEnabled {
     private float costrain(float value, float maxValue, float minValue) {
       return Math.min(Math.max(value, minValue), maxValue);
     }
-    
+
     @Override
-    public void setup() {
-    }
+    public void setup() {}
 
   }
 
@@ -348,15 +346,14 @@ public class VizList extends VizPanel implements TouchEnabled {
   }
 
   @Override
-  public void setup() {
-  }
-  
+  public void setup() {}
+
   @Override
   public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
     super.modifyPositionWithAbsoluteValue(newX0, newY0);
-    slider.modifyPosition(getWidth()-slider.getWidth(), 0);
+    slider.modifyPosition(getWidth() - slider.getWidth(), 0);
   }
-  
+
   public void selectElementByString(String elementName) {
     for (Object o : elements) {
       if (o.toString().equals(elementName)) {

@@ -53,6 +53,10 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     return false;
   }
 
+  @Override
+  public boolean needKeyboard() {
+    return true;
+  }
 
   @Override
   public boolean draw() {

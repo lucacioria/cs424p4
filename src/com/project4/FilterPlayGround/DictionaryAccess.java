@@ -45,6 +45,8 @@ public class DictionaryAccess {
   public List<String> getWordSenses(String name) {
     List<String> ret = new ArrayList<String>();
     IIndexWord idxWord = dictionary.getIndexWord(name, POS.NOUN);
+    if (idxWord == null) return ret;
+    if (idxWord.getWordIDs() == null) return ret;
     IWordID wordID = idxWord.getWordIDs().get(0);
     IWord word = dictionary.getWord(wordID);
     ISynset synset = word.getSynset();

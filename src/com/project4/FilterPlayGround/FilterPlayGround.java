@@ -10,12 +10,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizList;
+import com.anotherbrick.inthewall.VizList.SelectionMode;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.FilterPlayGround.serializables.AbstractSerializableBox;
@@ -39,7 +42,13 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   private int terminalCount = 0;
   OptionButtons buttons = new OptionButtons(0, getHeight() / 2, this);
 
+  private ArrayList<String> hours = new ArrayList<String>(Arrays.asList("1", "2", "3", "4", "5",
+      "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
+      "22", "23", "24"));
+
   Keyboard keyboard = new Keyboard(100, getHeight() - 90, 250, 90, this);
+  VizList selectFromTime = new VizList(100, getHeight() - 90, 80, 90, this);;
+  VizList selectToTime = new VizList(100, getHeight() - 90, 80, 90, this);;
 
   public FilterPlayGround(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -53,6 +62,15 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     addTouchSubscriber(buttons);
     keyboard.setup();
     keyboard.setVisible(false);
+
+    selectFromTime.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 4, hours, false,
+        SelectionMode.SINGLE);
+    selectFromTime.setVisible(false);
+    addTouchSubscriber(selectFromTime);
+    selectToTime.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 4, hours, false,
+        SelectionMode.SINGLE);
+    selectToTime.setVisible(false);
+    addTouchSubscriber(selectToTime);
     addTouchSubscriber(keyboard);
     loadLastConfiguration();
   }
@@ -97,6 +115,8 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
     drawBoxes(terminalBoxes);
     buttons.draw();
     keyboard.draw();
+    selectFromTime.draw();
+    selectToTime.draw();
     popStyle();
     return false;
   }
@@ -120,7 +140,11 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-    if (down && !keyboard.containsPoint(x, y)) {
+    if (down && !keyboard.containsPoint(x, y) && !selectFromTime.containsPoint(x, y)
+        && !selectToTime.containsPoint(x, y)) {
+      selectFromTime.setVisible(false);
+      selectToTime.setVisible(false);
+
       keyboard.setVisible(false);
       for (AbstractFilterBox afb : boxes) {
         handleConnectorTouch(x, y, afb, OUTGOING);
@@ -142,7 +166,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   }
 
   private void handleFocus(float x, float y, AbstractFilterBox afb) {
-    if (afb.containsPoint(x, y) && !afb.isTerminal()) {
+    if (afb.containsPoint(x, y) && !afb.isTerminal() && afb.needKeyboard()) {
       afb.setFocus(true);
       keyboard.setVisible(true);
     } else
@@ -317,7 +341,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       if (data.toString().equals("Add OutputButton")) boxToBeDropped = newTerminalBox();
       if (data.toString().equals("ApplyButton")) {
         ArrayList<Filter> filters = new ArrayList<Filter>();
-        int i = 0;
+        int i = 1;
         for (AbstractFilterBox tb : terminalBoxes) {
           filters.add(new Filter(i, tb.COLOR, new FilterBuilder().getFilterString(tb)));
           i++;
@@ -328,6 +352,12 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
       if (data.toString().contains("remove")) {
         Integer toRemoveId = Integer.parseInt(data.toString().split("\\|")[0]);
         removeFilter(toRemoveId);
+      }
+      if (data.toString().contains("toButton")) {
+        selectToTime.setVisible(true);
+      }
+      if (data.toString().contains("fromButton")) {
+        selectFromTime.setVisible(true);
       }
     }
 

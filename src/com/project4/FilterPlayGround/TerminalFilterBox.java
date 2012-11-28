@@ -52,6 +52,11 @@ public class TerminalFilterBox extends AbstractFilterBox {
   }
 
   @Override
+  public boolean needKeyboard() {
+    return false;
+  }
+
+  @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     propagateTouch(x, y, down, touchType);
     return super.touch(x, y, down, touchType);

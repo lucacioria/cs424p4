@@ -73,11 +73,11 @@ public class Helper {
     int line = 0;
     out.add("");
     for (String w : words) {
-      width += p.textWidth(w + " ");
+      width += p.textWidth(w + " ") / Config.getInstance().multiply;
       if (width > maxWidth) {
         line++;
         out.add("");
-        width = p.textWidth(w + " ");
+        width = p.textWidth(w + " ") / Config.getInstance().multiply;
       }
       out.set(line, out.get(line) + w + " ");
     }
@@ -103,7 +103,7 @@ public class Helper {
   public static String limitStringLength(String s, int length, boolean dots) {
     if (s.length() > length) {
       if (dots)
-        return s.substring(0, length - 3) + "É";
+        return s.substring(0, length - 3) + "ï¿½";
       else
         return s.substring(0, length - 1);
     } else

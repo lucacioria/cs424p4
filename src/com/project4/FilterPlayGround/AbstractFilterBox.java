@@ -37,6 +37,8 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
         new BoxConnectorIngoing(0, getHeight() / 2, CONNECTOR_SIZE, CONNECTOR_SIZE, this);
   }
 
+  public abstract boolean needKeyboard();
+
   public float getRemoveX() {
     return REMOVE_BUTTON_DEFAULT_X;
   }
