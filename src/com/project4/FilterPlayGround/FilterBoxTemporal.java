@@ -26,6 +26,7 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
 
   public FilterBoxTemporal(SerializableTemporalBox asb, VizPanel parent) {
     this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), parent);
+    setup();
     this.setId(asb.getId());
   }
 
@@ -80,6 +81,7 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
 
   @Override
   public void setup() {
+    super.setup();
     toggleFromList = false;
     toggleToList = false;
     setupToButton();
