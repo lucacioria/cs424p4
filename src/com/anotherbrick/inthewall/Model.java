@@ -1,6 +1,5 @@
 package com.anotherbrick.inthewall;
 
-import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.project4.datasource.DataSourceSQL;
 
 public class Model {
@@ -16,6 +15,7 @@ public class Model {
   public DataSourceSQL dataSourceSQL;
 
   // global application variables
+  public boolean userLinesVisible = false;
 
   public static final float MAX_TIME = 1305935940;
   public static final float MIN_TIME = 1304121600;
