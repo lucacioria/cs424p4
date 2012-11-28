@@ -41,7 +41,7 @@ public class Config {
   }
 
   public enum MyColorEnum {
-    BLACK, DARK_GRAY, BACKGROUND_COLOR, LIGHT_GRAY, DARK_ORANGE, DARK_BROWN, LIGHT_ORANGE, DARK_BLUE, LIGHT_BLUE, MEDIUM_GRAY, WHITE, LIGHT_GREEN, DARKER_ORANGE, DARKER_BLUE, DARKERER_ORANGE, DARKERER_BLUE, RED, GRAPH_COLOR_1, GRAPH_COLOR_2, GRAPH_COLOR_3, GRAPH_COLOR_4, DARK_WHITE, TEXT_GRAY, YELLOW, HEAT_MAP_1, HEAT_MAP_2, HEAT_MAP_3, HEAT_MAP_4, FILTER_1, FILTER_2, FILTER_3
+    BLACK, DARK_GRAY, BACKGROUND_COLOR, LIGHT_GRAY, DARK_ORANGE, DARK_BROWN, LIGHT_ORANGE, DARK_BLUE, LIGHT_BLUE, MEDIUM_GRAY, WHITE, LIGHT_GREEN, DARKER_ORANGE, DARKER_BLUE, DARKERER_ORANGE, DARKERER_BLUE, RED, GRAPH_COLOR_1, GRAPH_COLOR_2, GRAPH_COLOR_3, GRAPH_COLOR_4, DARK_WHITE, TEXT_GRAY, YELLOW, HEAT_MAP_R1, HEAT_MAP_R2, HEAT_MAP_R3, HEAT_MAP_R4, HEAT_MAP_B1, HEAT_MAP_B2, HEAT_MAP_B3, HEAT_MAP_B4 , HEAT_MAP_V1, HEAT_MAP_V2, HEAT_MAP_V3, HEAT_MAP_V4,FILTER_1, FILTER_2, FILTER_3
   }
 
   public static void setup(PApplet p) {
@@ -171,14 +171,30 @@ public class Config {
       return hex("#1f1f1f");
     case YELLOW:
       return hex("#FFFF00");
-    case HEAT_MAP_4:
+    case HEAT_MAP_R4:
       return hex("#980043");
-    case HEAT_MAP_1:
+    case HEAT_MAP_R1:
       return hex("#FECC5C");
-    case HEAT_MAP_2:
+    case HEAT_MAP_R2:
       return hex("#FD8D3C");
-    case HEAT_MAP_3:
+    case HEAT_MAP_R3:
       return hex("#F03B20");
+    case HEAT_MAP_B4:
+      return hex("#0C2C84");
+    case HEAT_MAP_B1:
+      return hex("#41B6C4");
+    case HEAT_MAP_B2:
+      return hex("#1D91C0");
+    case HEAT_MAP_B3:
+      return hex("#225EA8");
+    case HEAT_MAP_V4:
+      return hex("#005824");
+    case HEAT_MAP_V1:
+      return hex("#66C2A4");
+    case HEAT_MAP_V2:
+      return hex("#41AE76");
+    case HEAT_MAP_V3:
+      return hex("#238B45");
     case FILTER_1:
       return hex("#52923C");      
     case FILTER_2:
@@ -189,6 +205,7 @@ public class Config {
       return 0;
     }
   }
+
 
   public PFont myFont(MyFontEnum font) {
     switch (font) {

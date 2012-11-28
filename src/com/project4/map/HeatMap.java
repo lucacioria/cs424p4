@@ -10,6 +10,7 @@ import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
+import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
@@ -24,7 +25,8 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private TreeMap <Filter, Integer> maxCount;
   private TreeMap<Filter, int[][]> lines;
   private TreeMap<Filter, ArrayList<Tweet>> tweets = new TreeMap<Filter, ArrayList<Tweet>>();
-
+  MyColorEnum color1;
+  MyColorEnum color2, color3,color4;
 
 
   public HeatMap(float x0, float y0, float width, float height, Map parent) {
@@ -90,22 +92,55 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
     while(it.hasNext()){
       Filter key = it.next();
       if(!map.isFilterVisible(key.getNumber())) continue;
+      setColors(key.getNumber());
       for (int j = 0; j < lines.get(key).length; j++) {
         for (int i = 0; i < lines.get(key)[j].length; i++) {
           if (lines.get(key)[j][i] > maxCount.get(key) / 1.5)
-            fill(MyColorEnum.HEAT_MAP_4, alpha*0.9f);
+            fill(color1, alpha*0.9f);
           else if (lines.get(key)[j][i] > maxCount.get(key) / 2)
-            fill(MyColorEnum.HEAT_MAP_3, alpha*0.8f);
+            fill(color2, alpha*0.8f);
           else if (lines.get(key)[j][i] > maxCount.get(key) / 5)
-            fill(MyColorEnum.HEAT_MAP_2, alpha*0.7f);
+            fill(color3, alpha*0.7f);
           else if (lines.get(key)[j][i] > maxCount.get(key) / 10)
-            fill(MyColorEnum.HEAT_MAP_1, alpha*0.6f);
+            fill(color4, alpha*0.6f);
           else
             noFill();
           rect(i * gridW, j * gridH, gridW, gridH);
         }
       }
     }
+  }
+
+ 
+
+  private void setColors(int number) {
+    if(number==1)
+      setGreenColors();
+    else if(number==2)
+      setRedColors();
+    else if(number==3)
+      setBlueColors();
+  }
+
+  private void setBlueColors() {
+    color1 = MyColorEnum.HEAT_MAP_B4;
+    color2 = MyColorEnum.HEAT_MAP_B3;
+    color3 = MyColorEnum.HEAT_MAP_B2;
+    color4 = MyColorEnum.HEAT_MAP_B1;    
+  }
+
+  private void setRedColors() {
+    color1 = MyColorEnum.HEAT_MAP_R4;
+    color2 = MyColorEnum.HEAT_MAP_R3;
+    color3 = MyColorEnum.HEAT_MAP_R2;
+    color4 = MyColorEnum.HEAT_MAP_R1;    
+  }
+
+  private void setGreenColors() {
+    color1 = MyColorEnum.HEAT_MAP_V4;
+    color2 = MyColorEnum.HEAT_MAP_V3;
+    color3 = MyColorEnum.HEAT_MAP_V2;
+    color4 = MyColorEnum.HEAT_MAP_V1;
   }
 
   @SuppressWarnings("unchecked")
