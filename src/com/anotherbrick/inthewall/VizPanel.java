@@ -510,11 +510,11 @@ public abstract class VizPanel {
   
   //TODO basta cos“?
   public float textAscent(){
-    return p.textAscent();
+    return p.textAscent()/Config.getInstance().multiply;
   }
   
   public float textWidth(String str){
-    return p.textWidth(str);
+    return p.textWidth(str)/Config.getInstance().multiply;
   }
   
   
