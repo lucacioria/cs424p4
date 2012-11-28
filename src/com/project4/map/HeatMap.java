@@ -3,7 +3,6 @@ package com.project4.map;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Random;
 import java.util.TreeMap;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
@@ -59,25 +58,6 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
     return false;
   }
 
-  private void drawGrid2() {
-    float alpha = 180;
-    for (int j = 0; j < grid.length; j++) {
-      for (int i = 0; i < grid[j].length; i++) {
-        if (grid[j][i] > maxCount / 1.5)
-          fill(MyColorEnum.DARK_BLUE, alpha);
-        else if (grid[j][i] > maxCount / 2)
-          fill(MyColorEnum.RED, alpha);
-        else if (grid[j][i] > maxCount / 5)
-          fill(MyColorEnum.LIGHT_ORANGE, alpha);
-        else if (grid[j][i] > maxCount / 10)
-          fill(MyColorEnum.YELLOW, alpha);
-        else
-          noFill();
-        rect(i * gridW, j * gridH, gridW, gridH);
-      }
-    }
-  }
-  
   private void drawGrid() {
     float alpha = 255;
     for (int j = 0; j < grid.length; j++) {
@@ -124,8 +104,6 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
           increaseValue(x, y);
         }
       }
-      // TODO disegna solo la prima heatmap a caso..
-      break;
     }
     updateMax();
   }

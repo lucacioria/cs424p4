@@ -11,6 +11,7 @@ import com.anotherbrick.inthewall.VizPanel;
 import com.project4.datasource.Day;
 import com.project4.datasource.Filter;
 import com.project4.datasource.Tweet;
+import com.project4.datasource.User;
 
 public class EventManager extends VizPanel implements EventSubscriber {
 
@@ -40,13 +41,16 @@ public class EventManager extends VizPanel implements EventSubscriber {
     m.notificationCenter.notifyEvent(EventName.DATA_UPDATED, tweets);
     ArrayList<Day> days = m.dataSourceSQL.getDays(filters);
     m.notificationCenter.notifyEvent(EventName.DAYS_UPDATED, days);
+    TreeMap<Filter, ArrayList<User>> users = m.dataSourceSQL.getUsers(filters, minMax, 2);
+    m.notificationCenter.notifyEvent(EventName.USERS_UPDATED, users);
   }
 
   public void initInterface() {
     // TODO this should trigger filters.. not fake one..
     filters = new ArrayList<Filter>();
-    filters.add(new Filter(0, MyColorEnum.RED, "match(text) against('truck')"));
-    filters.add(new Filter(1, MyColorEnum.LIGHT_GREEN, "match(text) against('sick')"));
+    filters.add(new Filter(1, MyColorEnum.FILTER_1, "match(text) against('truck')"));
+    filters.add(new Filter(2, MyColorEnum.FILTER_2, "match(text) against('sick')"));
+    filters.add(new Filter(3, MyColorEnum.FILTER_3, "match(text) against('ball')"));
   }
 
   @Override

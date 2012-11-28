@@ -52,7 +52,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     standardButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
         MyColorEnum.DARK_GRAY, 155f, 10);
     standardButton.setStyleSelected(MyColorEnum.DARK_GRAY, MyColorEnum.WHITE,
-      MyColorEnum.WHITE, 155f, 155f, 10);
+      MyColorEnum.DARK_GRAY, 155f, 155f, 10);
     standardButton.setStyleDisabled(MyColorEnum.MEDIUM_GRAY, MyColorEnum.LIGHT_GRAY,
       MyColorEnum.DARK_GRAY, 55f, 55f, 10);
 

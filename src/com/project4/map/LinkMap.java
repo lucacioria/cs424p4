@@ -33,6 +33,7 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
 
   @Override
   public void setup() {
+    setVisible(false);
     m.notificationCenter.registerToEvent(EventName.USERS_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.MAP_ZOOMED_OR_PANNED, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
@@ -53,12 +54,13 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
     Iterator<Filter> i = lines.keySet().iterator();
     while (i.hasNext()) {
       Filter key = i.next();
+      if (map.isAnyFilterSelected() && !map.isFilterVisible(key.getNumber())) continue;
       stroke(key.getColor());
       for (ArrayList<PVector> line : lines.get(key)) {
-      for (int j = 1; j < line.size(); j++) {
-        line(line.get(j - 1).x, line.get(j - 1).y, line.get(j).x, line.get(j).y);
+        for (int j = 1; j < line.size(); j++) {
+          line(line.get(j - 1).x, line.get(j - 1).y, line.get(j).x, line.get(j).y);
+        }
       }
-    }
     }
   }
 
@@ -74,6 +76,11 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
     }
     if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals("linesButton")) {
       toggleVisible();
+      if (isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "linesButton");
+      } else {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "linesButton");
+      }
     }
   }
 

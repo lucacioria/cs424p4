@@ -1,4 +1,5 @@
 *.class
+data/filters/
 *.war
 *.ear
 *.pydevproject

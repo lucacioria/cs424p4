@@ -18,16 +18,10 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
   public static final float width = 80f;
   public static final float height = 210f;
   private float padding = 10;
-  private boolean hidden = false;
-  private boolean animating = false;
-  private int startTime;
-  private float originalY0;
-  private float animationDuration = 5000;
   private FilterButtons filterButtons;
 
   @Override
   public void setup() {
-    originalY0 = getY0();
     setupZoomButtons();
     setupPanButtons();
     setupLayerButtons();
@@ -38,7 +32,6 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
 
   @Override
   public boolean draw() {
-    updatePosition();
     zoomButtons.draw();
     panButtons.draw();
     layerButtons.draw();
@@ -46,25 +39,9 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
     return false;
   }
 
-  private void updatePosition() {
-    if (animating) {
-      if (hidden) { // showing animation
-
-      } else { // hiding animation
-        move(0, 500 / m.p.frameRate);
-        log("new position: " + getY0());
-        if (getY0() >= originalY0 + getHeight() - 30) {
-          log("finished transition!");
-          animating = false;
-          hidden = true;
-        }
-      }
-    }
-  }
-
   private void setupZoomButtons() {
     zoomButtons =
-        new ZoomButtons(getWidth() - 60, getHeight() - ZoomButtons.height - padding, this);
+        new ZoomButtons(getWidth() - 70, getHeight() - ZoomButtons.height - padding, this);
     addTouchSubscriber(zoomButtons);
     addChild(zoomButtons);
     zoomButtons.setup();
@@ -96,25 +73,6 @@ public class ControlPanel extends VizPanel implements TouchEnabled, EventSubscri
   
   @Override
   public void eventReceived(EventName eventName, Object data) {
-    if (eventName == EventName.TOGGLE_CONTROL_PANEL) {
-      if (animating) return;
-      if (hidden) {
-        startShowAnimation();
-      } else {
-        startHideAnimation();
-      }
-    }
-  }
-
-  private void startHideAnimation() {
-    log("start hiding animation");
-    startTime = millis();
-    animating = true;
-  }
-
-  private void startShowAnimation() {
-    // TODO Auto-generated method stub
-
   }
 
   @Override

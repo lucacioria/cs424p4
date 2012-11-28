@@ -54,6 +54,7 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
     Iterator<Filter> i = tweets.keySet().iterator();
     while (i.hasNext()) {
       Filter key = i.next();
+      if (map.isAnyFilterSelected() && !map.isFilterVisible(key.getNumber())) continue;
       fill(key.getColor(), 100f);
       for (Tweet t : tweets.get(key)) {
         drawTweet(t);
@@ -64,7 +65,14 @@ public class Scatter extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private void updateSelectedTweet() {
-    for (Tweet t: tweets.firstEntry().getValue()) {
+    ArrayList<Tweet> selectableTweets = new ArrayList<Tweet>();
+    Iterator<Filter> i = tweets.keySet().iterator();
+    while (i.hasNext()) {
+      Filter key = i.next();
+      if (map.isAnyFilterSelected() && !map.isFilterVisible(key.getNumber())) continue;
+      selectableTweets.addAll(tweets.get(key));
+    }
+    for (Tweet t: selectableTweets) {
       PVector tweetPosition = map.getPositionByLatLon(t.getLat(), t.getLon());
       if (dist(m.touchX, m.touchY, tweetPosition.x, tweetPosition.y) < 5 &&
           t != selectedTweet) {

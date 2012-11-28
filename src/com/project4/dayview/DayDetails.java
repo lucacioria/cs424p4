@@ -2,6 +2,8 @@ package com.project4.dayview;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.TreeMap;
 
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -13,12 +15,13 @@ import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.project4.datasource.Day;
+import com.project4.datasource.Filter;
 import com.project4.datasource.Day.WeatherEnum;
 
 public class DayDetails extends VizPanel implements TouchEnabled, EventSubscriber {
 
   public final static float width = 100;
-  public final static float height = 100;
+  public final static float height = 120;
   private int dayNumber;
   public float startX;
   public float endX;
@@ -49,8 +52,27 @@ public class DayDetails extends VizPanel implements TouchEnabled, EventSubscribe
     if (!isVisible()) return false;
     drawBackground();
     drawWeather();
+    drawCounts();
     text(day.getDay() + " - " + day.getWindSpeed(), getWidth() / 2, getHeight() / 2);
     return false;
+  }
+
+  private void drawCounts() {
+    pushStyle();
+    TreeMap<Filter, Integer> counts = day.getCounts();
+    textAlign(PApplet.LEFT, PApplet.TOP);
+    int i = 0;
+    float x = 10;
+    float y = 40;
+    for (Filter filter : day.getFilters()) {
+      Integer count = counts.get(filter);
+      fill(filter.getColor());
+      rect(x, y + i, 15, 15);
+      fill(MyColorEnum.WHITE);
+      text(count + "", x + 30, y + i);
+      i += 20;
+    }
+    popStyle();
   }
 
   private void drawWeather() {

@@ -1,8 +1,6 @@
 package com.project4.map;
 
-import java.util.ArrayList;
 import java.util.Stack;
-import java.util.TreeMap;
 
 import processing.core.PImage;
 import processing.core.PVector;
@@ -11,7 +9,6 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
-import com.project4.datasource.Filter;
 import com.project4.datasource.Tweet;
 
 public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
@@ -35,14 +32,30 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
   private LinkMap linkMap;
   private ControlPanel controlPanel;
 
+  private boolean filter1Visible = false;
+  private boolean filter2Visible = false;
+  private boolean filter3Visible = false;
+
   public Map(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
+  }
+
+  public boolean isAnyFilterSelected() {
+    return (filter1Visible || filter2Visible || filter3Visible);
+  }
+
+  public boolean isFilterVisible(int filterNumber) {
+    if (filterNumber == 1) return filter1Visible;
+    if (filterNumber == 2) return filter2Visible;
+    if (filterNumber == 3) return filter3Visible;
+    return false;
   }
 
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.BUTTON_TOUCHED) {
       manageButtons(data.toString());
+      manageFilterButtons(data.toString());
     }
     if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals("scatterButton")) {
       scatter.toggleVisible();
@@ -59,7 +72,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
       if (heatMap.isVisible()) {
         m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "heatmapButton");
         scatter.setVisible(false);
-        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");        
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");
       } else {
         m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "heatmapButton");
       }
@@ -69,7 +82,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
       if (tagCloud.isVisible()) {
         m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "heatmapButton");
         scatter.setVisible(false);
-        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");        
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "scatterButton");
       } else {
         m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "wordcloudButton");
       }
@@ -95,6 +108,42 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
     } else if (buttonName.equals("panLeftButton")) {
       panLeft();
       m.notificationCenter.notifyEvent(EventName.MAP_ZOOMED_OR_PANNED);
+    }
+  }
+
+  private void manageFilterButtons(String buttonName) {
+    if (buttonName.equals("filter1Button")) {
+      filter1Visible = !filter1Visible;
+      if (filter1Visible) {
+        filter2Visible = filter3Visible = false;
+        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "filter1Button");
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter2Button");
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter3Button");
+      } else {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter1Button");
+      }
+    }
+    if (buttonName.equals("filter2Button")) {
+      filter2Visible = !filter2Visible;
+      if (filter2Visible) {
+        filter1Visible = filter3Visible = false;
+        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "filter2Button");
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter1Button");
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter3Button");
+      } else {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter2Button");
+      }
+    }
+    if (buttonName.equals("filter3Button")) {
+      filter3Visible = !filter3Visible;
+      if (filter3Visible) {
+        filter1Visible = filter2Visible = false;
+        m.notificationCenter.notifyEvent(EventName.BUTTON_SELECTED, "filter3Button");
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter1Button");
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter2Button");
+      } else {
+        m.notificationCenter.notifyEvent(EventName.BUTTON_DESELECTED, "filter3Button");
+      }
     }
   }
 

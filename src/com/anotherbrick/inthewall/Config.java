@@ -179,6 +179,12 @@ public class Config {
       return hex("#FD8D3C");
     case HEAT_MAP_3:
       return hex("#F03B20");
+    case FILTER_1:
+      return hex("#52923C");      
+    case FILTER_2:
+      return hex("#E14C41");      
+    case FILTER_3:
+      return hex("#0C5AA6");      
     default:
       return 0;
     }

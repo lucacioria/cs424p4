@@ -12,7 +12,7 @@ public class PanButtons extends VizPanel implements TouchEnabled {
   private VizButton panLeftButton;
   private VizButton panRightButton;
 
-  public static final float height = 60;
+  public static final float height = 50;
   public static final float width = 60;
   
   public PanButtons(float x0, float y0, VizPanel parent) {
@@ -36,7 +36,7 @@ public class PanButtons extends VizPanel implements TouchEnabled {
     addTouchSubscriber(panUpButton);
     addChild(panUpButton);
 
-    panDownButton = new VizButton(20, 40, 20, 20, this);
+    panDownButton = new VizButton(20, 30, 20, 20, this);
     panDownButton.name = "panDownButton";
     panDownButton.text = "\u2193";
     panDownButton.repeatRate = 250;
@@ -47,7 +47,7 @@ public class PanButtons extends VizPanel implements TouchEnabled {
     addTouchSubscriber(panDownButton);
     addChild(panDownButton);
 
-    panRightButton = new VizButton(40, 20, 20, 20, this);
+    panRightButton = new VizButton(40, 15, 20, 20, this);
     panRightButton.name = "panRightButton";
     panRightButton.text = "\u2192";
     panRightButton.repeatRate = 250;
@@ -58,7 +58,7 @@ public class PanButtons extends VizPanel implements TouchEnabled {
     addTouchSubscriber(panRightButton);
     addChild(panRightButton);
     
-    panLeftButton = new VizButton(0, 20, 20, 20, this);
+    panLeftButton = new VizButton(0, 15, 20, 20, this);
     panLeftButton.name = "panLeftButton";
     panLeftButton.text = "\u2190";
     panLeftButton.repeatRate = 250;
