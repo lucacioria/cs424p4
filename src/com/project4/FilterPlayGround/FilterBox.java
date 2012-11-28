@@ -18,7 +18,7 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
     m.notificationCenter.registerToEvent(EventName.BUTTON_PRESSED, this);
     addTouchSubscriber(excludeCheckBox);
     addTouchSubscriber(synonymCheckBox);
-    excludeCheckBox.setSelected(true);
+    excludeCheckBox.setSelected(false);
     synonymCheckBox.setSelected(false);
   }
 
@@ -72,7 +72,7 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
 
   @Override
   public String getFilter() {
-    String exclusion = excludeCheckBox.isSelected() ? "+" : "-";
+    String exclusion = excludeCheckBox.isSelected() ? "-" : "+";
     String words = exclusion + content;
     if (synonymCheckBox.isSelected()) {
       for (String w : DictionaryAccess.getInstance().getWordSenses(content))
