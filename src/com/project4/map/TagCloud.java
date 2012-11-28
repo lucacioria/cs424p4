@@ -20,15 +20,15 @@ import com.project4.datasource.Tweet;
 
 public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber {
 
-  private static final int GRID_X = 6, GRID_Y = 5;
-  private static final int NUMBER_OF_WORDS_PER_GRID = 1;
+  private static final int GRID_X = 5, GRID_Y = 3;
+  private static final int NUMBER_OF_WORDS_PER_GRID = 2;
   private static final int MAX_TEXT = 50, MIN_TEXT = 15;
   private TreeMap<Filter, ArrayList<Tweet>> tweets = new TreeMap<Filter, ArrayList<Tweet>>();
   private Map map;
   private TreeMap<String, WordPos>[][] wordsMap;
   private int maxCounts, minCounts;
   private ArrayList<WordPos>[][] wordPoses;
-  private String[] bl = {"&", "en", "de", "ur", "dont", "0", "9", "8", "7", "6", "5", "4", "3",
+  private String[] bl = {"","&", "en", "de", "ur", "dont", "0", "9", "8", "7", "6", "5", "4", "3",
                          "2", "1", "im", "a", "a\'s", "able", "about", "above", "according", "accordingly", "across",
                          "actually", "after", "afterwards", "again", "against", "ain't", "all", "allow", "allows",
                          "almost", "alone", "along", "already", "also", "although", "always", "am", "among",
@@ -152,7 +152,7 @@ public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber 
         int count = 0;
         for (int i = 0; i < wordPoses[j][k].size() && i < NUMBER_OF_WORDS_PER_GRID; i++) {
           count++;
-          //computeRealPosition(j, k, i, count);
+          computeRealPosition(j, k, i, count);
           float size = map(wordPoses[j][k].get(i).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);
           //float size = Math.max(Math.min(wordPoses[j][k].get(i).getCount(), 30), 15);
           textSize(size);
@@ -163,36 +163,36 @@ public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber 
     }
   }
 
-  private void computeRealPosition(int j, int k, int i, int count) {
-    for (int l = 0; l < i; l++) {
-      int sizep1 = (int) map(wordPoses[j][k].get(i).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);;
-      int sizep2 = (int) map(wordPoses[j][k].get(l).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);
-      if (overlaps(wordPoses[j][k].get(i), wordPoses[j][k].get(l), sizep1, sizep2)) {
-        move(wordPoses[j][k].get(i),wordPoses[j][k].get(l),sizep1,sizep2,count);
-        log(wordPoses[j][k].get(i).word + "," + wordPoses[j][k].get(l).word + " "
-            + wordPoses[j][k].get(i).getPosition().y);
-        computeRealPosition(j, k, i, count);
-      }
-    }
-  }
-  
 //  private void computeRealPosition(int j, int k, int i, int count) {
-//    for (int g1 = 0; g1 <= j; g1++) {
-//      for (int g2 = 0; g2 < wordPoses[g1].length; g2++) {
-//        for (int l = 0; l < wordPoses[g1][g2].size(); l++) {
-//          if(g1==j&&g2==k&&l==i) continue;
-//          int sizep1 = (int) map(wordPoses[j][k].get(i).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);;
-//          int sizep2 = (int) map(wordPoses[g1][g2].get(l).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);
-//          if (overlaps(wordPoses[j][k].get(i), wordPoses[g1][g2].get(l), sizep1, sizep2)) {
-//            move(wordPoses[j][k].get(i),wordPoses[g1][g2].get(l),sizep1,sizep2,count);
-//            //log(wordPoses[j][k].get(i).word + "," + wordPoses[g1][g2].get(l).word + " "
-//            //    + wordPoses[j][k].get(i).getPosition().y);
-//            computeRealPosition(j, k, i, count);
-//          }
-//        }
+//    for (int l = 0; l < i; l++) {
+//      int sizep1 = (int) map(wordPoses[j][k].get(i).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);;
+//      int sizep2 = (int) map(wordPoses[j][k].get(l).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);
+//      if (overlaps(wordPoses[j][k].get(i), wordPoses[j][k].get(l), sizep1, sizep2)) {
+//        move(wordPoses[j][k].get(i),wordPoses[j][k].get(l),sizep1,sizep2,count);
+//        log(wordPoses[j][k].get(i).word + "," + wordPoses[j][k].get(l).word + " "
+//            + wordPoses[j][k].get(i).getPosition().y);
+//        computeRealPosition(j, k, i, count);
 //      }
 //    }
 //  }
+//  
+  private void computeRealPosition(int j, int k, int i, int count) {
+    for (int g1 = 0; g1 <= j; g1++) {
+      for (int g2 = 0; g2 < wordPoses[g1].length; g2++) {
+        for (int l = 0; l < wordPoses[g1][g2].size(); l++) {
+          if(g1==j&&g2==k&&l==i) continue;
+          int sizep1 = (int) map(wordPoses[j][k].get(i).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);;
+          int sizep2 = (int) map(wordPoses[g1][g2].get(l).getCount(),maxCounts,minCounts,MAX_TEXT,MIN_TEXT);
+          if (overlaps(wordPoses[j][k].get(i), wordPoses[g1][g2].get(l), sizep1, sizep2)) {
+            move(wordPoses[j][k].get(i),wordPoses[g1][g2].get(l),sizep1,sizep2,count);
+            //log(wordPoses[j][k].get(i).word + "," + wordPoses[g1][g2].get(l).word + " "
+            //    + wordPoses[j][k].get(i).getPosition().y);
+            computeRealPosition(j, k, i, count);
+          }
+        }
+      }
+    }
+  }
 //  
 
   private void move(WordPos wordPos1,WordPos wordPos2,int sizep1,int sizep2,int count) {
@@ -263,7 +263,6 @@ public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber 
       for (Tweet t : tweets.get(key)) {
         t.generateWords();
       }
-      break;
     }
     generateWords();
     sortMap();
@@ -377,7 +376,6 @@ public class TagCloud extends VizPanel implements TouchEnabled, EventSubscriber 
           }
         }
       }
-      break;
     }
   }
 
