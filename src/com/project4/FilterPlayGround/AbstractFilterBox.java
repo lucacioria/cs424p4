@@ -73,7 +73,7 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
     removeButton.draw();
     popStyle();
     if (dragging) {
-      modifyPositionWithAbsoluteValue(m.touchX, m.touchY);
+      modifyPositionWithAbsoluteValue(m.touchX - spanX, m.touchY - spanY);
     }
     return false;
   }
