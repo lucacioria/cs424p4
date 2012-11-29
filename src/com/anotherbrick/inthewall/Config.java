@@ -20,7 +20,7 @@ public class Config {
   private PApplet p;
   int height = 384;
   int width = 1360;
-  int multiply;
+  public int multiply;
   private PFont helvetica;
   private PFont myriad;
   public boolean onLocalServer = false;
