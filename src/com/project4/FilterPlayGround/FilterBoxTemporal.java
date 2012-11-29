@@ -21,16 +21,30 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
     this(asb.getX0(), asb.getY0(), asb.getWidth(), asb.getHeight(), parent);
     setup();
     this.setId(asb.getId());
+    this.from = asb.getFrom();
+    this.to = asb.getTo();
+  }
+
+  private int from = 0;
+  private int to = 24;
+
+  public void setFrom(int from) {
+    this.from = from;
+  }
+
+  public void setTo(int to) {
+    this.to = to;
   }
 
   public static MyColorEnum TEXT_COLOR = MyColorEnum.BLACK;
   public static float TEXT_X = 10;
   public static float TEXT_Y = 20;
   public static float TEXT_SIZE = 12;
-  public static float FROM_X = 15;
-  public static float TO_X = 40;
+  public static float FROM_X = 10;
+  public static float TO_X = 34;
   public static float BUTTONS_Y = 25;
-  public static float BUTTONS_SIZE = 30;
+  public static float BUTTONS_WIDTH = 24;
+  public static float BUTTONS_HEIGHT = 12;
   public static float REMOVE_BUTTON_X = 60;
   private VizButton fromButton;
   private VizButton toButton;
@@ -53,6 +67,8 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
     super.draw();
     fromButton.draw();
     toButton.draw();
+    textSize(TEXT_SIZE);
+    text("From " + from + " To " + to, TEXT_X, TEXT_Y);
     return false;
   }
 
@@ -75,7 +91,7 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
   }
 
   private void setupToButton() {
-    toButton = new VizButton(0, 0, BUTTONS_SIZE, BUTTONS_SIZE, this);
+    toButton = new VizButton(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT, this);
     toButton.setup();
     toButton.name = "toButton|" + getId();
     toButton.text = "to";
@@ -88,7 +104,7 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
   }
 
   private void setupFromButton() {
-    fromButton = new VizButton(0, 0, BUTTONS_SIZE, BUTTONS_SIZE, this);
+    fromButton = new VizButton(0, 0, BUTTONS_WIDTH, BUTTONS_HEIGHT, this);
     fromButton.setup();
     fromButton.name = "fromButton|" + getId();
     fromButton.text = "from";
@@ -109,12 +125,16 @@ public class FilterBoxTemporal extends AbstractFilterBox implements EventSubscri
 
   @Override
   public AbstractSerializableBox serialize() {
-    return new SerializableTemporalBox(getId(), getX0(), getY0(), getWidth(), getHeight());
+    return new SerializableTemporalBox(getId(), getX0(), getY0(), getWidth(), getHeight(), from, to);
   }
 
   @Override
-  public void eventReceived(EventName eventName, Object data) {
-    System.out.println(data.toString());
-    System.out.println(eventName.toString());
+  public void eventReceived(EventName eventName, Object data) {}
+
+  @Override
+  public void setId(Integer id) {
+    super.setId(id);
+    toButton.name = "toButton|" + getId();
+    fromButton.name = "fromButton|" + getId();
   }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 
 public class VizList extends VizPanel implements TouchEnabled {
 
@@ -16,7 +17,7 @@ public class VizList extends VizPanel implements TouchEnabled {
   };
 
   private SelectionMode selectionMode;
-  private String name;
+  public String name;
 
   public VizList(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -100,7 +101,8 @@ public class VizList extends VizPanel implements TouchEnabled {
       }
       selectedObjects.add(element);
     }
-
+    m.notificationCenter.notifyEvent(EventName.TIME_UPDATED, name + "|"
+        + selectedObjects.get(0).toString());
   }
 
   private void deselectElement(Object element, SelectionMode s) {

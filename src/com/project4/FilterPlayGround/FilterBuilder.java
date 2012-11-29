@@ -36,11 +36,11 @@ public class FilterBuilder {
       list.get(levels.get(a)).add(a);
     }
     for (Integer i : list.descendingKeySet()) {
-      ret += "MATCH (text) AGAINST (\"";
+      ret += " (";
       for (AbstractFilterBox af : list.get(i)) {
-        ret += " " + af.getFilter();
+        ret += af.getFilter() + " OR ";
       }
-      ret += "\") AND ";
+      ret += " FALSE ) AND ";
     }
     ret += "TRUE ";
     return ret;

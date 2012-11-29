@@ -58,6 +58,7 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
   @Override
   public void setup() {
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
+    m.notificationCenter.registerToEvent(EventName.TIME_UPDATED, this);
     buttons.setup();
     addTouchSubscriber(buttons);
     keyboard.setup();
@@ -67,9 +68,11 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
         SelectionMode.SINGLE);
     selectFromTime.setVisible(false);
     addTouchSubscriber(selectFromTime);
+    selectFromTime.name = "fromList";
     selectToTime.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 4, hours, false,
         SelectionMode.SINGLE);
     selectToTime.setVisible(false);
+    selectToTime.name = "selectToTime";
     addTouchSubscriber(selectToTime);
     addTouchSubscriber(keyboard);
     loadLastConfiguration();
@@ -333,6 +336,8 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
 
   AbstractFilterBox boxToBeDropped = null;
 
+  int temporalSelectedId = 0;
+
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName.equals(EventName.BUTTON_TOUCHED)) {
@@ -354,10 +359,26 @@ public final class FilterPlayGround extends VizPanel implements TouchEnabled, Ev
         removeFilter(toRemoveId);
       }
       if (data.toString().contains("toButton")) {
+        temporalSelectedId = Integer.parseInt(data.toString().split("\\|")[1]);
+        log(data.toString());
         selectToTime.setVisible(true);
       }
       if (data.toString().contains("fromButton")) {
+        temporalSelectedId = Integer.parseInt(data.toString().split("\\|")[1]);
         selectFromTime.setVisible(true);
+      }
+    }
+    if (eventName.equals(EventName.TIME_UPDATED)) {
+      if (data.toString().contains("fromList")) {
+        selectFromTime.setVisible(false);
+        ((FilterBoxTemporal) getBoxById(temporalSelectedId)).setFrom(Integer.parseInt(data
+            .toString().split("\\|")[1]));
+      }
+      log(data.toString());
+      if (data.toString().contains("selectToTime")) {
+        selectToTime.setVisible(false);
+        ((FilterBoxTemporal) getBoxById(temporalSelectedId)).setTo(Integer.parseInt(data.toString()
+            .split("\\|")[1]));
       }
     }
 

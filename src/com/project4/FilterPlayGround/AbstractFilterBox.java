@@ -128,8 +128,8 @@ public abstract class AbstractFilterBox extends VizPanel implements TouchEnabled
     if (down) {
       dragging = true;
       setModal(true);
-      spanX = m.touchX - getX0Absolute();
-      spanY = m.touchY - getY0Absolute();
+      spanX = m.touchX - getX0AbsoluteZoom();
+      spanY = m.touchY - getY0AbsoluteZoom();
     } else {
       dragging = false;
       setModal(false);

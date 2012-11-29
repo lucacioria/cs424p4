@@ -77,12 +77,12 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
   @Override
   public String getFilter() {
     String exclusion = excludeCheckBox.isSelected() ? "-" : "+";
-    String words = exclusion + content;
+    String words = "MATCH (text) AGAINST (\"" + exclusion + content;
     if (synonymCheckBox.isSelected()) {
       for (String w : DictionaryAccess.getInstance().getWordSenses(content))
         words += " " + exclusion + w;
     }
-    return words;
+    return words + "\") ";
   }
 
   @Override

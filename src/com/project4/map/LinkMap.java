@@ -43,6 +43,7 @@ public class LinkMap extends VizPanel implements TouchEnabled, EventSubscriber {
   public boolean draw() {
     if (!isVisible()) return false;
     pushStyle();
+    strokeWeight(2);
     stroke(MyColorEnum.RED, 200f);
     drawLines();
     popStyle();
