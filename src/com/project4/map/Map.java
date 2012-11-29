@@ -318,7 +318,7 @@ public class Map extends VizPanel implements TouchEnabled, EventSubscriber {
 
   public PVector getPositionByLatLon(double lat, double lon) {
     float x = map((float) lon, (float) getMinLon(), (float) getMaxLon(), 0, getWidth());
-    float y = map((float) lat, (float) getMinLat(), (float) getMaxLat(), 0, getHeight());
+    float y = map((float) lat, (float) getMinLat(), (float) getMaxLat(), getHeight(), 0);
     return new PVector(x, y);
   }
 

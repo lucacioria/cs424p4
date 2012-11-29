@@ -171,7 +171,7 @@ public class HeatMap extends VizPanel implements TouchEnabled, EventSubscriber {
           x =
               (int) ((t.getLon() - map.getMinLon()) / (map.getMaxLon() - map.getMinLon()) * gridSizeX);
           y =
-              (int) ((t.getLat() - map.getMinLat()) / (map.getMaxLat() - map.getMinLat()) * gridSizeY);
+              gridSizeY - (int) ((t.getLat() - map.getMinLat()) / (map.getMaxLat() - map.getMinLat()) * gridSizeY);
           increaseValue(x, y, key);
         }
       }
