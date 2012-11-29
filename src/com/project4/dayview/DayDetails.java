@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import processing.core.PApplet;
 import processing.core.PImage;
 import processing.core.PShape;
+import sun.security.krb5.Config;
 
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
@@ -80,8 +81,8 @@ public class DayDetails extends VizPanel implements TouchEnabled, EventSubscribe
     image(weatherImages.get(day.getWeather().toString().toLowerCase()), 10, 10);
     pushMatrix();
     imageMode(PApplet.CENTER);
-    translate(getX0Absolute() + 80 + windImage.width / 2.0f, getY0Absolute() + 7 + windImage.height
-        / 2.0f);
+    translate(getX0Absolute() + 80 + windImage.width / c.multiply / 2.0f, getY0Absolute() + 7 + windImage.height
+        / 2.0f/ c.multiply);
     rotate(radians(45 - day.getWindDirection()));
     m.p.image(windImage, 0, 0);
     popMatrix();
