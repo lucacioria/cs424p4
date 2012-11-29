@@ -76,13 +76,23 @@ public class FilterBox extends AbstractFilterBox implements EventSubscriber {
 
   @Override
   public String getFilter() {
-    String exclusion = excludeCheckBox.isSelected() ? "-" : "";
-    String words = "MATCH (text) AGAINST (\"" + exclusion + content;
-    if (synonymCheckBox.isSelected()) {
-      for (String w : DictionaryAccess.getInstance().getWordSenses(content))
-        words += " " + exclusion + w;
+    String exclusion = excludeCheckBox.isSelected() ? "-" : "+";
+    String synexclusion = excludeCheckBox.isSelected() ? "-" : "";
+    if (content.length() > 3) {
+      String words = "MATCH (text) AGAINST (\"" + exclusion + content;
+      if (synonymCheckBox.isSelected()) {
+        for (String w : DictionaryAccess.getInstance().getWordSenses(content))
+          words += " " + synexclusion + w;
+      }
+      return words + "\" IN BOOLEAN MODE) ";
+    } else {
+      String words = "text LIKE '%" + content + "%' OR";
+      if (synonymCheckBox.isSelected()) {
+        for (String w : DictionaryAccess.getInstance().getWordSenses(content))
+          words += " text LIKE '%" + w + "%' OR";
+      }
+      return words + " FAlSE";
     }
-    return words + "\" IN BOOLEAN MODE) ";
   }
 
   @Override

@@ -21,7 +21,7 @@ public class OptionButtons extends VizPanel implements TouchEnabled {
   }
 
   public void setupButtons() {
-    String[] buttonNames = {"Add Filter","Add TFilter", "Add Output", "Apply", "Save"};
+    String[] buttonNames = {"Add Filter", "Add Output", "Apply", "Save"};
     for (int i = 0; i < buttonNames.length; i++) {
       VizButton button = new VizButton(0, 20 * i, getWidth(), 20, this);
       button.name = buttonNames[i] + "Button";

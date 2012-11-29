@@ -299,7 +299,7 @@ public abstract class VizPanel {
   public float dist(float x1, float y1, float x2, float y2) {
     return PApplet.dist(x1, y1, x2, y2);
   }
-  
+
   public void log(String msg) {
     DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
     Date date = new Date();
@@ -345,6 +345,10 @@ public abstract class VizPanel {
   }
 
   public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
+    if (dist(this.x0, this.y0, newX0, newY0) > 10) {
+      log(dist(this.x0, this.y0, newX0, newY0) + "<-----------------------");
+      return;
+    }
     this.x0 = newX0;
     this.y0 = newY0;
     this.x0Zoom = s(x0);
@@ -507,17 +511,17 @@ public abstract class VizPanel {
   public void textSize(float size) {
     p.textSize(s(size));
   }
-  
-  //TODO basta cos“?
-  public float textAscent(){
-    return p.textAscent()/Config.getInstance().multiply;
+
+  // TODO basta cosï¿½?
+  public float textAscent() {
+    return p.textAscent() / Config.getInstance().multiply;
   }
-  
-  public float textWidth(String str){
-    return p.textWidth(str)/Config.getInstance().multiply;
+
+  public float textWidth(String str) {
+    return p.textWidth(str) / Config.getInstance().multiply;
   }
-  
-  
+
+
 
   public boolean toggleVisible() {
     this.visible = !visible;
