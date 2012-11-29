@@ -83,7 +83,7 @@ public class DayDetails extends VizPanel implements TouchEnabled, EventSubscribe
     imageMode(PApplet.CENTER);
     translate(getX0Absolute() + 80 + windImage.width / c.multiply / 2.0f, getY0Absolute() + 7 + windImage.height
         / 2.0f/ c.multiply);
-    rotate(radians(45 - day.getWindDirection()));
+    rotate(radians(180 + 45 - day.getWindDirection()));
     m.p.image(windImage, 0, 0);
     popMatrix();
     text(day.getWindSpeed() + "mph", 40, 10);
