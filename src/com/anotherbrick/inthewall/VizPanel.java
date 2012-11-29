@@ -345,10 +345,6 @@ public abstract class VizPanel {
   }
 
   public void modifyPositionWithAbsoluteValue(float newX0, float newY0) {
-    if (dist(this.x0, this.y0, newX0, newY0) > 10) {
-      log(dist(this.x0, this.y0, newX0, newY0) + "<-----------------------");
-      return;
-    }
     this.x0 = newX0;
     this.y0 = newY0;
     this.x0Zoom = s(x0);
